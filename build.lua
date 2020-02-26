@@ -14,7 +14,7 @@ function update_tag(file, content, tagname, tagdate)
     return string.gsub(content,
       "%d%d%d%d%-%d%d%-%d%d v%d%.%d%w?",
       tagdate .. " v" .. tagname)
-  elseif string.match(file, "expkv-def.dtx") then
+  elseif file == "expkv-def.dtx" then
     content = string.gsub(content,
       "\\def\\ekvdDate{%d%d%d%d%-%d%d%-%d%d}",
       "\\def\\ekvdDate{" .. tagdate .. "}")
