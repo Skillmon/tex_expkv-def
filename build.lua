@@ -1,5 +1,5 @@
--- Build script for expkv
-module     = "expkv-tex"
+-- Build script for expkv-def
+module     = "expkv-def"
 pkgversion = "0.1"
 pkgdate    = "2020-02-26"
 
