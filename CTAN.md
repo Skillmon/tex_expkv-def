@@ -24,8 +24,9 @@ This work is "maintained" (as per LPPL maintenance status) by
 
 -------------------------------------------------------------------------------
 
-This provides a key=val frontend to define keys for expkv. It is generic code
-and only requires expkv for its parsing. There is a LaTeX package
-`expkv-def.sty` included to play nice on LaTeX's package loading system, but
-that package is not needed and does not provide more functionality than the
-generic code in `expkv-def.tex`.
+This provides a key=val frontend to define keys for
+[expkv](https://github.com/Skillmon/tex_expkv). It is generic code and only
+requires expkv for its parsing. There is a LaTeX package `expkv-def.sty`
+included to play nice on LaTeX's package loading system, but that package is not
+needed and does not provide more functionality than the generic code in
+`expkv-def.tex`.
