@@ -1,0 +1,1373 @@
+% \iffalse meta-comment
+%
+% File: expkv-def.dtx Copyright (C) 2020 Jonathan P. Spratte
+%
+% This work  may be  distributed and/or  modified under  the conditions  of the
+% LaTeX Project Public License (LPPL),  either version 1.3c  of this license or
+% (at your option) any later version.  The latest version of this license is in
+% the file:
+%
+%   http://www.latex-project.org/lppl.txt
+%
+% ------------------------------------------------------------------------------
+%
+%<*driver>^^A>>=
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+\input l3docstrip.tex
+\askforoverwritefalse
+\preamble
+
+--------------------------------------------------------------
+expkv-def -- a key-defining frontend for expkv
+E-mail: jspratte@yahoo.de
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+--------------------------------------------------------------
+
+Copyright (C) 2020 Jonathan P. Spratte
+
+This  work may be  distributed and/or  modified under  the conditions  of the
+LaTeX Project Public License (LPPL),  either version 1.3c  of this license or
+(at your option) any later version.  The latest version of this license is in
+the file:
+
+  http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+  Jonathan P. Spratte.
+
+This work consists of the file  expkv-def.dtx
+and the derived files           expkv-def.pdf
+                                expkv-def.sty
+                                expkv-def.tex
+
+\endpreamble
+% stop docstrip adding \endinput
+\postamble
+\endpostamble
+\generate{\file{expkv-def.sty}{\from{expkv-def.dtx}{pkg}}}
+\generate{\file{expkv-def.tex}{\from{expkv-def.dtx}{tex}}}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%
+\IfFileExists{expkv-def.tex}{\input{expkv-def.tex}}{}
+\ProvidesFile{expkv-def.dtx}
+  [\csname ekvdDate\endcsname\ a key-defining frontend for expkv]
+\PassOptionsToPackage{full}{textcomp}
+\documentclass{l3doc}
+\RequirePackage[oldstylenums,nott]{kpfonts}
+\input{glyphtounicode}
+\pdfgentounicode=1
+\RequirePackage{listings}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{collcell}
+\RequirePackage{siunitx}
+\RequirePackage{xcolor}
+\RequirePackage{caption}
+\RequirePackage{microtype}
+\RequirePackage{accsupp}
+\lstset
+  {
+    ,flexiblecolumns=false
+    ,basewidth=.53em
+    ,gobble=2
+    ,basicstyle=\fontfamily{jkp}\itshape
+    ,morekeywords=^^A
+      {^^A
+        \ekvdefinekeys
+      }
+    ,morecomment=[l]\%
+    ,commentstyle=\color[gray]{0.4}
+    ,literate={\{}{{\CodeSymbol\{}}{1}
+              {\}}{{\CodeSymbol\}}}{1}
+    ^^A,literate=*{<key>}{\key}{4}{<set>}{\set}{4}
+  }
+\newcommand*\CodeSymbol[1]{\textbf{#1}}
+\RequirePackage{randtext}
+\let\metaORIG\meta
+\protected\def\meta #1{\texttt{\metaORIG{#1}}}
+\renewcommand*\thefootnote{\fnsymbol{footnote}}
+\definecolor{expkvred}{HTML}{9F393D}
+\colorlet{expkvgrey}{black!75}
+\makeatletter
+\newcommand*\expkv
+  {^^A
+    \texorpdfstring
+      {^^A
+        \mbox
+          {^^A
+            \BeginAccSupp{ActualText=expkv}^^A
+            \href{https://github.com/Skillmon/tex_expkv}
+              {^^A
+                \rmfamily
+                \bfseries
+                {\color{expkvgrey}e\kern-.05em x\kern-.05em}^^A
+                \lower.493ex
+                  \hbox{{\color{expkvgrey}P}\kern-.1em{\color{expkvred}k}}^^A
+                \kern-.18em{\color{expkvred}v}^^A
+              }^^A
+            \EndAccSupp{}^^A
+          }^^A
+      }
+      {expkv}^^A
+  }
+\newcommand*\expkvd
+  {^^A
+    \texorpdfstring
+      {^^A
+        \mbox
+          {^^A
+            \BeginAccSupp{ActualText=expkv-def}^^A
+            \href{https://github.com/Skillmon/tex_expkv-def}
+              {^^A
+                \rmfamily
+                \bfseries
+                {\color{expkvgrey}e\kern-.05em x\kern-.05em}^^A
+                \lower.493ex
+                  \hbox{{\color{expkvgrey}P}\kern-.1em{\color{expkvred}k}}^^A
+                \kern-.18em{\color{expkvred}v}^^A
+                {\color{expkvgrey}^^A
+                  \kern.05em\rule[-.1ex]{.08em}{1.2ex}\kern.05em\textsc{def}^^A
+                }^^A
+              }^^A
+            \EndAccSupp{}^^A
+          }^^A
+      }
+      {expkv-def}^^A
+  }
+\newcommand\kv{\meta{key}=\meta{value}}
+\newcommand\key{\meta{key}}
+\newcommand\val{\meta{value}}
+\newcommand\set{\meta{set}}
+\newcommand\enfprot{\textcolor{black}{protected}}
+\newcommand\allprot{\textcolor{gray}{protected}}
+\newcommand\notprot{\textcolor{red!80!black}{protected}}
+\newcommand\enflong{\textcolor{black}{long}}
+\newcommand\alllong{\textcolor{gray}{long}}
+\newcommand\notlong{\textcolor{red!80!black}{long}}
+\newcommand\prefixes[2]
+  {^^A
+    \hfill
+    \ifcase\numexpr#1\relax\or
+      \enfprot\or
+      \allprot\or
+      \notprot\fi\space
+    \ifcase\numexpr#2\relax\or
+      \enflong\or
+      \alllong\or
+      \notlong\fi
+  }
+\hypersetup{linkcolor=red!80!black,urlcolor=purple!80!black}
+\DoNotIndex{\def,\edef,\,,\=,\begingroup,\catcode,\chardef,\csname,\endcsname}
+\DoNotIndex{\endgroup,\endinput,\errmessage,\expandafter,\input,\let,\long}
+\DoNotIndex{\noexpand,\protected,\ProvidesFile,\ProvidesPackage,\relax,\space}
+\DoNotIndex{\@,\unexpanded,\string,\expanded,\dimexpr,\global,\glueexpr,\hbox}
+\DoNotIndex{\numexpr,\RequirePackage,\setbox,\the,\unless,\xdef}
+\DoNotIndex{\ifcsname}
+\DoNotIndex{\ifx}
+\DoNotIndex{\ifdefined}
+\DoNotIndex{\iffalse}
+\DoNotIndex{\iftrue}
+\DoNotIndex{\else}
+\DoNotIndex{\fi}
+\@gobble\fi ^^A ignoring \ifx, \ifcsname, etc., but only one \fi
+\@gobble\fi ^^A ignoring \ifx, \ifcsname, etc., but only one \fi
+\@gobble\fi ^^A ignoring \ifx, \ifcsname, etc., but only one \fi
+\@gobble\fi ^^A ignoring \ifx, \ifcsname, etc., but only one \fi
+\@ifdefinable\gobbledocstriptag{\def\gobbledocstriptag#1>{}}
+\makeatother
+\begin{document}
+  \title
+    {^^A
+      \texorpdfstring
+        {^^A
+          \huge\expkvd
+          \\[\medskipamount]
+          \Large a key-defining frontend for \expkv
+        }{expkv-def - a key-defining frontend for expkv}^^A
+    }
+  \date{\ekvdDate\space v\ekvdVersion}
+  \author{Jonathan P. Spratte\thanks{\protect\randomize{jspratte@yahoo.de}}}
+  \DocInput{expkv-def.dtx}
+\end{document}
+%</driver>^^A=<<
+% \fi
+%
+% \maketitle
+% \renewcommand*\thefootnote{\arabic{footnote}}
+%
+% \begin{abstract}
+% \noindent\parfillskip=0pt
+% \expkvd\ provides a small \kv\ interface to define keys for \expkv. Key-types
+% are declared using prefixes, similar to static typed languages. The stylised
+% name is \expkvd\ but the files use \file{expkv-def}, this is due to CTAN-rules
+% which don't allow \string| in package names since that is the pipe symbol in *nix
+% shells.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \begin{documentation}^^A>>=
+%
+% \section{Documentation}
+%
+% Since the trend for the last couple of years goes to defining keys for a \kv\
+% interface using a \kv\ interface, I thought that maybe providing such an
+% interface for \expkv\ will make it more attractive for actual use, besides its
+% unique selling points of being fully expandable, and fast and reliable. But at
+% the same time I don't want to widen \expkv's initial scope. So here it is
+% \expkvd, go define \kv\ interfaces with \kv\ interfaces.
+%
+% Unlike many of the other established \kv\ interfaces to define keys, \expkvd\
+% works using prefixes instead of suffixes (\emph{e.g.}, |.tl_set:N| of
+% \pkg{l3keys}) or directory like handlers (\emph{e.g.}, |/.store in| of
+% \pkg{pgfkeys}). This was decided as a personal preference, more over in \TeX\
+% parsing for the first space is way easier than parsing for the last one.
+% \expkvd's prefixes are sorted into two categories |p|-type, which are
+% equivalent to \TeX's prefixes like |\long|, and |t|-type defining the type of
+% the key. For a description of the available |p|-prefixes take a look at
+% \autoref{sec:prefix:p}, the |t|-prefixes are described in
+% \autoref{sec:prefix:t}.
+%
+% \expkvd\ is usable as generic code and as a \LaTeX\ package. It'll
+% automatically load \expkv\ in the same mode as well. To use it, just use one
+% of
+% \begin{lstlisting}
+% \usepackage{expkv-def} % LaTeX
+% \input expkv-def       % plainTeX
+% \end{lstlisting}
+%
+% \subsection{Macros}
+% Apart from version and date containers there is only a single user-facing
+% macro, and that should be used to define keys.
+%
+% \begin{function}{\ekvdefinekeys}
+%   \begin{syntax}
+%     \cs{ekvdefinekeys}\marg{set}\{\kv, \ldots\}
+%   \end{syntax}
+%   In \set, define \key\ to have definition \val. The general syntax for \key\
+%   should be
+%   \begin{quote}\ttfamily\small
+%     \meta{prefix} \meta{name}
+%   \end{quote}
+%   Where \meta{prefix} is a space separated list of optional |p|-type prefixes
+%   followed by one |t|-type prefix. The syntax of \val\ is dependent on the
+%   used |t|-prefix.
+% \end{function}
+%
+% \begin{function}{\ekvdDate,\ekvdVersion}
+%   These two macros store the version and date of the package.
+% \end{function}
+%
+% \subsection{Prefixes}
+% As already said there are |p|-prefixes and |t|-prefixes. Not every |p|-prefix
+% is allowed for all |t|-prefixes.
+%
+% \subsubsection{\texttt{p}-Prefixes}\label{sec:prefix:p}
+% The |p|-type prefixes are pretty simple by nature, so their description is
+% pretty simple. They affect the \key\ at use-time, so omitting |long| doesn't
+% mean that a \meta{definition} can't contain a |\par| token, only that the
+% \key\ will not accept a |\par| in \val.
+% \begin{function}{protected,protect}
+%   The following key will be defined |\protected|. Note that key-types which
+%   can't be defined expandable will always use |\protected|.
+% \end{function}
+%
+% \begin{function}{long}
+%   The following key will be defined |\long|.
+% \end{function}
+%
+% \subsubsection{\texttt{t}-Prefixes}\label{sec:prefix:t}
+% Since the |p|-type prefixes apply to some of the |t|-prefixes automatically
+% but sometimes one might be disallowed we need some way to highlight this
+% behaviour. In the following an enforced prefix will be printed black
+% (\texttt{\enfprot}), allowed prefixes will be grey (\texttt{\allprot}), and
+% disallowed prefixes will be red (\texttt{\notprot}). This will be put
+% flush-right in the syntax showing line.
+%
+% \begin{function}{code,ecode}
+%   \begin{syntax}
+%     code \key\ = \marg{definition} \prefixes22
+%   \end{syntax}
+%   Define \key\ to expand to \meta{definition}. The \key\ will require a \val\
+%   for which you can use |#1| inside \meta{definition}. The |ecode| variant
+%   will fully expand \meta{definition} inside an |\edef|.
+% \end{function}
+%
+% \begin{function}{noval,enoval}
+%   \begin{syntax}
+%     noval \key\ = \marg{definition} \prefixes23
+%   \end{syntax}
+%   The |noval| type defines \key\ to expand to \meta{definition}. The \key\
+%   will not take a \val. |enoval| fully expands \meta{definition} inside an
+%   |\edef|.
+% \end{function}
+%
+% \begin{function}{default,qdefault,edefault}
+%   \begin{syntax}
+%     default \key\ = \marg{definition} \prefixes23
+%   \end{syntax}
+%   This serves to place a default \val\ for a \key\ that takes an argument, the
+%   \key\ can be of any argument-grabbing kind, and when used without a \val\
+%   it will be passed \meta{definition} instead. The |qdefault| variant will
+%   expand the \key's code once, so will be slightly quicker, but not change if
+%   you redefine \key. The |edefault| on the other hand fully expands the
+%   \key-code with \meta{definition} as its argument inside of an |\edef|.
+% \end{function}
+%
+% \begin{function}{initial}
+%   \begin{syntax}
+%     initial \key\ = \{\val\} \prefixes33
+%   \end{syntax}
+%   With |initial| you can set an initial \val\ for an already defined argument
+%   taking \key. It'll just call the key-macro of \key\ and pass it \val.
+% \end{function}
+%
+% \begin{function}{bool,gbool,boolTF,gboolTF}
+%   \begin{syntax}
+%     bool \key\ = \meta{cs} \prefixes23
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\iffoo|.
+%   This will define \key\ to be a boolean key, which only takes the values
+%   |true| or |false| and will throw an error for other values. If the key is
+%   used without a \val\ it'll have the same effect as if you use
+%   \texttt{\key=true}. |bool| and |gbool| will behave like \TeX-ifs so either
+%   be |\iftrue| or |\iffalse|. The |boolTF| and |gboolTF| variants will both
+%   take two arguments and if true the first will be used else the second, so
+%   they are always either |\@firstoftwo| or |\@secondoftwo|. The variants with
+%   a leading |g| will set the control sequence globally, the others locally. If
+%   \meta{cs} is not yet defined it'll be initialised as the |false| version.
+%   Note that the initialisation is \emph{not} done with |\newif|, so you will
+%   not be able to do |\footrue| outside of the \kv\ interface, but you could
+%   use |\newif| yourself. Even if the \key\ will not be |\protected| the
+%   commands which execute the |true| or |false| choice will be, so the usage
+%   should be safe in an expansion context (\emph{e.g.}, you can use
+%   \texttt{edefault \key\ = false} without an issue to change the default
+%   behaviour to execute the |false| choice).
+% \end{function}
+%
+% \begin{function}{store,estore,gstore,xstore}
+%   \begin{syntax}
+%     store \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\foo|.
+%   This will define \key\ to store \val\ inside of the control sequence. If
+%   \meta{cs} isn't yet defined it will be initialised as empty. The variants
+%   behave similarly to their |\def|, |\edef|, |\gdef|, and |\xdef|
+%   counterparts, but |store| and |gstore| will allow you to store macro
+%   parameters inside of them by using |\unexpanded|.
+% \end{function}
+%
+% \begin{function}{int,eint,gint,xint}
+%   \begin{syntax}
+%     int \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\foo|.
+%   An |int| key will be a \TeX-count register. If \meta{cs} isn't defined yet,
+%   |\newcount| will be used to initialise it. The |eint| and |xint| versions
+%   will use |\numexpr| to allow basic computations in their \val. The |gint|
+%   and |xint| variants set the register globally.
+% \end{function}
+%
+% \begin{function}{dimen,edimen,gdimen,xdimen}
+%   \begin{syntax}
+%     dimen \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\foo|.
+%   This is just like |int| but uses a dimen register, |\newdimen| and
+%   |\dimexpr| instead.
+% \end{function}
+%
+% \begin{function}{skip,eskip,gskip,xskip}
+%   \begin{syntax}
+%     dimen \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\foo|.
+%   This is just like |int| but uses a skip register, |\newskip| and |\glueexpr|
+%   instead.
+% \end{function}
+%
+% \begin{function}{toks,gtoks,apptoks,gapptoks}
+%   \begin{syntax}
+%     dimen \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\foo|. 
+%   Store \val\ inside of a toks-register. The |g| variants use |\global|, the
+%   |app| variants append \val\ to the contents of that register. If \meta{cs}
+%   is not yet defined it will be initialised with |\newtoks|.
+% \end{function}
+%
+% \begin{function}{box,gbox}
+%   \begin{syntax}
+%     box \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\foo|.
+%   Typesets \val\ into a |\hbox| and stores the result in a box register. The
+%   boxes are colour safe. \expkvd\ doesn't provide a |vbox| type.
+% \end{function}
+%
+% \begin{function}{meta}
+%   \begin{syntax}
+%     meta \key\ = \{\kv, \ldots\} \prefixes22
+%   \end{syntax}
+%   This key type can set other keys, you can access the \val\ which was passed
+%   to \key\ inside the \kv\ list with |#1|. It works by calling a sub-|\ekvset|
+%   on the \kv\ list, so a |set| key will only affect that \kv\ list and not the
+%   current |\ekvset|.
+% \end{function}
+%
+% \begin{function}{nmeta}
+%   \begin{syntax}
+%     nmeta \key\ = \{\kv, \ldots\} \prefixes23
+%   \end{syntax}
+%   This key type can set other keys, the difference to |meta| is, that this key
+%   doesn't take a value, so the \kv\ list is static.
+% \end{function}
+%
+% \begin{function}{smeta}
+%   \begin{syntax}
+%     smeta \key\ = \marg{set}\{\kv, \ldots\} \prefixes22
+%   \end{syntax}
+%   Yet another |meta| variant. An |smeta| key will take a \val\ which you can
+%   access using |#1|, but it sets the \kv\ list inside of \set, so is equal to
+%   \texttt{\cs[no-index]{ekvset}\marg{set}\{\kv, \ldots\}}.
+% \end{function}
+%
+% \begin{function}{snmeta}
+%   \begin{syntax}
+%     snmeta \key\ = \marg{set}\{\kv, \ldots\} \prefixes23
+%   \end{syntax}
+%   And the last |meta| variant. |snmeta| is a combination of |smeta| and
+%   |nmeta|. It doesn't take an argument and sets the \kv\ list inside of \set.
+% \end{function}
+%
+% \begin{function}{set}
+%   \begin{syntax}
+%     set \key\ = \marg{set} \prefixes33
+%   \end{syntax}
+%   This will define |\key| to change the set of the current |\ekvset|
+%   invocation to \set. You can omit \set\ (including the equals sign),
+%   which is the same as using \texttt{set \key\ = \{\key\}}. The created |set|
+%   key will not take a \val.
+% \end{function}
+%
+% \begin{function}{choice}
+%   \begin{syntax}
+%     choice \key\ = \{\val=\meta{definition}, \ldots\} \prefixes23
+%   \end{syntax}
+%   Defines \key\ to be a |choice| key, meaning it will only accept a limited
+%   set of values. You should define each possible \val\ inside of the
+%   \val=\meta{definition} list. If a defined \val\ is passed to \key\ the
+%   \meta{dafinition} will be left in the input stream. You can make
+%   individual values |protected| inside the \val=\meta{definition} list. By
+%   default a |choice| key is expandable, an undefined \val\ will throw an error
+%   in an expandable way.
+% \end{function}
+%
+% \subsection{Bugs}
+% I don't think there are any (but every developer says that), if you find some
+% please let me know, either via the email address on the first page or on
+% GitHub:
+% \url{https://github.com/Skillmon/tex_expkv-def}
+%
+% \subsection{Examples}
+% The following is an example code defining each base key-type once. Please
+% admire the very creative key-name examples.
+%
+% \begin{lstlisting}
+% \ekvdefinekeys{example}
+%   {
+%     ,long code keyA = #1
+%     ,noval     keyA = NoVal given
+%     ,bool      keyB = \keyB
+%     ,boolTF    keyC = \keyC
+%     ,store     keyD = \keyD
+%     ,int       keyE = \keyE
+%     ,dimen     keyF = \keyF
+%     ,skip      keyG = \keyG
+%     ,toks      keyH = \keyH
+%     ,default   keyH = \empty test
+%     ,box       keyI = \keyI
+%     ,qdefault  keyI = text
+%     ,choice    keyJ =
+%       {
+%         ,protected 1 = \texttt{a}
+%         ,2 = b
+%         ,3 = c
+%         ,4 = d
+%         ,5 = e
+%       }
+%     ,edefault  keyJ = 2
+%     ,meta      keyK = {keyA={#1},keyB=false}
+%     ,set       setB = B
+%   }
+% \end{lstlisting}
+%
+% \subsection{License}
+%
+% Copyright \textcopyright\ 2020\unless\ifnum\year=2020--\the\year\fi\
+% Jonathan P. Spratte
+%
+% \medskip\noindent
+% This work may be distributed and/or modified under the conditions of the
+% \LaTeX\ Project Public License (LPPL), either version 1.3c of this license or
+% (at your option) any later version. The latest version of this license is in
+% the file:
+%
+% \url{http://www.latex-project.org/lppl.txt}
+%
+% \noindent
+% This work is ``maintained'' (as per LPPL maintenance status) by
+%
+% \mbox{Jonathan P. Spratte}.
+%
+% \end{documentation}^^A=<<
+%
+% \begin{implementation}^^A>>=
+%
+% \clearpage
+%
+% \section{Implementation}^^A>>=
+%^^A the LaTeX package >>=
+% \subsection{The \LaTeX\ Package}
+% Just like for \expkv\ we provide a small \LaTeX\ package that sets up things
+% such that we behave nicely on \LaTeX\ packages and files system. It'll
+% |\input| the generic code which implements the functionality.
+% \gobbledocstriptag
+%<*pkg>
+%    \begin{macrocode}
+\RequirePackage{expkv}
+\def\ekvd@tmp
+  {%
+    \ProvidesFile{expkv-def.tex}%
+      [\ekvdDate\space v\ekvdVersion\space a key-defining frontend for expkv]%
+  }
+\input{expkv-def.tex}
+\ProvidesPackage{expkv-def}%
+  [\ekvdDate\space v\ekvdVersion\space a key-defining frontend for expkv]
+%    \end{macrocode}
+% \gobbledocstriptag
+%</pkg>
+%^^A=<<
+%^^A main file >>=
+% \subsection{The Generic Code}
+% The rest of this implementation will be the generic code.
+% \gobbledocstriptag
+%<*tex>
+%
+% Load \expkv\ if the package didn't already do so -- since \expkv\ has
+% safeguards against being loaded twice this does no harm and the overhead
+% isn't that big. Also we reuse some of the internals of \expkv\ to save us from
+% retyping them.
+%    \begin{macrocode}
+\input expkv
+%    \end{macrocode}
+%
+% We make sure that \file{expkv-def.tex} is only input once:
+%    \begin{macrocode}
+\expandafter\ifx\csname ekvdVersion\endcsname\relax
+\else
+  \expandafter\endinput
+\fi
+%    \end{macrocode}
+%
+% \begin{macro}{\ekvdVersion,\ekvdDate}
+% We're on our first input, so lets store the version and date in a macro.
+%    \begin{macrocode}
+\def\ekvdVersion{0.1}
+\def\ekvdDate{2020-02-26}
+%    \end{macrocode}
+% \end{macro}
+%
+% If the \LaTeX\ format is loaded we want to be a good file and report back who
+% we are, for this the package will have defined |\ekvd@tmp| to use
+% |\ProvidesFile|, else this will expand to a |\relax| and do no harm.
+%    \begin{macrocode}
+\csname ekvd@tmp\endcsname
+%    \end{macrocode}
+%
+% Store the category code of |@| to later be able to reset it and change it to
+% 11 for now.
+%    \begin{macrocode}
+\expandafter\chardef\csname ekvd@tmp\endcsname=\catcode`\@
+\catcode`\@=11
+%    \end{macrocode}
+% |\ekvd@tmp| will be reused later to handle expansion during the key
+% defining. But we don't need it to ever store information long-term after
+% \expkvd\ was initialized.
+%
+% \begin{macro}[internal]
+%   {\ekvd@long,\ekvd@prot,\ekvd@clear@prefixes,\ekvd@empty}
+% \expkvd\ will use |\ekvd@long| and |\ekvd@prot| to store whether a key should
+% be defined an |\long| or |\protected|, and we have to clear them for every new
+% key. By default they'll just be empty.
+%    \begin{macrocode}
+\def\ekvd@empty{}
+\protected\def\ekvd@clear@prefixes
+  {%
+    \let\ekvd@long\ekvd@empty
+    \let\ekvd@prot\ekvd@empty
+  }
+\ekvd@clear@prefixes
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ekvdefinekeys}
+% This is the one front-facing macro which provides the interface to define
+% keys. It's using |\ekvparse| to handle the \kv\ list, the interpretation will
+% be done by |\ekvd@noarg| and |\ekvd@|. The \set\ for which the keys should be
+% defined is stored in |\ekvd@set|.
+%    \begin{macrocode}
+\protected\def\ekvdefinekeys#1%
+  {%
+    \def\ekvd@set{#1}%
+    \ekvparse\ekvd@noarg\ekvd@
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@noarg,\ekvd@}
+% |\ekvd@noarg| just places a special marker and gives control to |\ekvd@|.
+% |\ekvd@| has to test whether there is a space inside the key and if so calls
+% the prefix grabbing routine, else we throw an error and ignore the key.
+%    \begin{macrocode}
+\protected\def\ekvd@noarg#1{\ekvd@{#1}\ekvd@noarg@mark}
+\protected\def\ekvd@#1#2%
+  {%
+    \ekvd@clear@prefixes
+    \ekvd@ifspace{#1}%
+      {\ekvd@prefix\ekv@mark#1\ekv@stop{#2}}%
+      {\ekvd@missing@prefix{#1}}%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@prefix,\ekvd@prefix@}
+% \expkvd\ separates prefixes into two groups, the first being prefixes in the
+% \TeX\ sense (|long| and |protected|) which use |@p@| in their name, the other
+% being key-types (|code|, |int|, \emph{etc.}) which use |@t@| instead.
+% |\ekvd@prefix| splits at the first space and checks whether its a |@p@|
+% or |@t@| type prefix. If it is neither throw an error and gobble the
+% definition (the value).
+%    \begin{macrocode}
+\protected\def\ekvd@prefix#1 {\ekv@strip{#1}\ekvd@prefix@\ekv@mark}
+\protected\def\ekvd@prefix@#1#2\ekv@stop
+  {%
+    \ekv@ifdefined{ekvd@t@#1}%
+      {\ekv@strip{#2}{\csname ekvd@t@#1\endcsname}}%
+      {%
+        \ekv@ifdefined{ekvd@p@#1}%
+          {\csname ekvd@p@#1\endcsname{#2}}%
+          {\ekvd@err@undefined@prefix{#1}\@gobble}%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@prefix@after@p}
+% The |@p@| type prefixes are all just modifying a following |@t@| type, so they
+% will need to search for another prefix. This is true for all of them, so we
+% use a macro to handle this. It'll throw an error if there is no other prefix.
+%    \begin{macrocode}
+\protected\def\ekvd@prefix@after@p#1%
+  {%
+    \ekvd@ifspace{#1}%
+      {\ekvd@prefix#1\ekv@stop}%
+      {%
+        \expandafter\ekvd@err@missing@prefix\expandafter{\ekv@gobble@mark#1}%
+        \@gobble
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@p@long,\ekvd@p@protected,\ekvd@p@protect}
+% Define the |@p@| type prefixes, they all just store some information in a
+% temporary macro and call |\ekvd@prefix@after@p|.
+%    \begin{macrocode}
+\protected\def\ekvd@p@long{\let\ekvd@long\long\ekvd@prefix@after@p}
+\protected\def\ekvd@p@protected{\let\ekvd@prot\protected\ekvd@prefix@after@p}
+\let\ekvd@p@protect\ekvd@p@protected
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Key Types}
+%
+% \begin{macro}[internal]{\ekvd@t@set}
+% The |set| type is quite straight forward, just define a |NoVal| key to call
+% |\ekvchangeset|.
+%    \begin{macrocode}
+\protected\def\ekvd@t@set#1#2%
+  {%
+    \ekvd@assert@not@long{set #1}%
+    \ekvd@assert@not@protected{set #1}%
+    \ekvd@ifnoarg{#2}%
+      {\ekvdefNoVal\ekvd@set{#1}{\ekvchangeset{#1}}}%
+      {%
+        \ekv@ifempty{#2}%
+          {\ekvd@err@missing@definition{set #1}}%
+          {\ekvdefNoVal\ekvd@set{#1}{\ekvchangeset{#2}}}%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@noval,\ekvd@t@noval,\ekvd@t@enoval}
+% Another pretty simple type, |noval| just needs to assert that there is a
+% definition and that |long| wasn't specified.
+% There are types where the difference in the variants is so small, that we
+% define a common handler for them, those common handlers are named with
+% |@type@|. |noval| and |enoval| are so similar that we can use such a |@type@|
+% macro, even if we could've done |noval| in a slightly faster way without it.
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@noval#1#2#3#4%
+  {%
+    \ekvd@assert@arg{#1noval #3}{#4}%
+      {%
+        \ekvd@assert@not@long{#1noval #3}%
+        \ekvd@prot#2\ekvd@tmp{#4}%
+        \ekvletNoVal\ekvd@set{#3}\ekvd@tmp
+      }%
+  }
+\protected\def\ekvd@t@noval{\ekvd@type@noval{}\def}
+\protected\def\ekvd@t@noval{\ekvd@type@noval e\edef}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@code,\ekvd@t@code,\ekvd@t@ecode}
+% |code| is simple as well, |ecode| has to use |\edef| on a temporary macro,
+% since \expkv\ doesn't provide an |\ekvedef|.
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@code#1#2#3#4%
+  {%
+    \ekvd@assert@arg{#1code #3}{#4}
+      {%
+        \ekvd@prot\ekvd@long#2\ekvd@tmp##1{#4}%
+        \ekvlet\ekvd@set{#3}\ekvd@tmp
+      }%
+  }
+\protected\def\ekvd@t@code{\ekvd@type@code{}\def}
+\protected\def\ekvd@t@ecode{\ekvd@type@code e\edef}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@default,\ekvd@t@default,\ekvd@t@qdefault}
+% |\ekvd@type@default| asserts there was an argument, also the key for which one
+% wants to set a default has to be already defined (this is not so important for
+% |default|, but |qdefault| requires is). If everything is good, |\edef| a
+% temporary macro that expands |\ekvd@set| and the |\csname| for the key, and in
+% the case of |qdefault| does the first expansion step of the key-macro.
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@default#1#2#3#4%
+  {%
+    \ekvd@assert@arg{#1default #3}{#4}%
+      {%
+        \ekvifdefined\ekvd@set{#3}%
+          {%
+            \ekvd@assert@not@long{#1default #3}%
+            \ekvd@prot\edef\ekvd@tmp
+              {%
+                \unexpanded\expandafter#2%
+                  {\csname\ekv@name\ekvd@set{#3}\endcsname{#4}}%
+              }%
+            \ekvletNoVal\ekvd@set{#3}\ekvd@tmp
+          }%
+          {\ekvd@err@undefined@key{#3}}%
+      }%
+  }
+\protected\def\ekvd@t@default{\ekvd@type@default{}{}}
+\protected\def\ekvd@t@qdefault{\ekvd@type@default q{\expandafter\expandafter}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@t@edefault}
+% |edefault| is too different from |default| and |qdefault| to reuse the
+% |@type@| macro, as it doesn't need |\unexpanded| inside of |\edef|.
+%    \begin{macrocode}
+\protected\long\def\ekvd@t@edefault#1#2%
+  {%
+    \ekvd@assert@arg{edefault #1}{#2}%
+      {%
+        \ekvifdefined\ekvd@set{#1}%
+          {%
+            \ekvd@assert@not@long{edefault #1}%
+            \ekvd@prot\edef\ekvd@tmp
+              {\csname\ekv@name\ekvd@set{#1}\endcsname{#2}}%
+            \ekvletNoVal\ekvd@set{#1}\ekvd@tmp
+          }%
+          {\ekvd@err@undefined@key{#1}}%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@t@initial}
+%    \begin{macrocode}
+\long\def\ekvd@t@initial#1#2%
+  {%
+    \ekvd@assert@arg{initial #1}{#2}%
+      {%
+        \ekvifdefined\ekvd@set{#1}%
+          {%
+            \ekvd@assert@not@long{initial #1}%
+            \ekvd@assert@not@protected{initial #1}%
+            \csname\ekv@name\ekvd@set{#1}\endcsname{#2}%
+          }%
+          {\ekvd@err@undefined@key{#1}}%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {\ekvd@type@bool,\ekvd@t@bool,\ekvd@t@gbool,\ekvd@t@boolTF,\ekvd@t@gboolTF}
+% The boolean types are a quicker version of a |choice| that accept |true| and
+% |false|, and set up the |NoVal| action to be identical to \texttt{\key=true}.
+% The |true| and |false| actions are always just |\let|ting the macro in |#7| to
+% some other macro (\emph{e.g.}, \cs[no-index]{iftrue}).
+%    \begin{macrocode}
+\protected\def\ekvd@type@bool#1#2#3#4#5#6#7%
+  {%
+    \ekvd@assert@filledarg{#1bool#2 #6}{#7}%
+      {%
+        \ekvd@newlet#7#5%
+        \ekvd@type@choice{#1bool#2}{#6}%
+        \protected\ekvdefNoVal\ekvd@set{#6}{#3\let#7#4}%
+        \protected\expandafter\def
+          \csname\ekvd@choice@name\ekvd@set{#6}{true}\endcsname
+          {#3\let#7#4}%
+        \protected\expandafter\def
+          \csname\ekvd@choice@name\ekvd@set{#6}{false}\endcsname
+          {#3\let#7#5}%
+      }%
+  }
+\protected\def\ekvd@t@bool{\ekvd@type@bool{}{}{}\iftrue\iffalse}
+\protected\def\ekvd@t@gbool{\ekvd@type@bool g{}\global\iftrue\iffalse}
+\protected\def\ekvd@t@boolTF{\ekvd@type@bool{}{TF}{}\@firstoftwo\@secondoftwo}
+\protected\def\ekvd@t@gboolTF
+  {\ekvd@type@bool g{TF}\global\@firstoftwo\@secondoftwo}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@box,\ekvd@t@box,\ekvd@t@gbox}
+% Set up our boxes. Though we're a generic package we want to be colour safe, so
+% we put an additional grouping level inside the box contents, for the case that
+% someone uses \pkg{color}. |\ekvd@newreg| is a small wrapper which tests
+% whether the first argument is defined and if not does
+% |\csname new#2\endcsname#1|.
+%    \begin{macrocode}
+\protected\def\ekvd@type@box#1#2#3#4%
+  {%
+    \ekvd@assert@filledarg{#1box #3}{#4}%
+      {%
+        \ekvd@newreg#4{box}%
+        \protected\ekvd@long\ekvdef\ekvd@set{#3}%
+          {#2\setbox#4\hbox{\begingroup##1\endgroup}}%
+      }%
+  }
+\protected\def\ekvd@t@box{\ekvd@type@box{}{}}
+\protected\def\ekvd@t@gbox{\ekvd@type@box g\global}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@toks,\ekvd@t@toks,\ekvd@t@gtoks}
+% Similar to |box|, but set the |toks|.
+%    \begin{macrocode}
+\protected\def\ekvd@type@toks#1#2#3#4%
+  {%
+    \ekvd@assert@filledarg{#1toks #3}{#4}%
+      {%
+        \ekvd@newreg#4{toks}%
+        \protected\ekvd@long\ekvdef\ekvd@set{#3}{#2#4{##1}}%
+      }%
+  }
+\protected\def\ekvd@t@toks{\ekvd@type@toks{}{}}
+\protected\def\ekvd@t@gtoks{\ekvd@type@toks{g}\global}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@apptoks,\ekvd@t@apptoks,\ekvd@t@gapptoks}
+% Just like |toks|, but expand the current contents of the |toks| register to
+% append the new contents.
+%    \begin{macrocode}
+\protected\def\ekvd@type@apptoks#1#2#3#4%
+  {%
+    \ekvd@assert@filledarg{#1apptoks #3}{#4}%
+      {%
+        \ekvd@newreg#4{toks}%
+        \protected\ekvd@long\ekvdef\ekvd@set{#3}{#2#4\expandafter{\the#4##1}}%
+      }%
+  }
+\protected\def\ekvd@t@apptoks{\ekvd@type@apptoks{}{}}
+\protected\def\ekvd@t@gapptoks{\ekvd@type@apptoks{g}\global}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {
+%     \ekvd@type@reg,\ekvd@t@int,\ekvd@t@eint,\ekvd@t@gint,\ekvd@t@xint,
+%     \ekvd@t@dimen,\ekvd@t@edimen,\ekvd@t@gdimen,\ekvd@t@xdimen,
+%     \ekvd@t@skip,\ekvd@t@eskip,\ekvd@t@gskip,\ekvd@t@xskip
+%   }
+% The |\ekvd@type@reg| can handle all the types for which the assignment will
+% just be \texttt{\meta{register}=\meta{value}}.
+%    \begin{macrocode}
+\protected\def\ekvd@type@reg#1#2#3#4#5#6#7%
+  {%
+    \ekvd@assert@filledarg{#1 #6}{#7}%
+      {%
+        \ekvd@newreg#7{#2}%
+        \protected\ekvd@long\ekvdef\ekvd@set{#6}{#3#7=#4##1#5\relax}%
+      }%
+  }
+\protected\def\ekvd@t@int{\ekvd@type@reg{int}{count}{}{}{}}
+\protected\def\ekvd@t@eint{\ekvd@type@reg{eint}{count}{}\numexpr\relax}
+\protected\def\ekvd@t@gint{\ekvd@type@reg{gint}{count}\global{}{}}
+\protected\def\ekvd@t@xint{\ekvd@type@reg{xint}{count}\global\numexpr\relax}
+\protected\def\ekvd@t@dimen{\ekvd@type@reg{dimen}{dimen}{}{}{}}
+\protected\def\ekvd@t@edimen{\ekvd@type@reg{edimen}{dimen}{}\dimexpr\relax}
+\protected\def\ekvd@t@gdimen{\ekvd@type@reg{gdimen}{dimen}\global{}{}}
+\protected\def\ekvd@t@xdimen{\ekvd@type@reg{xdimen}{dimen}\global\dimexpr\relax}
+\protected\def\ekvd@t@skip{\ekvd@type@reg{skip}{skip}{}{}{}}
+\protected\def\ekvd@t@eskip{\ekvd@type@reg{eskip}{skip}{}\glueexpr\relax}
+\protected\def\ekvd@t@gskip{\ekvd@type@reg{gskip}{skip}\global{}{}}
+\protected\def\ekvd@t@xskip{\ekvd@type@reg{xskip}{skip}\global\glueexpr\relax}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@store,\ekvd@t@store,\ekvd@t@gstore}
+% The none-expanding |store| types use an |\edef| or |\xdef| and |\unexpanded|
+% to be able to also store |#| easily.
+%    \begin{macrocode}
+\protected\def\ekvd@type@store#1#2#3#4%
+  {%
+    \ekvd@assert@filledarg{#1store #3}{#4}%
+      {%
+        \unless\ifdefined#4\let#4\ekvd@empty\fi
+        \protected\ekvd@long\ekvdef\ekvd@set{#3}{#2#4{\unexpanded{##1}}}%
+      }%
+  }
+\protected\def\ekvd@t@store{\ekvd@type@store{}\edef}
+\protected\def\ekvd@t@gstore{\ekvd@type@store{g}\xdef}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@type@estore,\ekvd@t@estore,\ekvd@t@xstore}
+% And the straight forward |estore| types.
+%    \begin{macrocode}
+\protected\def\ekvd@type@estore#1#2#3#4%
+  {%
+    \ekvd@assert@filledarg{#1store #3}{#4}%
+      {%
+        \ekvd@newlet#4\ekvd@empty
+        \protected\ekvd@long\ekvdef\ekvd@set{#3}{#2#4{##1}}%
+      }%
+  }
+\protected\def\ekvd@t@estore{\ekvd@type@estore{e}\edef}
+\protected\def\ekvd@t@xstore{\ekvd@type@estore{x}\xdef}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {\ekvd@type@meta,\ekvd@type@meta@,\ekvd@t@meta,\ekvd@t@nmeta}
+% |meta| sets up things such that another instance of |\ekvset| will be run on
+% the argument, with the same \set.
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@meta#1#2#3#4#5%
+  {%
+    \ekvd@assert@filledarg{#1meta #4}{#5}%
+      {%
+        \edef\ekvd@tmp{\ekvd@set}%
+        \expandafter\ekvd@type@meta@\expandafter{\ekvd@tmp}{#3}{#5}%
+        #2\ekvd@set{#4}\ekvd@tmp
+      }%
+  }
+\protected\long\def\ekvd@type@meta@#1#2#3%
+  {%
+    \ekvd@prot\ekvd@long\def\ekvd@tmp#2{\ekvset{#1}{#3}}%
+  }
+\protected\def\ekvd@t@meta{\ekvd@type@meta{}\ekvlet{##1}}
+\protected\def\ekvd@t@nmeta{\ekvd@type@meta n\ekvletNoVal{}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {\ekvd@type@smeta,\ekvd@type@smeta@,\ekvd@t@smeta,\ekvd@t@snmeta}
+% |smeta| is pretty similar to |meta|, but needs two arguments inside of \val,
+% such that the first is the \set\ for which the sub-|\ekvset| and the second is
+% the \kv\ list.
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@smeta#1#2#3#4#5%
+  {%
+    \ekvd@assert@twoargs{s#1meta #4}{#5}%
+      {%
+        \expandafter\ekvd@type@smeta@\expandafter{\@secondoftwo#5}{#5}{#3}
+        #2\ekvd@set{#4}\ekvd@tmp
+      }%
+  }
+\protected\long\def\ekvd@type@smeta@#1#2#3%
+  {%
+    \expandafter\ekvd@type@meta@\expandafter{\@firstoftwo#2}{#3}{#1}%
+  }
+\protected\def\ekvd@t@smeta{\ekvd@type@smeta{}\ekvlet{##1}}
+\protected\def\ekvd@t@snmeta{\ekvd@type@smeta n\ekvletNoVal{}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {
+%     \ekvd@type@choice,\ekvd@populate@choice,\ekvd@populate@choice@,
+%     \ekvd@populate@choice@noarg,\ekvd@choice@prefix,\ekvd@choice@prefix@,
+%     \ekvd@choice@p@protected,\ekvd@choice@p@protect,
+%     \ekvd@choice@p@long,\ekvd@choice@p@long@,\ekvd@t@choice
+%   }
+% The |choice| type is by far the most complex type, as we have to run a
+% sub-parser on the choice-definition list, which should support the |@p@| type
+% prefixes as well (but |long| will always throw an error, as they are not
+% allowed to be long). |\ekvd@type@choice| will just define the choice-key, the
+% handling of the choices definition will be done by |\ekvd@populate@choice|.
+%    \begin{macrocode}
+\protected\def\ekvd@type@choice#1#2%
+  {%
+    \ekvd@assert@not@long{#1 #2}%
+    \ekvd@prot\edef\ekvd@tmp##1%
+      {%
+        \unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#2}{##1}}%
+      }%
+    \ekvlet\ekvd@set{#2}\ekvd@tmp
+  }
+%    \end{macrocode}
+% |\ekvd@populate@choice| just uses |\ekvparse| and then gives control to
+% |\ekvd@populate@choice@noarg|, which throws an error, and
+% |\ekvd@populate@choice@|.
+%    \begin{macrocode}
+\protected\def\ekvd@populate@choice
+  {%
+    \ekvparse\ekvd@populate@choice@noarg\ekvd@populate@choice@
+  }
+\protected\def\ekvd@populate@choice@noarg#1%
+  {%
+    \expandafter\ekvd@err@missing@definition\expandafter{\ekvd@set@choice : #1}%
+  }
+%    \end{macrocode}
+% |\ekvd@populate@choice@| runs the prefix-test, if there is none we can
+% directly define the choice, for that |\ekvd@set@choice| will expand to the
+% current choice-key's name, which will have been defined by |\ekvd@t@choice|.
+% If there is a prefix run the prefix grabbing routine, which was altered for
+% |@type@choice|.
+%    \begin{macrocode}
+\protected\long\def\ekvd@populate@choice@#1#2%
+  {%
+    \ekvd@clear@prefixes
+    \expandafter\ekvd@assert@arg\expandafter{\ekvd@set@choice : #1}{#2}%
+      {%
+        \ekvd@ifspace{#1}%
+          {\ekvd@choice@prefix\ekv@mark#1\ekv@stop}%
+          {%
+            \expandafter\def
+              \csname\ekvd@choice@name\ekvd@set\ekvd@set@choice{#1}\endcsname
+          }%
+          {#2}%
+      }%
+  }
+\protected\def\ekvd@choice@prefix#1
+  {%
+    \ekv@strip{#1}\ekvd@choice@prefix@\ekv@mark
+  }
+\protected\def\ekvd@choice@prefix@#1#2\ekv@stop
+  {%
+    \ekv@ifdefined{ekvd@choice@p@#1}%
+      {%
+        \csname ekvd@choice@p@#1\endcsname
+        \ekvd@ifspace{#2}%
+          {\ekvd@choice@prefix#2\ekv@stop}%
+          {%
+            \ekvd@prot\expandafter\def
+              \csname
+                \ekv@strip{#2}{\ekvd@choice@name\ekvd@set\ekvd@set@choice}%
+              \endcsname
+          }%
+      }%
+      {\ekvd@err@undefined@prefix{#1}\@gobble}%
+  }
+\protected\def\ekvd@choice@p@protected{\let\ekvd@prot\protected}
+\let\ekvd@choice@p@protect\ekvd@choice@p@protected
+\protected\def\ekvd@choice@p@long\ekvd@ifspace#1%
+  {%
+    \expandafter\ekvd@choice@p@long@\expandafter{\ekv@gobble@mark#1}%
+    \ekvd@ifspace{#1}%
+  }
+\protected\def\ekvd@choice@p@long@#1%
+  {%
+    \expandafter\ekvd@err@no@long\expandafter
+      {\ekvd@set@choice : long #1}%
+  }
+%    \end{macrocode}
+% Finally we're able to set up the |@t@choice| macro, which has to store the
+% current choice-key's name, define the key, and parse the available choices.
+%    \begin{macrocode}
+\protected\long\def\ekvd@t@choice#1#2%
+  {%
+    \ekvd@assert@arg{choice #1}{#2}%
+      {%
+        \ekvd@type@choice{choice}{#1}%
+        \def\ekvd@set@choice{#1}%
+        \ekvd@populate@choice{#2}%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Key Type Helpers}
+% There are some keys that might need helpers during their execution (not during
+% their definition, which are gathered as |@type@| macros). These helpers are
+% named |@h@|.
+%
+% \begin{macro}[internal]{\ekvd@h@choice,\ekvd@h@choice@}
+% The |choice| helper will just test whether the given choice was defined, if
+% not throw an error expandably, else call the macro which stores the code for
+% this choice.
+%    \begin{macrocode}
+\def\ekvd@h@choice#1%
+  {%
+    \expandafter\ekvd@h@choice@
+      \csname\ifcsname#1\endcsname#1\else relax\fi\endcsname
+      {#1}%
+  }
+\def\ekvd@h@choice@#1#2%
+  {%
+    \ifx#1\relax
+      \ekvd@err@choice@invalid{#2}%
+      \expandafter\@gobble
+    \fi
+    #1%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Tests}
+%
+% \begin{macro}[internal]{\ekvd@noarg@mark}
+% This macro serves as a flag for the case that no \val\ was specified for a
+% key. As such it is not a test, but exists only for some tests.
+%    \begin{macrocode}
+\def\ekvd@noarg@mark{\ekvd@noarg@mark}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@fi@firstoftwo}
+% While we can reuse many of the internals of \expkv\ the specific case for this
+% branch wasn't needed by \expkv\ and hence isn't defined. We'll need it, so we
+% define it.
+%    \begin{macrocode}
+\long\def\ekvd@fi@firstoftwo\fi\@secondoftwo#1#2{\fi#1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@newlet,\ekvd@newreg}
+% These macros test whether a control sequence is defined, if it isn't they
+% define it, either via |\let| or via the correct \cs[no-index]{new\meta{reg}}.
+%    \begin{macrocode}
+\protected\def\ekvd@newlet#1#2%
+  {%
+    \unless\ifdefined#1\let#1#2\fi
+  }
+\protected\def\ekvd@newreg#1#2%
+  {%
+    \unless\ifdefined#1\csname new#2\endcsname#1\fi
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {\ekvd@assert@twoargs,\ekvd@ifnottwoargs,\ekvd@ifempty@gtwo}
+% A test for exactly two tokens can be reduced for an empty-test after gobbling
+% two tokens, in the case that there are fewer tokens than two in the argument,
+% only macros will be gobbled that are needed for the true branch, which doesn't
+% hurt, and if there are more this will not be empty.
+%    \begin{macrocode}
+\long\def\ekvd@assert@twoargs#1#2%
+  {%
+    \ekvd@ifnottwoargs{#2}%
+      {\ekvd@err@missing@definition{#1}}%
+  }
+\long\def\ekvd@ifnottwoargs#1%
+  {%
+    \ekvd@ifempty@gtwo#1\ekv@ifempty@B
+      \ekv@ifempty@false\ekv@ifempty@A\ekv@ifempty@B\@firstoftwo
+  }
+\long\def\ekvd@ifempty@gtwo#1#2{\ekv@ifempty@\ekv@ifempty@A}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@assert@arg,\ekvd@ifnoarg}
+% The test for an argument is just an |\ifx| comparison with our |noarg@mark|.
+%    \begin{macrocode}
+\long\def\ekvd@assert@arg#1#2%
+  {%
+    \ekvd@ifnoarg{#2}%
+      {\ekvd@err@missing@definition{#1}}%
+  }
+\long\def\ekvd@ifnoarg#1%
+  {%
+    \ifx\ekvd@noarg@mark#1%
+      \ekvd@fi@firstoftwo
+    \fi
+    \@secondoftwo
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@assert@filledarg,\ekvd@ifnoarg@or@empty}
+%    \begin{macrocode}
+\long\def\ekvd@assert@filledarg#1#2%
+  {%
+    \ekvd@ifnoarg@or@empty{#2}%
+      {\ekvd@err@missing@definition{#1}}%
+  }
+\long\def\ekvd@ifnoarg@or@empty#1%
+  {%
+    \ekvd@ifnoarg{#1}%
+      \@firstoftwo
+      {\ekv@ifempty{#1}}%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@assert@not@long,\ekvd@assert@not@protected}
+% Some key-types don't want to be |\long| or |\protected|, so we provide macros
+% to test this and throw an error, this could be silently ignored but now users
+% will learn to not use unnecessary stuff which slows the compilation down.
+%    \begin{macrocode}
+\long\def\ekvd@assert@not@long#1%
+  {%
+    \ifx\ekvd@long\long\ekvd@err@no@long{#1}\fi
+  }
+\long\def\ekvd@assert@not@protected#1%
+  {%
+    \ifx\ekvd@prot\protected\ekvd@err@no@protected{#1}\fi
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@ifspace,\ekvd@ifspace@}
+% Yet another test which can be reduced to an if-empty, this time by gobbling
+% everything up to the first space.
+%    \begin{macrocode}
+\long\def\ekvd@ifspace#1%
+  {%
+    \ekvd@ifspace@#1 \ekv@ifempty@B
+      \ekv@ifempty@false\ekv@ifempty@A\ekv@ifempty@B\@firstoftwo
+  }
+\long\def\ekvd@ifspace@#1 % keep this space
+  {%
+    \ekv@ifempty@\ekv@ifempty@A
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsubsection{Messages}
+%
+% Most messages of \expkvd\ are not expandable, since they only appear during
+% key-definition, which is not expandable anyway.
+%
+% \begin{macro}[internal]
+%   {
+%     \ekvd@err@missing@definition,\ekvd@err@missing@prefix,
+%     \ekvd@err@undefined@prefix,\ekvd@err@undefined@key,\ekvd@err@no@protected,
+%     \ekvd@err@no@long
+%   }
+% The non-expandable error messages are boring, so here they are:
+%    \begin{macrocode}
+\protected\def\ekvd@err@missing@definition#1%
+  {\errmessage{expkv-def Error: Missing definition for key `\unexpanded{#1}'}}
+\protected\def\ekvd@err@missing@prefix#1%
+  {\errmessage{expkv-def Error: Missing prefix for key `\unexpanded{#1}'}}
+\protected\def\ekvd@err@undefined@prefix#1%
+  {\errmessage{expkv-def Error: Undefined prefix `\unexpanded{#1}'}}
+\protected\def\ekvd@err@undefined@key#1%
+  {\errmessage{expkv-def Error: Undefined key `\unexpanded{#1}'}}
+\protected\def\ekvd@err@no@protected#1%
+  {%
+    \errmessage
+      {expkv-def Error: prefix `protected' not accepted for `\unexpanded{#1}'}%
+  }
+\protected\def\ekvd@err@no@long#1%
+  {%
+    \errmessage
+      {expkv-def Error: prefix `long' not accepted for `\unexpanded{#1}'}%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {
+%     \ekvd@err@choice@invalid,\ekvd@err@choice@invalid@,\ekvd@choice@name,
+%     \ekvd@err
+%   }
+% The expandable error messages use |\ekvd@err|, which is just like |\ekv@err|
+% from \expkv\ or the way \pkg{expl3} throws expandable error messages. It uses
+% an undefined control sequence to start the error message.
+% |\ekvd@err@choice@invalid| will have to use this mechanism to throw its
+% message. Also we have to retrieve the name parts of the choice in an easy way,
+% so we use parentheses of catcode 8 here, which should suffice in most cases to
+% allow for a correct separation.
+%    \begin{macrocode}
+\def\ekvd@err@choice@invalid#1%
+  {%
+    \ekvd@err@choice@invalid@#1\ekv@stop
+  }
+\begingroup
+\catcode40=8
+\catcode41=8
+\@firstofone{\endgroup
+\def\ekvd@choice@name#1#2#3%
+  {%
+    ekvd#1(#2)#3%
+  }
+\def\ekvd@err@choice@invalid@ ekvd#1(#2)#3\ekv@stop%
+  {%
+    \ekvd@err{invalid choice `#3' (`#2', set `#1')}%
+  }
+}
+\begingroup
+\edef\ekvd@err
+  {%
+    \endgroup
+    \unexpanded{\long\def\ekvd@err}##1%
+      {%
+        \unexpanded{\expandafter\ekv@err@\@firstofone}%
+        {\expandafter\noexpand\csname ! expkv-def Error:\endcsname ##1.}%
+        \unexpanded{\ekv@stop}%
+      }%
+  }
+\ekvd@err
+%    \end{macrocode}
+% \end{macro}
+%
+% Now everything that's left is to reset the category code of |@|.
+%    \begin{macrocode}
+\catcode`\@=\ekvd@tmp
+%    \end{macrocode}
+%
+% \gobbledocstriptag
+%</tex>
+%^^A=<<
+%
+%^^A=<<
+%
+% \end{implementation}^^A=<<
+%
+% \clearpage
+% \PrintIndex
+%
+\endinput
+%
+^^A vim: ft=tex fdm=marker fmr=>>=,=<<
