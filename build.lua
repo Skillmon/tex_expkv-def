@@ -60,7 +60,7 @@ uploadconfig  = {
   ctanPath    = "/macros/generic/expkv-def",
   repository  = "https://github.com/Skillmon/tex_expkv-def",
   bugtracker  = "https://github.com/Skillmon/tex_expkv-def/issues",
-  update      = false,
+  update      = true,
   description = [[
 `expkv-def` is a frontend to define keys for the `expkv` key=val implementation.
 It provides the defining frontend
