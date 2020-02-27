@@ -1,7 +1,7 @@
 -- Build script for expkv-def
 module     = "expkv-def"
 pkgversion = "0.1"
-pkgdate    = "2020-02-26"
+pkgdate    = "2020-02-27"
 
 -- update package date and version
 tagfiles = {"expkv-def.dtx", "README.md", "CTAN.md"}
@@ -40,7 +40,7 @@ docfiles     = {"expkv-def.pdf"}
 
 -- how the documentation is build
 typesetfiles = {"expkv-def.dtx"}
-typesetruns  = 2
+typesetruns  = 4
 
 -- make sure that expkv-def.tex ends up in the generic path
 packtdszip   = true
@@ -65,6 +65,6 @@ uploadconfig  = {
 `expkv-def` is a frontend to define keys for the `expkv` key=val implementation.
 It provides the defining frontend
 
-* `\ekvdefinekeys{<set>}{<prefix key=val list>}`
+* `\ekvdefinekeys{<set>}{<prefix> <key>=<definition>, ...}`
   ]]
 }
