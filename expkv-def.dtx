@@ -996,7 +996,11 @@ and the derived files           expkv-def.pdf
     \ekvd@prot\ekvd@long\def\ekvd@tmp#2{\ekvset{#1}{#3}}%
   }
 \protected\def\ekvd@t@meta{\ekvd@type@meta{}\ekvlet{##1}}
-\protected\def\ekvd@t@nmeta{\ekvd@type@meta n\ekvletNoVal{}}
+\protected\def\ekvd@t@nmeta#1#2%
+  {%
+    \ekvd@assert@not@long{nmeta #1}%
+    \ekvd@type@meta n\ekvletNoVal{}{#1}{#2}%
+  }
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1019,7 +1023,11 @@ and the derived files           expkv-def.pdf
     \expandafter\ekvd@type@meta@\expandafter{\@firstoftwo#2}{#3}{#1}%
   }
 \protected\def\ekvd@t@smeta{\ekvd@type@smeta{}\ekvlet{##1}}
-\protected\def\ekvd@t@snmeta{\ekvd@type@smeta n\ekvletNoVal{}}
+\protected\def\ekvd@t@snmeta#1#2%
+  {%
+    \ekvd@assert@not@long{snmeta #1}%
+    \ekvd@type@smeta n\ekvletNoVal{}{#1}{#2}%
+  }
 %    \end{macrocode}
 % \end{macro}
 %
