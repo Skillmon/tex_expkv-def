@@ -455,7 +455,9 @@ and the derived files           expkv-def.pdf
 %   This will define |\key| to change the set of the current |\ekvset|
 %   invocation to \set. You can omit \set\ (including the equals sign),
 %   which is the same as using \texttt{set \key\ = \{\key\}}. The created |set|
-%   key will not take a \val.
+%   key will not take a \val. Note that just like in \expkv\ it'll not be
+%   checked whether \set\ is defined and you'll get a low-level \TeX\ error if
+%   you use an undefined \set.
 % \end{function}
 %
 % \begin{function}{choice}
@@ -477,7 +479,7 @@ and the derived files           expkv-def.pdf
 % GitHub:
 % \url{https://github.com/Skillmon/tex_expkv-def}
 %
-% \subsection{Examples}
+% \subsection{Example}
 % The following is an example code defining each base key-type once. Please
 % admire the very creative key-name examples.
 %
@@ -737,7 +739,7 @@ and the derived files           expkv-def.pdf
       }%
   }
 \protected\def\ekvd@t@noval{\ekvd@type@noval{}\def}
-\protected\def\ekvd@t@noval{\ekvd@type@noval e\edef}
+\protected\def\ekvd@t@enoval{\ekvd@type@noval e\edef}
 %    \end{macrocode}
 % \end{macro}
 %
