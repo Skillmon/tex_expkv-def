@@ -1,0 +1,70 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\OMIT
+\newcommand\defkeys{\ekvdefinekeys{test}}
+\newcommand\usekeys{\ekvset{test}}
+\newcommand\hihi{hihi}
+\makeatletter
+\def\ekv@gobble@mark\ekv@mark{}
+\makeatother
+\TIMO
+
+\START
+
+\defkeys{choice foo={}}
+\TESTEXP{invalid choice}{\usekeys{foo=5}}
+
+\TEST{invalid definitions}
+  {
+    \defkeys
+      {
+        ,code key
+        ,noval key
+        ,default key = {}
+        ,default foo
+        ,initial key = {}
+        ,initial foo
+        ,bool key
+        ,store key
+        ,int key
+        ,dimen key
+        ,skip key
+        ,toks key
+        ,box key
+        ,meta key
+        ,nmeta key = {#1}
+        ,smeta key
+        ,smeta key = {#1}
+        ,smeta key = abc
+        ,snmeta key = {set}{#1}
+        ,choice key
+        ,key
+        ,long key
+        ,protected key
+        ,long protected key
+        ,undefined key
+      }
+  }
+
+\TEST{invalid prefixes}
+  {
+    \defkeys
+      {
+        ,long noval foo = {}
+        ,long default foo = {}
+        ,long initial foo = {}
+        ,protected initial foo = {}
+        ,long protected initial foo = {}
+        ,long bool key = \key
+        ,long nmeta key = {abc}
+        ,long snmeta key = {abc}{abc}
+        ,long set key
+        ,protected set key
+        ,long protected set key
+        ,long choice key = {}
+      }
+  }
+
+\END

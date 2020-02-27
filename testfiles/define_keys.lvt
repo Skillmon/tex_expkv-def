@@ -1,0 +1,142 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\OMIT
+\newcommand\defkeys{\ekvdefinekeys{test}}
+\newcommand\usekeys{\ekvset{test}}
+\newcommand\hihi{hihi}
+\makeatletter
+% Defining \ekvchangeset as the new version isn't yet deployed in TeXLive
+\def\ekvchangeset#1%
+  {%
+    \expandafter\ekv@changeset\csname\ekv@name@set{#1}\endcsname\ekv@mark
+  }
+\long\def\ekv@changeset#1#2\ekv@set@other#3#4\ekv@set#5%
+  {%
+    \@gobble#2\ekv@set@other#1#4\ekv@set#1%
+  }
+\makeatother
+\TIMO
+
+\START
+
+\TEST{code}
+  {
+    \defkeys{code keyA = \csname tl_analysis_show:n\endcsname{#1}}
+    \usekeys{keyA=test}
+  }
+\TEST{noval}
+  {
+    \defkeys{noval keyA = \csname tl_analysis_show:n\endcsname{d'is code}}
+    \usekeys{keyA}
+  }
+\TEST{bool}
+  {
+    \defkeys
+      {
+         bool     keyB = \keyB
+        ,edefault keyB = false
+        ,initial  keyB = true
+      }
+    \keyB\TRUE\else\FALSE\fi
+    \usekeys{keyB=false}
+    \keyB\TRUE\else\FALSE\fi
+    \usekeys{keyB=true}
+    \keyB\TRUE\else\FALSE\fi
+    \usekeys{keyB}
+    \keyB\TRUE\else\FALSE\fi
+  }
+\TEST{boolTF}
+  {
+    \defkeys{boolTF keyC = \keyC}
+    \keyC\TRUE\FALSE
+    \usekeys{keyC=true}
+    \keyC\TRUE\FALSE
+    \usekeys{keyC=false}
+    \keyC\TRUE\FALSE
+    \usekeys{keyC}
+    \keyC\TRUE\FALSE
+  }
+\TEST{store}
+  {
+    \defkeys{store keyD = \keyD}\keyD\NEWLINE
+    \usekeys{keyD=\YES}\keyD
+    \usekeys{keyD=\NO}\keyD
+    \defkeys{estore keyD = \keyD}
+    \usekeys{keyD=\empty}\show\keyD
+    \usekeys{keyD=\hihi}\show\keyD
+  }
+\TEST{registers}
+  {
+    \defkeys
+      {
+        ,int   keyE = \keyE
+        ,dimen keyF = \keyF
+        ,skip  keyG = \keyG
+      }
+    \showthe\keyE
+    \showthe\keyF
+    \showthe\keyG
+    \usekeys{keyE=5, keyF=5pt, keyG=5pt plus 1pt minus .1pt}
+    \showthe\keyE
+    \showthe\keyF
+    \showthe\keyG
+  }
+\TEST{toks}
+  {
+    \defkeys{toks keyH = \keyH}
+    \showthe\keyH
+    \usekeys{keyH=abc}
+    \showthe\keyH
+    \defkeys{apptoks keyH = \keyH}
+    \usekeys{keyH=abc}
+    \showthe\keyH
+  }
+\TEST{qdefault}
+  {
+    \defkeys{toks keyH = \keyH, qdefault keyH = \empty test}
+    \usekeys{keyH}
+    \showthe\keyH
+  }
+\TEST{box}
+  {
+    \defkeys{box keyI = \keyI}
+    \usekeys{keyI=\kern1pt}\showthe\wd\keyI
+  }
+\defkeys
+  {
+    ,choice  keyJ =
+      {
+        ,1 = a
+        ,2 = b
+        ,3 = c
+        ,4 = d
+        ,5 = e
+      }
+    ,default keyJ = 1
+  }
+\TESTEXP{choice}
+  {
+    \usekeys{keyJ,keyJ=1,keyJ=2,keyJ=3,keyJ=4,keyJ=5}
+  }
+\ekvdefinekeys{other}
+  {
+    ,noval a = ABC\NEWLINE
+    ,code  b = argument: #1\NEWLINE
+    ,noval nl = \NEWLINE
+  }
+\defkeys{meta keyK = {keyJ={#1}}}
+\defkeys{smeta keyKK = {other}{nl,a,b={#1}}}
+\TESTEXP{meta}
+  {
+    \usekeys{keyK=1,keyKK=5}
+  }
+\defkeys{set setB = other}
+\TESTEXP{set}
+  {
+    \usekeys{setB,a,nl,b=arg,nl}
+  }
+
+
+\END
