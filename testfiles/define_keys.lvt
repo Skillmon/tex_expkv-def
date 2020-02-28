@@ -6,17 +6,6 @@
 \newcommand\defkeys{\ekvdefinekeys{test}}
 \newcommand\usekeys{\ekvset{test}}
 \newcommand\hihi{hihi}
-\makeatletter
-% Defining \ekvchangeset as the new version isn't yet deployed in TeXLive
-\def\ekvchangeset#1%
-  {%
-    \expandafter\ekv@changeset\csname\ekv@name@set{#1}\endcsname\ekv@mark
-  }
-\long\def\ekv@changeset#1#2\ekv@set@other#3#4\ekv@set#5%
-  {%
-    \@gobble#2\ekv@set@other#1#4\ekv@set#1%
-  }
-\makeatother
 \TIMO
 
 \START
