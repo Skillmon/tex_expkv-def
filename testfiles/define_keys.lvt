@@ -56,6 +56,22 @@
     \usekeys{keyD=\empty}\show\keyD
     \usekeys{keyD=\hihi}\show\keyD
   }
+\TEST{data}
+  {
+    \defkeys{data keyD = \keyData}\keyData{\NO}{\YES}
+    {\usekeys{keyD=\YES}\keyData{\YES}{\NO}}
+    \defkeys{edata keyD = \keyData}\show\keyData
+    \usekeys{keyD=\empty}\show\keyData
+    \usekeys{keyD=\hihi}\show\keyData
+  }
+\TEST{dataT}
+  {
+    \defkeys{dataT keyD = \keyDataT}\keyDataT{\NO}
+    {\usekeys{keyD=\YES}\keyDataT{\YES}}
+    \defkeys{edataT keyD = \keyDataT}\show\keyDataT
+    \usekeys{keyD=\empty}\show\keyDataT
+    \usekeys{keyD=\hihi}\show\keyDataT
+  }
 \TEST{registers}
   {
     \defkeys

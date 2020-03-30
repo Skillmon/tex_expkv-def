@@ -322,12 +322,15 @@ and the derived files           expkv-def.pdf
 %   \key-code with \meta{definition} as its argument inside of an |\edef|.
 % \end{function}
 %
-% \begin{function}{initial}
+% \begin{function}{initial,oinitial,einitial}
 %   \begin{syntax}
 %     initial \key\ = \{\val\} \prefixes33
 %   \end{syntax}
 %   With |initial| you can set an initial \val\ for an already defined argument
-%   taking \key. It'll just call the key-macro of \key\ and pass it \val.
+%   taking \key. It'll just call the key-macro of \key\ and pass it \val. The
+%   |einitial| variant will expand \val\ using an |\edef| expansion prior to
+%   passing it to the key-macro and the |oinitial| variant will expand the first
+%   token in \val\ once.
 % \end{function}
 %
 % \begin{function}{bool,gbool,boolTF,gboolTF}
@@ -363,6 +366,32 @@ and the derived files           expkv-def.pdf
 %   behave similarly to their |\def|, |\edef|, |\gdef|, and |\xdef|
 %   counterparts, but |store| and |gstore| will allow you to store macro
 %   parameters inside of them by using |\unexpanded|.
+% \end{function}
+%
+% \begin{function}{data,edata,gdata,xdata}
+%   \begin{syntax}
+%     data \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   The \meta{cs} should be a single control sequence, such as |\foo|. This will
+%   define \key\ to store \val\ inside of the control sequence. But unlike the
+%   |store| type, the macro \meta{cs} will be a switch at the same time, it'll
+%   take two arguments and if \key\ was used expands to the first argument
+%   followed by \val\ in braces, if \key\ was not used \meta{cs} will expand to
+%   the second argument (so behave like |\@secondoftwo|). The idea is that with
+%   this type you can define a key which should be typeset formatted. The
+%   |edata| and |xdata| variants will fully expand \val, the |gdata| and |xdata|
+%   variants will store \val\ inside \meta{cs} globally. The |p|-prefixes will
+%   only affect the key-macro, \meta{cs} will always be expandable and |\long|.
+% \end{function}
+%
+% \begin{function}{dataT,edataT,gdataT,xdataT}
+%   \begin{syntax}
+%     dataT \key\ = \meta{cs} \prefixes12
+%   \end{syntax}
+%   Just like |data|, but instead of \meta{cs} grabbing two arguments it'll only
+%   grab one, so by default it'll behave like |\@gobble|, and if a \val\ was
+%   given to \key\ the \meta{cs} will behave like |\@firstofone| appended by
+%   \marg{value}.
 % \end{function}
 %
 % \begin{function}{int,eint,gint,xint}
@@ -491,14 +520,16 @@ and the derived files           expkv-def.pdf
 %     ,bool      keyB = \keyB
 %     ,boolTF    keyC = \keyC
 %     ,store     keyD = \keyD
-%     ,int       keyE = \keyE
-%     ,dimen     keyF = \keyF
-%     ,skip      keyG = \keyG
-%     ,toks      keyH = \keyH
-%     ,default   keyH = \empty test
-%     ,box       keyI = \keyI
-%     ,qdefault  keyI = text
-%     ,choice    keyJ =
+%     ,data      keyE = \keyE
+%     ,dataT     keyF = \keyF
+%     ,int       keyG = \keyG
+%     ,dimen     keyH = \keyH
+%     ,skip      keyI = \keyI
+%     ,toks      keyJ = \keyJ
+%     ,default   keyJ = \empty test
+%     ,box       keyK = \keyK
+%     ,qdefault  keyK = text
+%     ,choice    keyL =
 %       {
 %         ,protected 1 = \texttt{a}
 %         ,2 = b
@@ -506,11 +537,64 @@ and the derived files           expkv-def.pdf
 %         ,4 = d
 %         ,5 = e
 %       }
-%     ,edefault  keyJ = 2
-%     ,meta      keyK = {keyA={#1},keyB=false}
-%     ,set       setB = B
+%     ,edefault  keyL = 2
+%     ,meta      keyM = {keyA={#1},keyB=false}
+%     ,data
 %   }
 % \end{lstlisting}
+%
+% \bigskip
+% Since the |data| type might be a bit strange, here is another usage example
+% for it.
+% \begin{lstlisting}
+% \ekvdefinekeys{ex}
+%   {
+%     ,data  name  = \Pname
+%     ,data  age   = \Page
+%     ,dataT hobby = \Phobby
+%   }
+% \newcommand\Person[1]
+%   {%
+%     \begingroup
+%     \ekvset{ex}{#1}%
+%     \begin{description}
+%       \item[\Pname{}{\errmessage{A person requires a name}}]
+%       \item[Age] \Page{\textit}{\errmessage{A person requires an age}}
+%       \Phobby{\item[Hobbies]}
+%     \end{description}
+%     \endgroup
+%   }
+% \Person{name=Jonathan P. Spratte, age=young, hobby=\TeX\ coding}
+% \Person{name=Some User, age=unknown, hobby=Reading Documentation}
+% \Person{name=Anybody, age=any}
+% \end{lstlisting}
+% In this example a person should have a name and an age, but doesn't have to
+% have hobbies. The name will be displayed as the description item and the age
+% in Italics. If a person has no hobbies the description item will be silently
+% left out.  The result of the above code looks like this:
+%
+% \begingroup
+% \ekvdefinekeys{ex}
+%   {
+%     ,data  name  = \Pname
+%     ,data  age   = \Page
+%     ,dataT hobby = \Phobby
+%   }
+% \newcommand\Person[1]
+%   {%
+%     \begingroup
+%     \ekvset{ex}{#1}%
+%     \begin{description}
+%       \item[\Pname{}{\errmessage{A person requires a name}}]
+%       \item[Age] \Page{\textit}{\errmessage{A person requires an age}}
+%       \Phobby{\item[Hobbies]}
+%     \end{description}
+%     \endgroup
+%   }
+% \Person{name=Jonathan P. Spratte, age=young, hobby=\TeX\ coding}
+% \Person{name=Some User, age=unknown, hobby=Reading Documentation}
+% \Person{name=Anybody, age=any}
+% \endgroup
 %
 % \subsection{License}
 %
@@ -583,8 +667,8 @@ and the derived files           expkv-def.pdf
 % \begin{macro}{\ekvdVersion,\ekvdDate}
 % We're on our first input, so lets store the version and date in a macro.
 %    \begin{macrocode}
-\def\ekvdVersion{0.1a}
-\def\ekvdDate{2020-02-29}
+\def\ekvdVersion{0.2}
+\def\ekvdDate{2020-03-30}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -810,7 +894,7 @@ and the derived files           expkv-def.pdf
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}[internal]{\ekvd@t@initial}
+% \begin{macro}[internal]{\ekvd@t@initial,\ekvd@t@oinitial,\ekvd@t@einitial}
 %    \begin{macrocode}
 \long\def\ekvd@t@initial#1#2%
   {%
@@ -821,6 +905,34 @@ and the derived files           expkv-def.pdf
             \ekvd@assert@not@long{initial #1}%
             \ekvd@assert@not@protected{initial #1}%
             \csname\ekv@name\ekvd@set{#1}\endcsname{#2}%
+          }%
+          {\ekvd@err@undefined@key{#1}}%
+      }%
+  }
+\long\def\ekvd@t@oinitial#1#2%
+  {%
+    \ekvd@assert@arg{oinitial #1}{#2}%
+      {%
+        \ekvifdefined\ekvd@set{#1}%
+          {%
+            \ekvd@assert@not@long{oinitial #1}%
+            \ekvd@assert@not@protected{oinitial #1}%
+            \csname\ekv@name\ekvd@set{#1}\expandafter\endcsname\expandafter{#2}%
+          }%
+          {\ekvd@err@undefined@key{#1}}%
+      }%
+  }
+\long\def\ekvd@t@einitial#1#2%
+  {%
+    \ekvd@assert@arg{einitial #1}{#2}%
+      {%
+        \ekvifdefined\ekvd@set{#1}%
+          {%
+            \ekvd@assert@not@long{einitial #1}%
+            \ekvd@assert@not@protected{einitial #1}%
+            \edef\ekvd@tmp{#2}%
+            \csname\ekv@name\ekvd@set{#1}\expandafter\endcsname\expandafter
+              {\ekvd@tmp}%
           }%
           {\ekvd@err@undefined@key{#1}}%
       }%
@@ -855,6 +967,30 @@ and the derived files           expkv-def.pdf
 \protected\def\ekvd@t@boolTF{\ekvd@type@bool{}{TF}{}\@firstoftwo\@secondoftwo}
 \protected\def\ekvd@t@gboolTF
   {\ekvd@type@bool g{TF}\global\@firstoftwo\@secondoftwo}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {
+%     \ekvd@type@data,\ekvd@t@data,\ekvd@t@gdata,\ekvd@t@dataT,\ekvd@t@gdataT
+%   }
+%    \begin{macrocode}
+\protected\def\ekvd@type@data#1#2#3#4#5#6#7%
+  {%
+    \ekvd@assert@filledarg{#1data#2 #6}{#7}%
+      {%
+        \ekvd@newlet#7#3%
+        \protected\ekvd@long\ekvdef\ekvd@set{#6}{\long#4#7####1#5{####1{##1}}}%
+      }%
+  }
+\protected\def\ekvd@t@data{\ekvd@type@data{}{}\@secondoftwo\def{####2}}
+\protected\def\ekvd@t@edata{\ekvd@type@data e{}\@secondoftwo\edef{####2}}
+\protected\def\ekvd@t@gdata{\ekvd@type@data g{}\@secondoftwo\gdef{####2}}
+\protected\def\ekvd@t@xdata{\ekvd@type@data x{}\@secondoftwo\xdef{####2}}
+\protected\def\ekvd@t@dataT{\ekvd@type@data{}T\@gobble\def{}}
+\protected\def\ekvd@t@edataT{\ekvd@type@data eT\@gobble\edef{}}
+\protected\def\ekvd@t@gdataT{\ekvd@type@data gT\@gobble\gdef{}}
+\protected\def\ekvd@t@xdataT{\ekvd@type@data xT\@gobble\xdef{}}
 %    \end{macrocode}
 % \end{macro}
 %

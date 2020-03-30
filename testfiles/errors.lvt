@@ -28,6 +28,7 @@
         ,initial foo
         ,bool key
         ,store key
+        ,data key
         ,int key
         ,dimen key
         ,skip key

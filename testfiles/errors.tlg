@@ -51,6 +51,10 @@ l. ...  }
 \ekvd@err@missing@definition ...\unexpanded {#1}'}
 l. ...  }
 (That was another \errmessage.)
+! expkv-def Error: Missing definition for key `data key'.
+\ekvd@err@missing@definition ...\unexpanded {#1}'}
+l. ...  }
+(That was another \errmessage.)
 ! expkv-def Error: Missing definition for key `int key'.
 \ekvd@err@missing@definition ...\unexpanded {#1}'}
 l. ...  }
