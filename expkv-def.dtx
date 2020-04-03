@@ -167,9 +167,10 @@ and the derived files           expkv-def.pdf
 \hypersetup{linkcolor=red!80!black,urlcolor=purple!80!black}
 \DoNotIndex{\def,\edef,\,,\=,\begingroup,\catcode,\chardef,\csname,\endcsname}
 \DoNotIndex{\endgroup,\endinput,\errmessage,\expandafter,\input,\let,\long}
-\DoNotIndex{\noexpand,\protected,\ProvidesFile,\ProvidesPackage,\relax,\space}
+\DoNotIndex{\protected,\ProvidesFile,\ProvidesPackage,\relax,\space}
 \DoNotIndex{\@,\unexpanded,\string,\expanded,\dimexpr,\global,\glueexpr,\hbox}
-\DoNotIndex{\numexpr,\RequirePackage,\setbox,\the,\unless,\xdef}
+\DoNotIndex{\numexpr,\RequirePackage,\setbox,\the,\unless,\xdef,\@firstofone}
+\DoNotIndex{\@firstoftwo,\@gobble,\@secondoftwo}
 \DoNotIndex{\ifcsname}
 \DoNotIndex{\ifx}
 \DoNotIndex{\ifdefined}
@@ -667,8 +668,8 @@ and the derived files           expkv-def.pdf
 % \begin{macro}{\ekvdVersion,\ekvdDate}
 % We're on our first input, so lets store the version and date in a macro.
 %    \begin{macrocode}
-\def\ekvdVersion{0.2}
-\def\ekvdDate{2020-03-30}
+\def\ekvdVersion{0.2a}
+\def\ekvdDate{2020-04-03}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1490,7 +1491,7 @@ and the derived files           expkv-def.pdf
     \unexpanded{\long\def\ekvd@err}##1%
       {%
         \unexpanded{\expandafter\ekv@err@\@firstofone}%
-        {\expandafter\noexpand\csname ! expkv-def Error:\endcsname ##1.}%
+        {\unexpanded\expandafter{\csname ! expkv-def Error:\endcsname}##1.}%
         \unexpanded{\ekv@stop}%
       }%
   }
