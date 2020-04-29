@@ -450,7 +450,8 @@ and the derived files           expkv-def.pdf
 %   This key type can set other keys, you can access the \val\ which was passed
 %   to \key\ inside the \kv\ list with |#1|. It works by calling a sub-|\ekvset|
 %   on the \kv\ list, so a |set| key will only affect that \kv\ list and not the
-%   current |\ekvset|.
+%   current |\ekvset|. Since it runs in a separate |\ekvset| you can't use
+%   |\ekvsneak| using keys or similar macros in the way you normally could.
 % \end{function}
 %
 % \begin{function}{nmeta}
@@ -668,8 +669,8 @@ and the derived files           expkv-def.pdf
 % \begin{macro}{\ekvdVersion,\ekvdDate}
 % We're on our first input, so lets store the version and date in a macro.
 %    \begin{macrocode}
-\def\ekvdVersion{0.2a}
-\def\ekvdDate{2020-04-04}
+\def\ekvdVersion{0.3}
+\def\ekvdDate{2020-04-29}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1115,7 +1116,10 @@ and the derived files           expkv-def.pdf
 % \end{macro}
 %
 % \begin{macro}[internal]
-%   {\ekvd@type@meta,\ekvd@type@meta@,\ekvd@t@meta,\ekvd@t@nmeta}
+%   {
+%     \ekvd@type@meta,\ekvd@type@meta@a,\ekvd@type@meta@b,\ekvd@type@meta@c,
+%     \ekvd@t@meta,\ekvd@t@nmeta
+%   }
 % |meta| sets up things such that another instance of |\ekvset| will be run on
 % the argument, with the same \set.
 %    \begin{macrocode}
@@ -1124,13 +1128,21 @@ and the derived files           expkv-def.pdf
     \ekvd@assert@filledarg{#1meta #4}{#5}%
       {%
         \edef\ekvd@tmp{\ekvd@set}%
-        \expandafter\ekvd@type@meta@\expandafter{\ekvd@tmp}{#3}{#5}%
+        \expandafter\ekvd@type@meta@a\expandafter{\ekvd@tmp}{#5}{#3}%
         #2\ekvd@set{#4}\ekvd@tmp
       }%
   }
-\protected\long\def\ekvd@type@meta@#1#2#3%
+\protected\long\def\ekvd@type@meta@a#1#2%
   {%
-    \ekvd@prot\ekvd@long\def\ekvd@tmp#2{\ekvset{#1}{#3}}%
+    \expandafter\ekvd@type@meta@b\expandafter{\ekvset{#1}{#2}}%
+  }
+\protected\def\ekvd@type@meta@b
+  {%
+    \expandafter\ekvd@type@meta@c\expandafter
+  }
+\protected\long\def\ekvd@type@meta@c#1#2%
+  {%
+    \ekvd@prot\ekvd@long\def\ekvd@tmp#2{#1}%
   }
 \protected\def\ekvd@t@meta{\ekvd@type@meta{}\ekvlet{##1}}
 \protected\long\def\ekvd@t@nmeta#1#2%
@@ -1151,13 +1163,9 @@ and the derived files           expkv-def.pdf
   {%
     \ekvd@assert@twoargs{s#1meta #4}{#5}%
       {%
-        \expandafter\ekvd@type@smeta@\expandafter{\@secondoftwo#5}{#5}{#3}
+        \ekvd@type@meta@a#5{#3}%
         #2\ekvd@set{#4}\ekvd@tmp
       }%
-  }
-\protected\long\def\ekvd@type@smeta@#1#2#3%
-  {%
-    \expandafter\ekvd@type@meta@\expandafter{\@firstoftwo#2}{#3}{#1}%
   }
 \protected\def\ekvd@t@smeta{\ekvd@type@smeta{}\ekvlet{##1}}
 \protected\long\def\ekvd@t@snmeta#1#2%
