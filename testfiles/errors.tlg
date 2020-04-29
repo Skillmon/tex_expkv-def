@@ -90,13 +90,10 @@ are all screwed up? I'm going to assume that you meant ##.
 \ekvd@err@missing@definition ...\unexpanded {#1}'}
 l. ...  }
 (That was another \errmessage.)
-! Illegal parameter number in definition of \ekvd@tmp.
-<to be read again> 
-                   }
+! expkv-def Error: Missing definition for key `smeta key'.
+\ekvd@err@missing@definition ...\unexpanded {#1}'}
 l. ...  }
-You meant to type ## instead of #, right?
-Or maybe a } was forgotten somewhere earlier, and things
-are all screwed up? I'm going to assume that you meant ##.
+(That was another \errmessage.)
 ! expkv-def Error: Missing definition for key `smeta key'.
 \ekvd@err@missing@definition ...\unexpanded {#1}'}
 l. ...  }

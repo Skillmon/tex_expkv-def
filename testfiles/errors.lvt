@@ -37,7 +37,7 @@
         ,meta key
         ,nmeta key = {#1}
         ,smeta key
-        ,smeta key = {#1}
+        ,smeta key = a
         ,smeta key = abc
         ,snmeta key = {set}{#1}
         ,choice key
