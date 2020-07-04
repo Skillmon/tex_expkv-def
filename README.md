@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 # expkv-def -- a key-defining frontend for expkv
 
-Version 2020-04-29 v0.3
+Version 2020-07-04 v0.4
 
 Released under the LaTeX Project Public License v1.3c or later
 See http://www.latex-project.org/lppl.txt

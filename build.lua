@@ -1,7 +1,7 @@
 -- Build script for expkv-def
 module     = "expkv-def"
-pkgversion = "0.3"
-pkgdate    = "2020-04-29"
+pkgversion = "0.4"
+pkgdate    = "2020-07-04"
 
 -- update package date and version
 tagfiles = {"expkv-def.dtx", "README.md", "CTAN.md"}
