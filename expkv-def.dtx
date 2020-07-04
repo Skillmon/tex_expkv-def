@@ -1309,23 +1309,6 @@ and the derived files           expkv-def.pdf
 %
 % \subsubsection{Tests}
 %
-% \begin{macro}[internal]{\ekvd@noarg@mark}
-% This macro serves as a flag for the case that no \val\ was specified for a
-% key. As such it is not a test, but exists only for some tests.
-%    \begin{macrocode}
-\def\ekvd@noarg@mark{\ekvd@noarg@mark}
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}[internal]{\ekvd@fi@firstoftwo}
-% While we can reuse many of the internals of \expkv\ the specific case for this
-% branch wasn't needed by \expkv\ and hence isn't defined. We'll need it, so we
-% define it.
-%    \begin{macrocode}
-\long\def\ekvd@fi@firstoftwo\fi\@secondoftwo#1#2{\fi#1}
-%    \end{macrocode}
-% \end{macro}
-%
 % \begin{macro}[internal]{\ekvd@newlet,\ekvd@newreg}
 % These macros test whether a control sequence is defined, if it isn't they
 % define it, either via |\let| or via the correct \cs[no-index]{new\meta{reg}}.
@@ -1362,8 +1345,11 @@ and the derived files           expkv-def.pdf
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}[internal]{\ekvd@assert@arg,\ekvd@ifnoarg}
-% The test for an argument is just an |\ifx| comparison with our |noarg@mark|.
+% \begin{macro}[internal]
+%   {\ekvd@assert@arg,\ekvd@ifnoarg,\ekvd@ifnoarg@,\ekvd@ifnoarg@}
+% An |\ifx| comparison would fail if the first token of the user input is a
+% \TeX-if primitive or the user input contains unbalanced \TeX-if constructs, so
+% the test is done using \TeX's argument grabbing logic.
 %    \begin{macrocode}
 \long\def\ekvd@assert@arg#1#2%
   {%
@@ -1372,10 +1358,14 @@ and the derived files           expkv-def.pdf
   }
 \long\def\ekvd@ifnoarg#1%
   {%
-    \ifx\ekvd@noarg@mark#1%
-      \ekvd@fi@firstoftwo
-    \fi
-    \@secondoftwo
+    \ekvd@ifnoarg@\ekvd@ifnoarg@mark#1\ekvd@ifnoarg@mark\ekvd@ifnoarg@t
+      \ekvd@ifnoarg@mark\ekvd@noarg@mark\ekvd@ifnoarg@mark\@secondoftwo
+  }
+\long\def\ekvd@ifnoarg@#1\ekvd@ifnoarg@mark\ekvd@noarg@mark\ekvd@ifnoarg@mark{}
+\long\def\ekvd@ifnoarg@t
+    \ekvd@ifnoarg@mark\ekvd@noarg@mark\ekvd@ifnoarg@mark\@secondoftwo#1#2%
+  {%
+    #1%
   }
 %    \end{macrocode}
 % \end{macro}
