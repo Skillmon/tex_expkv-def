@@ -153,7 +153,8 @@
   }
 \defkeys
   {
-     choice keyUC={a=arg a\NEWLINE,b=arg b\NEWLINE}
+     choice keyUC={a=arg a\NEWLINE}
+    ,choice keyUC={b=arg b\NEWLINE}
     ,unknown-choice keyUC={unknown choice `#1'\NEWLINE}
   }
 \TESTEXP{unknown choice}
