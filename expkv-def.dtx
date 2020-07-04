@@ -354,7 +354,9 @@ and the derived files           expkv-def.pdf
 %   commands which execute the |true| or |false| choice will be, so the usage
 %   should be safe in an expansion context (\emph{e.g.}, you can use
 %   \texttt{edefault \key\ = false} without an issue to change the default
-%   behaviour to execute the |false| choice).
+%   behaviour to execute the |false| choice). Internally a |bool| \key\ is the
+%   same as a |choice| key which is set up to handle |true| and |false| as
+%   choices.
 % \end{function}
 %
 % \begin{function}{store,estore,gstore,xstore}
@@ -501,7 +503,20 @@ and the derived files           expkv-def.pdf
 %   \meta{definition} will be left in the input stream. You can make
 %   individual values |protected| inside the \val=\meta{definition} list. By
 %   default a |choice| key is expandable, an undefined \val\ will throw an error
-%   in an expandable way.
+%   in an expandable way (but see the |unknown-choice| prefix). You can add
+%   additional choices after the \key\ was created by using |choice| again for
+%   the same \key, redefining choices is possible the same way, but there is no
+%   interface to remove certain choices.
+% \end{function}
+%
+% \begin{function}{unknown-choice}
+%   \begin{syntax}
+%     unknown-choice \key\ = \marg{definition} \prefixes23
+%   \end{syntax}
+%   By default an unknown \val\ passed to a |choice| key will throw an error.
+%   However, with this prefix you can define an alternative action which should
+%   be executed if \key\ received an unknown choice. In \meta{definition} you
+%   can refer to the choice which was passed in with |#1|.
 % \end{function}
 %
 % \subsection{Bugs}
@@ -1280,6 +1295,20 @@ and the derived files           expkv-def.pdf
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}[internal]{\ekvd@t@unknown-choice}
+%    \begin{macrocode}
+\protected\long\expandafter\def\csname ekvd@t@unknown-choice\endcsname#1#2%
+  {%
+    \ekvd@assert@arg{unknown-choice #1}{#2}%
+      {%
+        \ekvd@assert@not@long{unknown-choice #1}%
+        \ekvd@prot\expandafter
+        \def\csname\ekvd@unknown@choice@name\ekvd@set{#1}\endcsname##1{#2}%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
 % \subsubsection{Key Type Helpers}
 % There are some keys that might need helpers during their execution (not during
 % their definition, which are gathered as |@type@| macros). These helpers are
@@ -1455,7 +1484,7 @@ and the derived files           expkv-def.pdf
 % \begin{macro}[internal]
 %   {
 %     \ekvd@err@choice@invalid,\ekvd@err@choice@invalid@,\ekvd@choice@name,
-%     \ekvd@err
+%     \ekvd@unknown@choice@name,\ekvd@err
 %   }
 % The expandable error messages use |\ekvd@err|, which is just like |\ekv@err|
 % from \expkv\ or the way \pkg{expl3} throws expandable error messages. It uses
@@ -1477,9 +1506,15 @@ and the derived files           expkv-def.pdf
   {%
     ekvd#1(#2)#3%
   }
+\def\ekvd@unknown@choice@name#1#2%
+  {%
+    ekvd:u:#1(#2)%
+  }
 \def\ekvd@err@choice@invalid@ ekvd#1(#2)#3\ekv@stop%
   {%
-    \ekvd@err{invalid choice `#3' (`#2', set `#1')}%
+    \ekv@ifdefined{\ekvd@unknown@choice@name{#1}{#2}}%
+      {\csname\ekvd@unknown@choice@name{#1}{#2}\endcsname{#3}}%
+      {\ekvd@err{invalid choice `#3' (`#2', set `#1')}}%
   }
 }
 \begingroup
