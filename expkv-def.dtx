@@ -1346,10 +1346,7 @@ and the derived files           expkv-def.pdf
   }
 \protected\long\def\ekvd@populate@choice@noarg#1%
   {%
-    \begingroup
-    \edef\ekvd@cur{\detokenize\expandafter{\ekvd@set@choice : #1}}%
-    \ekvd@err@missing@definition
-    \endgroup
+    \expandafter\ekvd@err@missing@definition@msg\expandafter{\ekvd@cur : #1}%
   }
 %    \end{macrocode}
 % |\ekvd@populate@choice@| runs the prefix-test, if there is none we can
@@ -1361,7 +1358,7 @@ and the derived files           expkv-def.pdf
 \protected\long\def\ekvd@populate@choice@#1#2%
   {%
     \ekvd@clear@prefixes
-    \expandafter\ekvd@assert@arg@msg\expandafter{\ekvd@set@choice : #1}{#2}%
+    \expandafter\ekvd@assert@arg@msg\expandafter{\ekvd@cur : #1}{#2}%
       {%
         \ekvd@ifspace{#1}%
           {\ekvd@choice@prefix\ekv@mark#1\ekv@stop}%
@@ -1394,15 +1391,17 @@ and the derived files           expkv-def.pdf
   }
 \protected\def\ekvd@choice@p@protected{\let\ekvd@prot\protected}
 \let\ekvd@choice@p@protect\ekvd@choice@p@protected
-\protected\def\ekvd@choice@p@long\ekvd@ifspace#1%
+\protected\def\ekvd@choice@invalid@p#1\ekvd@ifspace#2%
   {%
-    \expandafter\ekvd@choice@p@long@\expandafter{\ekv@gobble@mark#1}%
-    \ekvd@ifspace{#1}%
+    \expandafter\ekvd@choice@invalid@p@\expandafter{\ekv@gobble@mark#2}{#1}%
+    \ekvd@ifspace{#2}%
   }
-\protected\def\ekvd@choice@p@long@#1%
+\protected\def\ekvd@choice@invalid@p@#1#2%
   {%
-    \expandafter\ekvd@err@no@long@msg\expandafter{\ekvd@set@choice : long #1}%
+    \expandafter\ekvd@err@no@prefix@msg\expandafter{\ekvd@cur : #2 #1}{#2}%
   }
+\protected\def\ekvd@choice@p@long{\ekvd@choice@invalid@p{long}}%
+\protected\def\ekvd@choice@p@also{\ekvd@choice@invalid@p{also}}%
 %    \end{macrocode}
 % Finally we're able to set up the |@t@choice| macro, which has to store the
 % current choice-key's name, define the key, and parse the available choices.
@@ -1628,13 +1627,7 @@ and the derived files           expkv-def.pdf
 \long\def\ekvd@assert@arg#1{\ekvd@ifnoarg{#1}\ekvd@err@missing@definition}
 \long\def\ekvd@assert@arg@msg#1#2%
   {%
-    \ekvd@ifnoarg{#2}%
-      {%
-        \begingroup
-        \edef\ekvd@cur{\detokenize{#1}}%
-        \ekvd@err@missing@definition
-        \endgroup
-      }%
+    \ekvd@ifnoarg{#2}{\ekvd@err@missing@definition@msg{#1}}%
   }
 \long\def\ekvd@ifnoarg#1%
   {%
@@ -1675,16 +1668,19 @@ and the derived files           expkv-def.pdf
 % users will learn to not use unnecessary stuff which slows the compilation
 % down.
 %    \begin{macrocode}
-\def\ekvd@assert@not@long{\ifx\ekvd@long\long\ekvd@err@no@long\fi}
+\def\ekvd@assert@not@long{\ifx\ekvd@long\long\ekvd@err@no@prefix{long}\fi}
 \def\ekvd@assert@not@protected
   {%
-    \ifx\ekvd@prot\protected\ekvd@err@no@protected\fi
+    \ifx\ekvd@prot\protected\ekvd@err@no@prefix{protected}\fi
   }
-\def\ekvd@assert@not@also{\ekvd@ifalso\ekvd@err@no@also{}}
-\def\ekvd@assert@not@long@also{\ifx\ekvd@long\long\ekvd@err@no@long@also\fi}
+\def\ekvd@assert@not@also{\ekvd@ifalso{\ekvd@err@no@prefix{also}}{}}
+\def\ekvd@assert@not@long@also
+  {%
+    \ifx\ekvd@long\long\ekvd@err@no@prefix@also{long}\fi
+  }
 \def\ekvd@assert@not@protected@also
   {%
-    \ifx\ekvd@prot\protected\ekvd@err@no@protected@also\fi
+    \ifx\ekvd@prot\protected\ekvd@err@no@prefix@also{protected}\fi
   }
 %    \end{macrocode}
 % \end{macro}
@@ -1712,48 +1708,28 @@ and the derived files           expkv-def.pdf
 %
 % \begin{macro}[internal]
 %   {
-%     \ekvd@err@missing@definition,\ekvd@err@missing@type,
-%     \ekvd@err@undefined@prefix,\ekvd@err@undefined@key,\ekvd@err@no@protected,
-%     \ekvd@err@no@long,\ekvd@err@no@long@msg,\ekvd@err@no@also,
-%     \ekvd@err@no@long@also,\ekvd@err@no@protected@also
+%     \ekvd@err@missing@definition,\ekvd@err@missing@definition@msg,
+%     \ekvd@err@missing@type,\ekvd@err@undefined@prefix,\ekvd@err@undefined@key,
+%     \ekvd@err@no@prefix,\ekvd@err@no@prefix@msg,\ekvd@err@no@prefix@also
 %   }
 % The non-expandable error messages are boring, so here they are:
 %    \begin{macrocode}
 \protected\def\ekvd@err@missing@definition
   {\errmessage{expkv-def Error: Missing definition for key `\ekvd@cur'}}
+\protected\def\ekvd@err@missing@definition@msg#1%
+  {\errmessage{expkv-def Error: Missing definition for key `\unexpanded{#1}'}}
 \protected\def\ekvd@err@missing@type
   {\errmessage{expkv-def Error: Missing type prefix for key `\ekvd@cur'}}
 \protected\def\ekvd@err@undefined@prefix#1%
   {\errmessage{expkv-def Error: Undefined prefix `\unexpanded{#1}'}}
 \protected\def\ekvd@err@undefined@key#1%
   {\errmessage{expkv-def Error: Undefined key `\unexpanded{#1}'}}
-\protected\def\ekvd@err@no@protected
-  {%
-    \errmessage
-      {expkv-def Error: prefix `protected' not accepted in `\ekvd@cur'}%
-  }
-\protected\def\ekvd@err@no@long
-  {%
-    \errmessage{expkv-def Error: prefix `long' not accepted in `\ekvd@cur'}%
-  }
-\protected\def\ekvd@err@no@long@msg#1%
-  {%
-    \errmessage
-      {expkv-def Error: prefix `long' not accepted in `\unexpanded{#1}'}%
-  }
-\protected\def\ekvd@err@no@also
-  {%
-    \errmessage{exkpv-def Error: prefix `also' not accepted in `\ekvd@cur'}%
-  }
-\protected\def\ekvd@err@no@protected@also
-  {%
-    \errmessage
-      {expkv-def Error: `\ekvd@cur' not allowed with a `protected' key}%
-  }
-\protected\def\ekvd@err@no@long@also
-  {%
-    \errmessage{expkv-def Error: `\ekvd@cur' not allowed with a `long' key}%
-  }
+\protected\def\ekvd@err@no@prefix#1%
+  {\errmessage{expkv-def Error: prefix `#1' not accepted in `\ekvd@cur'}}
+\protected\def\ekvd@err@no@prefix@msg#1#2%
+  {\errmessage{expkv-def Error: prefix `#2' not accepted in `\unexpanded{#1}'}}
+\protected\def\ekvd@err@no@prefix@also#1%
+  {\errmessage{expkv-def Error: `\ekvd@cur' not allowed with a `#1' key}}
 %    \end{macrocode}
 % \end{macro}
 %
