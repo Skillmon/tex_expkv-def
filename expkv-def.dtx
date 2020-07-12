@@ -295,6 +295,10 @@ and the derived files           expkv-def.pdf
 %   order would be suboptimal as well, but can't be really captured with the
 %   current code).
 %
+%   A key already defined as |long| or |protected| will stay |long| or
+%   |protected|, but you can as well add |long| or |protected| with the |also|
+%   definition.
+%
 %   As a small example, suppose you want to create a boolean key, but
 %   additionally to setting a boolean value you want to execute some more code
 %   as well, you can use the following
@@ -714,8 +718,8 @@ and the derived files           expkv-def.pdf
 % \begin{macro}{\ekvdVersion,\ekvdDate}
 % We're on our first input, so lets store the version and date in a macro.
 %    \begin{macrocode}
-\def\ekvdVersion{0.4}
-\def\ekvdDate{2020-07-04}
+\def\ekvdVersion{0.5}
+\def\ekvdDate{2020-07-12}
 %    \end{macrocode}
 % \end{macro}
 %
