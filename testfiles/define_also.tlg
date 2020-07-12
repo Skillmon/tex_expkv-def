@@ -1,0 +1,37 @@
+This is a generated file for the l3build validation system.
+Don't change this file in any respect.
+============================================================
+TEST 1: val
+============================================================
+macro:#1->ab
+macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
+macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
+\protected macro:#1->a\edef \mystore {\unexpanded {#1}}
+\protected macro:#1->a\edef \mystore {#1}
+\protected macro:#1->a\long \edef \mydata ##1##2{##1{\unexpanded {#1}}}
+\protected macro:#1->a\long \edef \mydata ##1##2{##1{#1}}
+\protected macro:#1->a\long \edef \mydata ##1{##1{\unexpanded {#1}}}
+\protected macro:#1->a\long \edef \mydata ##1{##1{#1}}
+\myint=\count...
+macro:#1->a\myint =#1\relax 
+\mydimen=\dimen...
+macro:#1->a\mydimen =#1\relax 
+\myskip=\skip...
+macro:#1->a\myskip =#1\relax 
+\mytoks=\toks...
+\protected macro:#1->a\mytoks {#1}
+\protected macro:#1->a\mytoks \expandafter {\the \mytoks #1}
+\mybox=\box...
+\protected macro:#1->a\setbox \mybox \hbox {\begingroup #1\endgroup }
+macro:#1->a\ekv@set \! expkv Error: Set `test' undefined. \ekv@mark keyB={#1},\ekv@stop ,{}
+macro:#1->a\ekv@set \! expkv Error: Set `set' undefined. \ekv@mark key={#1},\ekv@stop ,{}
+macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
+============================================================
+============================================================
+TEST 2: noval
+============================================================
+macro:->ab
+macro:->a\ekvtest(key) {b}
+macro:->a\ekv@set \! expkv Error: Set `test' undefined. \ekv@mark keyB=B,\ekv@stop ,{}
+macro:->a\ekv@set \! expkv Error: Set `set' undefined. \ekv@mark key={B},\ekv@stop ,{}
+============================================================

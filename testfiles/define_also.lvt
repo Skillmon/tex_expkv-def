@@ -1,0 +1,55 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\OMIT
+\newcommand\defkeys{\ekvdefinekeys{test}}
+\newcommand\defalso[1]{\defkeys{code key = a, also #1}\SHOWKEY}
+\makeatletter
+\newcommand\SHOWKEY
+  {\TYPE{\expandafter\meaning\csname\ekv@name{test}{key}\endcsname\NEWLINE}}
+\makeatother
+\TIMO
+
+\START
+
+\TEST{val}
+  {
+    \defalso{code key = b}
+    \defalso{bool key = \ifmybool}
+    \defalso{boolTF key = \myboolTF}
+    \defalso{store key = \mystore}
+    \defalso{estore key = \mystore}
+    \defalso{data key = \mydata}
+    \defalso{edata key = \mydata}
+    \defalso{dataT key = \mydata}
+    \defalso{edataT key = \mydata}
+    \defalso{int key = \myint}
+    \defalso{dimen key = \mydimen}
+    \defalso{skip key = \myskip}
+    \defalso{toks key = \mytoks}
+    \defalso{apptoks key = \mytoks}
+    \defalso{box key = \mybox}
+    \defalso{meta key = {keyB={#1}}}
+    \defalso{smeta key = {set}{key={#1}}}
+    \defalso{choice key = {a=A,b=B}}
+  }
+
+\OMIT
+\renewcommand\defalso[1]{\defkeys{noval key = a, also #1}\SHOWKEY}
+\makeatletter
+\renewcommand\SHOWKEY
+  {\TYPE{\expandafter\meaning\csname\ekv@name{test}{key}N\endcsname\NEWLINE}}
+\makeatother
+\defkeys{code key=c}
+\TIMO
+
+\TEST{noval}
+  {
+    \defalso{noval key = b}
+    \defalso{default key = b}
+    \defalso{nmeta key={keyB=B}}
+    \defalso{snmeta key={set}{key={B}}}
+  }
+
+\END

@@ -1,0 +1,78 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\OMIT
+\newcommand\defkeys{\ekvdefinekeys{test}}
+\newcommand\defalso[1]{\defkeys{code key = a, also #1}}
+\TIMO
+
+\START
+
+\TEST{undefined}
+  {
+    \defkeys{also code key = a}
+    \defkeys{also noval key = a}
+  }
+
+\TEST{unallowed also}
+  {
+    \defkeys{code key = a, also initial key = b}
+    \defkeys{choice key = {abc=def},also unknown-choice key = b}
+  }
+
+\TEST{val also noval}
+  {
+    \defalso{noval key = b}
+    \defalso{default key = b}
+    \defalso{nmeta key={keyB=B}}
+    \defalso{snmeta key={set}{key={B}}}
+  }
+
+\OMIT
+\renewcommand\defalso[1]{\defkeys{noval key = a, also #1}}
+\TIMO
+
+\TEST{noval also val}
+  {
+    \defalso{code key = b}
+    \defalso{bool key = \ifmybool}
+    \defalso{boolTF key = \myboolTF}
+    \defalso{store key = \mystore}
+    \defalso{estore key = \mystore}
+    \defalso{data key = \mydata}
+    \defalso{edata key = \mydata}
+    \defalso{dataT key = \mydata}
+    \defalso{edataT key = \mydata}
+    \defalso{int key = \myint}
+    \defalso{dimen key = \mydimen}
+    \defalso{skip key = \myskip}
+    \defalso{toks key = \mytoks}
+    \defalso{apptoks key = \mytoks}
+    \defalso{box key = \mybox}
+    \defalso{meta key = {keyB={#1}}}
+    \defalso{smeta key = {set}{key={#1}}}
+    \defalso{choice key = {a=A,b=B}}
+  }
+
+\OMIT
+\makeatletter
+\ekvlet{test}{val}\@firstoftwo
+\ekvletNoVal{test}{noval}\@firstoftwo
+\makeatother
+\TIMO
+
+\TEST{wrong args}
+  {
+    \defkeys{also code val = b}
+    \defkeys{also noval noval = b}
+  }
+
+\TEST{incompatible types}
+  {
+    \defkeys{protected noval key = b,also set key=set}
+    \defkeys{long code key=a,also bool key=\mybool}
+    \defkeys{long code key=a,also choice key={a=a,b=b}}
+  }
+
+\END
