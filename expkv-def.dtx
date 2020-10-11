@@ -759,18 +759,6 @@ and the derived files           expkv-def.pdf
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}[internal]{\ekvd@exp@Nno,\ekvd@exp@reinsert@n}
-%   These are expansion helpers, similar to what \LaTeX3 uses, but simpler and
-%   for just a few cases
-%    \begin{macrocode}
-\long\def\ekvd@exp@Nno#1#2#3%
-  {%
-    \expandafter\ekvd@exp@reinsert@n\expandafter{#3}{#1{#2}}%
-  }
-\long\def\ekvd@exp@reinsert@n#1#2{#2{#1}}
-%    \end{macrocode}
-% \end{macro}
-%
 % \begin{macro}{\ekvdefinekeys}
 % This is the one front-facing macro which provides the interface to define
 % keys. It's using |\ekvparse| to handle the \kv\ list, the interpretation will
@@ -895,7 +883,7 @@ and the derived files           expkv-def.pdf
         \ekvd@assert@not@long
         \ekvd@prot#2\ekvd@tmp{#4}%
         \ekvd@ifalso
-          {\ekvd@exp@Nno\ekvd@add@noval{#3}\ekvd@tmp{}}%
+          {\ekv@expB@unbraceA{\ekvd@add@noval{#3}}\ekvd@tmp{}}%
           {\ekvletNoVal\ekvd@set{#3}\ekvd@tmp}%
       }%
   }
@@ -914,7 +902,7 @@ and the derived files           expkv-def.pdf
       {%
         \ekvd@prot\ekvd@long#2\ekvd@tmp##1{#4}%
         \ekvd@ifalso
-          {\ekvd@exp@Nno\ekvd@add@val{#3}{\ekvd@tmp{##1}}{}}%
+          {\ekv@expB@unbraceA{\ekvd@add@val{#3}}{\ekvd@tmp{##1}}{}}%
           {\ekvlet\ekvd@set{#3}\ekvd@tmp}%
       }%
   }
@@ -943,7 +931,7 @@ and the derived files           expkv-def.pdf
                   {\csname\ekv@name\ekvd@set{#3}\endcsname{#4}}%
               }%
             \ekvd@ifalso
-              {\ekvd@exp@Nno\ekvd@add@noval{#3}\ekvd@tmp{}}%
+              {\ekv@expB@unbraceA{\ekvd@add@noval{#3}}\ekvd@tmp{}}%
               {\ekvletNoVal\ekvd@set{#3}\ekvd@tmp}%
           }%
           {\ekvd@err@undefined@key{#3}}%
@@ -968,7 +956,7 @@ and the derived files           expkv-def.pdf
             \ekvd@prot\edef\ekvd@tmp
               {\csname\ekv@name\ekvd@set{#1}\endcsname{#2}}%
             \ekvd@ifalso
-              {\ekvd@exp@Nno\ekvd@add@noval{#1}\ekvd@tmp{}}%
+              {\ekv@expB@unbraceA{\ekvd@add@noval{#1}}\ekvd@tmp{}}%
               {\ekvletNoVal\ekvd@set{#1}\ekvd@tmp}%
           }%
           {\ekvd@err@undefined@key{#1}}%
@@ -1260,7 +1248,7 @@ and the derived files           expkv-def.pdf
         \edef\ekvd@tmp{\ekvd@set}%
         \expandafter\ekvd@type@meta@a\expandafter{\ekvd@tmp}{#8}{#3}%
         \ekvd@ifalso
-          {\ekvd@exp@Nno#4{#7}{\ekvd@tmp#5}{#6}}%
+          {\ekv@expB@unbraceA{#4{#7}}{\ekvd@tmp#5}{#6}}%
           {#2\ekvd@set{#7}\ekvd@tmp}%
       }%
   }
@@ -1298,7 +1286,7 @@ and the derived files           expkv-def.pdf
       {%
         \ekvd@type@meta@a#8{#3}%
         \ekvd@ifalso
-          {\ekvd@exp@Nno#4{#7}{\ekvd@tmp#5}{#6}}%
+          {\ekv@expB@unbraceA{#4{#7}}{\ekvd@tmp#5}{#6}}%
           {#2\ekvd@set{#7}\ekvd@tmp}%
       }%
   }
@@ -1335,7 +1323,8 @@ and the derived files           expkv-def.pdf
       }%
     \ekvd@ifalso
       {%
-        \ekvd@exp@Nno\ekvd@add@val{#2}{\ekvd@tmp{##1}}\ekvd@assert@not@long@also
+        \ekv@expB@unbraceA{\ekvd@add@val{#2}}{\ekvd@tmp{##1}}%
+          \ekvd@assert@not@long@also
       }%
       {\ekvlet\ekvd@set{#2}\ekvd@tmp}%
   }
