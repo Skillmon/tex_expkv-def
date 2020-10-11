@@ -46,6 +46,8 @@
         ,protected key
         ,long protected key
         ,undefined key
+        ,boolpair key
+        ,boolpair key = {}
       }
   }
 
@@ -65,6 +67,7 @@
         ,protected set key
         ,long protected set key
         ,long choice key = {}
+        ,long boolpair key = \pairA\pairB
       }
   }
 

@@ -129,6 +129,14 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
+! expkv-def Error: Missing definition for key `boolpair key'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+! expkv-def Error: Missing definition for key `boolpair key'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
 ============================================================
 ============================================================
 TEST 3: invalid prefixes
@@ -213,6 +221,10 @@ l. ...  }
 l. ...  }
 (That was another \errmessage.)
 ! expkv-def Error: prefix `long' not accepted in `long choice key'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+! expkv-def Error: prefix `long' not accepted in `long boolpair key'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)

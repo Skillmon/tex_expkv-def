@@ -53,6 +53,7 @@
     \defalso{meta key = {keyB={#1}}}
     \defalso{smeta key = {set}{key={#1}}}
     \defalso{choice key = {a=A,b=B}}
+    \defalso{boolpair key = \ifmyboolA\ifmyboolB}
   }
 
 \OMIT
@@ -73,6 +74,7 @@
     \defkeys{protected noval key = b,also set key=set}
     \defkeys{long code key=a,also bool key=\mybool}
     \defkeys{long code key=a,also choice key={a=a,b=b}}
+    \defkeys{long code key=a,also boolpair key=\ifmyboolA\ifmyboolB}
   }
 
 \END

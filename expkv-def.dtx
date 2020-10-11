@@ -1065,6 +1065,47 @@ and the derived files           expkv-def.pdf
 %
 % \begin{macro}[internal]
 %   {
+%     \ekvd@type@boolpair,
+%     \ekvd@t@boolpair,\ekvd@t@gboolpair,\ekvd@t@boolpairTF,\ekvd@t@gboolpairTF
+%   }
+% The boolean pair types are essentially the same as the boolean types, but set
+% two macros instead of one.
+%    \begin{macrocode}
+\protected\def\ekvd@type@boolpair#1#2#3#4#5#6#7#8%
+  {%
+    \ekvd@newlet#7#5%
+    \ekvd@newlet#8#4%
+    \ekvd@type@choice{#1boolpair#2}{#6}%
+    \protected\ekvdefNoVal\ekvd@set{#6}{#3\let#7#4#3\let#8#5}%
+    \protected\expandafter\def
+      \csname\ekvd@choice@name\ekvd@set{#6}{true}\endcsname
+      {#3\let#7#4#3\let#8#5}%
+    \protected\expandafter\def
+      \csname\ekvd@choice@name\ekvd@set{#6}{false}\endcsname
+      {#3\let#7#5#3\let#8#4}%
+  }
+\protected\def\ekvd@t@boolpair#1#2%
+  {\ekvd@assert@twoargs{#2}{\ekvd@type@boolpair{}{}{}\iftrue\iffalse{#1}#2}}
+\protected\def\ekvd@t@gboolpair#1#2%
+  {%
+    \ekvd@assert@twoargs{#2}%
+      {\ekvd@type@boolpair g{}\global\iftrue\iffalse{#1}#2}%
+  }
+\protected\def\ekvd@t@boolpairTF#1#2%
+  {%
+    \ekvd@assert@twoargs{#2}%
+      {\ekvd@type@boolpair{}{TF}{}\@firstoftwo\@secondoftwo{#1}#2}%
+  }
+\protected\def\ekvd@t@gboolpairTF#1#2%
+  {%
+    \ekvd@assert@twoargs{#2}%
+      {\ekvd@type@boolpair g{TF}\global\@firstoftwo\@secondoftwo{#1}#2}%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {
 %     \ekvd@type@data,\ekvd@t@data,\ekvd@t@gdata,\ekvd@t@dataT,\ekvd@t@gdataT
 %   }
 %    \begin{macrocode}

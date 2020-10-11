@@ -26,6 +26,7 @@ macro:#1->a\myskip =#1\relax
 macro:#1->a\ekv@set \! expkv Error: Set `test' undefined. \ekv@mark keyB={#1},\ekv@stop ,{}
 macro:#1->a\ekv@set \! expkv Error: Set `set' undefined. \ekv@mark key={#1},\ekv@stop ,{}
 macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
+macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
 ============================================================
 ============================================================
 TEST 2: noval

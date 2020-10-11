@@ -140,6 +140,10 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
+! expkv-def Error: `also boolpair key' not allowed with a NoVal key.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
 ============================================================
 ============================================================
 TEST 5: wrong args
@@ -165,6 +169,10 @@ l. ...  }
 l. ...  }
 (That was another \errmessage.)
 ! expkv-def Error: `also choice key' not allowed with a `long' key.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+! expkv-def Error: `also boolpair key' not allowed with a `long' key.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)

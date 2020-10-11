@@ -33,6 +33,7 @@
     \defalso{meta key = {keyB={#1}}}
     \defalso{smeta key = {set}{key={#1}}}
     \defalso{choice key = {a=A,b=B}}
+    \defalso{boolpair key = \ifmyboolA\ifmyboolB}
   }
 
 \OMIT

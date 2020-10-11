@@ -162,4 +162,49 @@
     \usekeys{keyUC=a,keyUC=b,keyUC=c}
   }
 
+\TEST{invbool}
+  {
+    \defkeys{invbool keyL = \keyL}
+    \keyL\TRUE\else\FALSE\fi
+    \usekeys{keyL = false}
+    \keyL\TRUE\else\FALSE\fi
+    \usekeys{keyL = true}
+    \keyL\TRUE\else\FALSE\fi
+    \usekeys{keyL}
+    \keyL\TRUE\else\FALSE\fi
+  }
+\TEST{invboolTF}
+  {
+    \defkeys{invboolTF keyM = \keyM}
+    \keyM\TRUE\FALSE
+    \usekeys{keyM = false}
+    \keyM\TRUE\FALSE
+    \usekeys{keyM = true}
+    \keyM\TRUE\FALSE
+    \usekeys{keyM}
+    \keyM\TRUE\FALSE
+  }
+\TEST{boolpair}
+  {
+    \defkeys{boolpair keyN = \keyNa\keyNb}
+    \keyNa\TRUE\else\FALSE\fi\keyNb\FALSE\else\TRUE\fi
+    \usekeys{keyN = false}
+    \keyNa\TRUE\else\FALSE\fi\keyNb\FALSE\else\TRUE\fi
+    \usekeys{keyN = true}
+    \keyNa\TRUE\else\FALSE\fi\keyNb\FALSE\else\TRUE\fi
+    \usekeys{keyN}
+    \keyNa\TRUE\else\FALSE\fi\keyNb\FALSE\else\TRUE\fi
+  }
+\TEST{boolpairTF}
+  {
+    \defkeys{boolpairTF keyO = \keyOa\keyOb}
+    \keyOa\TRUE\FALSE\keyOb\FALSE\TRUE
+    \usekeys{keyO = false}
+    \keyOa\TRUE\FALSE\keyOb\FALSE\TRUE
+    \usekeys{keyO = true}
+    \keyOa\TRUE\FALSE\keyOb\FALSE\TRUE
+    \usekeys{keyO}
+    \keyOa\TRUE\FALSE\keyOb\FALSE\TRUE
+  }
+
 \END
