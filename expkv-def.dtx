@@ -1025,7 +1025,10 @@ and the derived files           expkv-def.pdf
 % \end{macro}
 %
 % \begin{macro}[internal]
-%   {\ekvd@type@bool,\ekvd@t@bool,\ekvd@t@gbool,\ekvd@t@boolTF,\ekvd@t@gboolTF}
+%   {
+%     \ekvd@type@bool,\ekvd@t@bool,\ekvd@t@gbool,\ekvd@t@boolTF,\ekvd@t@gboolTF,
+%     \ekvd@t@invbool,\ekvd@t@ginvbool,\ekvd@t@invboolTF,\ekvd@t@ginvboolTF,
+%   }
 % The boolean types are a quicker version of a |choice| that accept |true| and
 % |false|, and set up the |NoVal| action to be identical to \texttt{\key=true}.
 % The |true| and |false| actions are always just |\let|ting the macro in |#7| to
@@ -1051,6 +1054,12 @@ and the derived files           expkv-def.pdf
 \protected\def\ekvd@t@boolTF{\ekvd@type@bool{}{TF}{}\@firstoftwo\@secondoftwo}
 \protected\def\ekvd@t@gboolTF
   {\ekvd@type@bool g{TF}\global\@firstoftwo\@secondoftwo}
+\protected\def\ekvd@t@invbool{\ekvd@type@bool{}{}{}\iffalse\iftrue}
+\protected\def\ekvd@t@ginvbool{\ekvd@type@bool g{}\global\iffalse\iftrue}
+\protected\def\ekvd@t@invboolTF
+  {\ekvd@type@bool{}{TF}{}\@secondoftwo\@firstoftwo}
+\protected\def\ekvd@t@ginvboolTF
+  {\ekvd@type@bool g{TF}\global\@secondoftwo\@firstoftwo}
 %    \end{macrocode}
 % \end{macro}
 %
