@@ -75,6 +75,8 @@
     \defkeys{long code key=a,also bool key=\mybool}
     \defkeys{long code key=a,also choice key={a=a,b=b}}
     \defkeys{long code key=a,also boolpair key=\ifmyboolA\ifmyboolB}
+    \defkeys{choice key={a=A,b=B}, also bool key=\mybool}
+    \defkeys{bool key=\myboolA, also invbool key=\myboolB}
   }
 
 \END

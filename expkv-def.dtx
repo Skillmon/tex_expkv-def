@@ -1393,13 +1393,22 @@ and the derived files           expkv-def.pdf
   {%
     \ekvd@assert@not@long
     \ekvd@prot\edef\ekvd@tmp##1%
-      {%
-        \unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#1}{##1}}%
-      }%
+      {\unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#1}{##1}}}%
     \ekvd@ifalso
       {%
-        \ekv@expB@unbraceA{\ekvd@add@val{#1}}{\ekvd@tmp{##1}}%
-          \ekvd@assert@not@long@also
+        \ekvd@assert@val{#1}%
+          {%
+            \ekvd@assert@not@already@choice{#1}%
+              {%
+                \ekv@expB@unbraceA
+                  {%
+                    \expandafter\ekvd@add@aux
+                      \csname\ekv@name\ekvd@set{#1}\endcsname{{##1}}{#1}%
+                  }%
+                  {\ekvd@tmp{##1}}%
+                  {\ekvd@long\ekvdef}\ekvd@assert@not@long@also
+              }%
+          }%
       }%
       {\ekvlet\ekvd@set{#1}\ekvd@tmp}%
   }
@@ -1762,6 +1771,32 @@ and the derived files           expkv-def.pdf
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}[internal]
+%   {
+%     \ekvd@assert@not@already@choice, \ekvd@assert@not@already@choice@a,
+%     \ekvd@assert@not@already@choice@b
+%   }
+% It is bad to use |also| on a key that already contains a |choice|, as both
+% choices would share the same valid values and thus lead to each callback being
+% used twice. The following is a rudimentary test against this.
+%    \begin{macrocode}
+\protected\def\ekvd@assert@not@already@choice#1%
+  {%
+    \expandafter\ekvd@assert@not@already@choice@a
+      \csname\ekv@name\ekvd@set{#1}\endcsname
+      {}\ekvd@h@choice\ekvd@stop
+  }
+\protected\def\ekvd@assert@not@already@choice@a
+  {%
+    \expandafter\ekvd@assert@not@already@choice@b
+  }
+\long\protected\def\ekvd@assert@not@already@choice@b#1\ekvd@h@choice#2\ekvd@stop
+  {%
+    \ekv@ifempty{#2}\@firstofone{\ekvd@err@already@choice\@gobble}%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}[internal]{\ekvd@ifspace,\ekvd@ifspace@}
 % Yet another test which can be reduced to an if-empty, this time by gobbling
 % everything up to the first space.
@@ -1789,7 +1824,7 @@ and the derived files           expkv-def.pdf
 %     \ekvd@err@missing@type,\ekvd@err@undefined@prefix,\ekvd@err@undefined@key,
 %     \ekvd@err@no@prefix,\ekvd@err@no@prefix@msg,\ekvd@err@no@prefix@also,
 %     \ekvd@err@add@val@on@noval,\ekvd@err@add@noval@on@val,
-%     \ekvd@err@unsupported@arg
+%     \ekvd@err@unsupported@arg,\ekvd@err@already@choice
 %   }
 % The non-expandable error messages are boring, so here they are:
 %    \begin{macrocode}
@@ -1829,6 +1864,8 @@ and the derived files           expkv-def.pdf
         `\ekvd@extracted@args' for key `\ekvd@cur'%
       }%
   }
+\protected\def\ekvd@err@already@choice
+  {\ekvd@errm{`\ekvd@cur' not allowed for a key that already contains a choice}}
 %    \end{macrocode}
 % \end{macro}
 %
