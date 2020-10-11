@@ -768,18 +768,28 @@ and the derived files           expkv-def.pdf
 \protected\def\ekvdefinekeys#1%
   {%
     \def\ekvd@set{#1}%
-    \ekvparse\ekvd@noarg\ekvd@
+    \ekvparse\ekvd@noarg\ekvd@arg
   }
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}[internal]{\ekvd@noarg,\ekvd@}
-% |\ekvd@noarg| just places a special marker and gives control to |\ekvd@|.
-% |\ekvd@| has to test whether there is a space inside the key and if so calls
-% the prefix grabbing routine, else we throw an error and ignore the key.
+% \begin{macro}[internal]{\ekvd@noarg,\ekvd@arg,\ekvd@handle}
+% |\ekvd@noarg| and |\ekvd@arg| store whether there was a value in the \kv\
+% pair. |\ekvd@handle| has to test whether there is a space inside the key and
+% if so calls the prefix grabbing routine, else we throw an error and ignore the
+% key.
 %    \begin{macrocode}
-\protected\def\ekvd@noarg#1{\ekvd@{#1}\ekvd@noarg@mark}
-\protected\long\def\ekvd@#1#2%
+\protected\def\ekvd@noarg#1%
+  {%
+    \let\ekvd@ifnoarg\@firstoftwo
+    \ekvd@handle{#1}{}%
+  }
+\protected\def\ekvd@arg
+  {%
+    \let\ekvd@ifnoarg\@secondoftwo
+    \ekvd@handle
+  }
+\protected\long\def\ekvd@handle#1#2%
   {%
     \ekvd@clear@prefixes
     \edef\ekvd@cur{\detokenize{#1}}%
@@ -840,11 +850,11 @@ and the derived files           expkv-def.pdf
 %
 % \subsubsection{Key Types}
 %
-% \begin{macro}[internal]{\ekvd@t@set}
+% \begin{macro}[internal]{\ekvd@type@set,\ekvd@t@set}
 % The |set| type is quite straight forward, just define a |NoVal| key to call
 % |\ekvchangeset|.
 %    \begin{macrocode}
-\protected\def\ekvd@t@set#1#2%
+\protected\def\ekvd@type@set#1#2%
   {%
     \ekvd@assert@not@long
     \ekvd@assert@not@protected
@@ -853,17 +863,17 @@ and the derived files           expkv-def.pdf
       {%
         \ekvd@ifalso
           {%
-            \ekvd@ifnoarg{#2}%
-              {\ekvd@add@noval{#1}{\ekvchangeset{#1}}}%
-              {\ekvd@add@noval{#1}{\ekvchangeset{#2}}}%
+            \ekvd@add@noval{#1}{\ekvchangeset{#2}}%
               \ekvd@assert@not@protected@also
           }%
-          {%
-            \ekvd@ifnoarg{#2}%
-              {\ekvdefNoVal\ekvd@set{#1}{\ekvchangeset{#1}}}%
-              {\ekvdefNoVal\ekvd@set{#1}{\ekvchangeset{#2}}}%
-          }%
+          {\ekvdefNoVal\ekvd@set{#1}{\ekvchangeset{#2}}}%
       }%
+  }
+\protected\def\ekvd@t@set#1#2%
+  {%
+    \ekvd@ifnoarg
+      {\ekvd@type@set{#1}{#1}}%
+      {\ekvd@type@set{#1}{#2}}%
   }
 %    \end{macrocode}
 % \end{macro}
@@ -878,7 +888,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \protected\long\def\ekvd@type@noval#1#2#3#4%
   {%
-    \ekvd@assert@arg{#4}%
+    \ekvd@assert@arg
       {%
         \ekvd@assert@not@long
         \ekvd@prot#2\ekvd@tmp{#4}%
@@ -898,7 +908,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \protected\long\def\ekvd@type@code#1#2#3#4%
   {%
-    \ekvd@assert@arg{#4}
+    \ekvd@assert@arg
       {%
         \ekvd@prot\ekvd@long#2\ekvd@tmp##1{#4}%
         \ekvd@ifalso
@@ -920,7 +930,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \protected\long\def\ekvd@type@default#1#2#3#4%
   {%
-    \ekvd@assert@arg{#4}%
+    \ekvd@assert@arg
       {%
         \ekvifdefined\ekvd@set{#3}%
           {%
@@ -948,7 +958,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \protected\long\def\ekvd@t@edefault#1#2%
   {%
-    \ekvd@assert@arg{#2}%
+    \ekvd@assert@arg
       {%
         \ekvifdefined\ekvd@set{#1}%
           {%
@@ -969,7 +979,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \long\def\ekvd@t@initial#1#2%
   {%
-    \ekvd@assert@arg{#2}%
+    \ekvd@assert@arg
       {%
         \ekvifdefined\ekvd@set{#1}%
           {%
@@ -983,7 +993,7 @@ and the derived files           expkv-def.pdf
   }
 \long\def\ekvd@t@oinitial#1#2%
   {%
-    \ekvd@assert@arg{#2}%
+    \ekvd@assert@arg
       {%
         \ekvifdefined\ekvd@set{#1}%
           {%
@@ -997,7 +1007,7 @@ and the derived files           expkv-def.pdf
   }
 \long\def\ekvd@t@einitial#1#2%
   {%
-    \ekvd@assert@arg{#2}%
+    \ekvd@assert@arg
       {%
         \ekvifdefined\ekvd@set{#1}%
           {%
@@ -1351,7 +1361,7 @@ and the derived files           expkv-def.pdf
 \protected\long\def\ekvd@populate@choice@#1#2%
   {%
     \ekvd@clear@prefixes
-    \expandafter\ekvd@assert@arg@msg\expandafter{\ekvd@cur : #1}{#2}%
+    \expandafter\ekvd@assert@arg@msg\expandafter{\ekvd@cur : #1}%
       {%
         \ekvd@ifspace{#1}%
           {\ekvd@choice@prefix\ekv@mark#1\ekv@stop}%
@@ -1401,7 +1411,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \protected\long\def\ekvd@t@choice#1#2%
   {%
-    \ekvd@assert@arg{#2}%
+    \ekvd@assert@arg
       {%
         \ekvd@type@choice{choice}{#1}%
         \def\ekvd@set@choice{#1}%
@@ -1415,7 +1425,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \protected\long\expandafter\def\csname ekvd@t@unknown-choice\endcsname#1#2%
   {%
-    \ekvd@assert@arg{#2}%
+    \ekvd@assert@arg
       {%
         \ekvd@assert@not@long
         \ekvd@assert@not@also
@@ -1633,30 +1643,14 @@ and the derived files           expkv-def.pdf
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}[internal]
-%   {
-%     \ekvd@assert@arg,\ekvd@assert@arg@msg,\ekvd@ifnoarg,\ekvd@ifnoarg@,
-%     \ekvd@ifnoarg@
-%   }
-% An |\ifx| comparison would fail if the first token of the user input is a
-% \TeX-if primitive or the user input contains unbalanced \TeX-if constructs, so
-% the test is done using \TeX's argument grabbing logic.
+% \begin{macro}[internal]{\ekvd@assert@arg,\ekvd@assert@arg@msg,\ekvd@ifnoarg}
+% There is no need to actually define |\ekvd@ifnoarg| here, as it will be set by
+% either |\ekvd@arg| or |\ekvd@noarg|.
 %    \begin{macrocode}
-\long\def\ekvd@assert@arg#1{\ekvd@ifnoarg{#1}\ekvd@err@missing@definition}
-\long\def\ekvd@assert@arg@msg#1#2%
+\def\ekvd@assert@arg{\ekvd@ifnoarg\ekvd@err@missing@definition}
+\long\def\ekvd@assert@arg@msg#1%
   {%
-    \ekvd@ifnoarg{#2}{\ekvd@err@missing@definition@msg{#1}}%
-  }
-\long\def\ekvd@ifnoarg#1%
-  {%
-    \ekvd@ifnoarg@\ekvd@ifnoarg@mark#1\ekvd@ifnoarg@mark\ekvd@ifnoarg@t
-      \ekvd@ifnoarg@mark\ekvd@noarg@mark\ekvd@ifnoarg@mark\@secondoftwo
-  }
-\long\def\ekvd@ifnoarg@#1\ekvd@ifnoarg@mark\ekvd@noarg@mark\ekvd@ifnoarg@mark{}
-\long\def\ekvd@ifnoarg@t
-    \ekvd@ifnoarg@mark\ekvd@noarg@mark\ekvd@ifnoarg@mark\@secondoftwo#1#2%
-  {%
-    #1%
+    \ekvd@ifnoarg{\ekvd@err@missing@definition@msg{#1}}%
   }
 %    \end{macrocode}
 % \end{macro}
@@ -1669,7 +1663,7 @@ and the derived files           expkv-def.pdf
   }
 \long\def\ekvd@ifnoarg@or@empty#1%
   {%
-    \ekvd@ifnoarg{#1}%
+    \ekvd@ifnoarg
       \@firstoftwo
       {\ekv@ifempty{#1}}%
   }
