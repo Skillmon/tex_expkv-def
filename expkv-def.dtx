@@ -1058,32 +1058,30 @@ and the derived files           expkv-def.pdf
 % The |true| and |false| actions are always just |\let|ting the macro in |#7| to
 % some other macro (\emph{e.g.}, \cs[no-index]{iftrue}).
 %    \begin{macrocode}
-\protected\def\ekvd@type@bool#1#2#3#4#5#6#7%
+\protected\def\ekvd@type@bool#1#2#3#4#5%
   {%
-    \ekvd@assert@filledarg{#7}%
+    \ekvd@assert@filledarg{#5}%
       {%
-        \ekvd@newlet#7#5%
-        \ekvd@type@choice{#1bool#2}{#6}%
-        \protected\ekvdefNoVal\ekvd@set{#6}{#3\let#7#4}%
+        \ekvd@newlet#5#3%
+        \ekvd@type@choice{#4}%
+        \protected\ekvdefNoVal\ekvd@set{#4}{#1\let#5#2}%
         \protected\expandafter\def
-          \csname\ekvd@choice@name\ekvd@set{#6}{true}\endcsname
-          {#3\let#7#4}%
+          \csname\ekvd@choice@name\ekvd@set{#4}{true}\endcsname
+          {#1\let#5#2}%
         \protected\expandafter\def
-          \csname\ekvd@choice@name\ekvd@set{#6}{false}\endcsname
-          {#3\let#7#5}%
+          \csname\ekvd@choice@name\ekvd@set{#4}{false}\endcsname
+          {#1\let#5#3}%
       }%
   }
-\protected\def\ekvd@t@bool{\ekvd@type@bool{}{}{}\iftrue\iffalse}
-\protected\def\ekvd@t@gbool{\ekvd@type@bool g{}\global\iftrue\iffalse}
-\protected\def\ekvd@t@boolTF{\ekvd@type@bool{}{TF}{}\@firstoftwo\@secondoftwo}
-\protected\def\ekvd@t@gboolTF
-  {\ekvd@type@bool g{TF}\global\@firstoftwo\@secondoftwo}
-\protected\def\ekvd@t@invbool{\ekvd@type@bool{}{}{}\iffalse\iftrue}
-\protected\def\ekvd@t@ginvbool{\ekvd@type@bool g{}\global\iffalse\iftrue}
-\protected\def\ekvd@t@invboolTF
-  {\ekvd@type@bool{}{TF}{}\@secondoftwo\@firstoftwo}
+\protected\def\ekvd@t@bool{\ekvd@type@bool{}\iftrue\iffalse}
+\protected\def\ekvd@t@gbool{\ekvd@type@bool\global\iftrue\iffalse}
+\protected\def\ekvd@t@boolTF{\ekvd@type@bool{}\@firstoftwo\@secondoftwo}
+\protected\def\ekvd@t@gboolTF{\ekvd@type@bool\global\@firstoftwo\@secondoftwo}
+\protected\def\ekvd@t@invbool{\ekvd@type@bool{}\iffalse\iftrue}
+\protected\def\ekvd@t@ginvbool{\ekvd@type@bool\global\iffalse\iftrue}
+\protected\def\ekvd@t@invboolTF{\ekvd@type@bool{}\@secondoftwo\@firstoftwo}
 \protected\def\ekvd@t@ginvboolTF
-  {\ekvd@type@bool g{TF}\global\@secondoftwo\@firstoftwo}
+  {\ekvd@type@bool\global\@secondoftwo\@firstoftwo}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1095,35 +1093,32 @@ and the derived files           expkv-def.pdf
 % The boolean pair types are essentially the same as the boolean types, but set
 % two macros instead of one.
 %    \begin{macrocode}
-\protected\def\ekvd@type@boolpair#1#2#3#4#5#6#7#8%
+\protected\def\ekvd@type@boolpair#1#2#3#4#5#6%
   {%
-    \ekvd@newlet#7#5%
-    \ekvd@newlet#8#4%
-    \ekvd@type@choice{#1boolpair#2}{#6}%
-    \protected\ekvdefNoVal\ekvd@set{#6}{#3\let#7#4#3\let#8#5}%
+    \ekvd@newlet#5#3%
+    \ekvd@newlet#6#2%
+    \ekvd@type@choice{#4}%
+    \protected\ekvdefNoVal\ekvd@set{#4}{#1\let#5#2#1\let#6#3}%
     \protected\expandafter\def
-      \csname\ekvd@choice@name\ekvd@set{#6}{true}\endcsname
-      {#3\let#7#4#3\let#8#5}%
+      \csname\ekvd@choice@name\ekvd@set{#4}{true}\endcsname
+      {#1\let#5#2#1\let#6#3}%
     \protected\expandafter\def
-      \csname\ekvd@choice@name\ekvd@set{#6}{false}\endcsname
-      {#3\let#7#5#3\let#8#4}%
+      \csname\ekvd@choice@name\ekvd@set{#4}{false}\endcsname
+      {#1\let#5#3#1\let#6#2}%
   }
 \protected\def\ekvd@t@boolpair#1#2%
-  {\ekvd@assert@twoargs{#2}{\ekvd@type@boolpair{}{}{}\iftrue\iffalse{#1}#2}}
+  {\ekvd@assert@twoargs{#2}{\ekvd@type@boolpair{}\iftrue\iffalse{#1}#2}}
 \protected\def\ekvd@t@gboolpair#1#2%
-  {%
-    \ekvd@assert@twoargs{#2}%
-      {\ekvd@type@boolpair g{}\global\iftrue\iffalse{#1}#2}%
-  }
+  {\ekvd@assert@twoargs{#2}{\ekvd@type@boolpair\global\iftrue\iffalse{#1}#2}}
 \protected\def\ekvd@t@boolpairTF#1#2%
   {%
     \ekvd@assert@twoargs{#2}%
-      {\ekvd@type@boolpair{}{TF}{}\@firstoftwo\@secondoftwo{#1}#2}%
+      {\ekvd@type@boolpair{}\@firstoftwo\@secondoftwo{#1}#2}%
   }
 \protected\def\ekvd@t@gboolpairTF#1#2%
   {%
     \ekvd@assert@twoargs{#2}%
-      {\ekvd@type@boolpair g{TF}\global\@firstoftwo\@secondoftwo{#1}#2}%
+      {\ekvd@type@boolpair\global\@firstoftwo\@secondoftwo{#1}#2}%
   }
 %    \end{macrocode}
 % \end{macro}
@@ -1133,33 +1128,32 @@ and the derived files           expkv-def.pdf
 %     \ekvd@type@data,\ekvd@t@data,\ekvd@t@gdata,\ekvd@t@dataT,\ekvd@t@gdataT
 %   }
 %    \begin{macrocode}
-\protected\def\ekvd@type@data#1#2#3#4#5#6#7#8%
+\protected\def\ekvd@type@data#1#2#3#4#5#6%
   {%
-    \ekvd@assert@filledarg{#8}%
+    \ekvd@assert@filledarg{#6}%
       {%
-        \ekvd@newlet#8#3%
+        \ekvd@newlet#6#1%
         \ekvd@ifalso
           {%
             \let\ekvd@prot\protected
-            \ekvd@add@val{#7}{\long#4#8####1#5{####1{#6}}}{}%
+            \ekvd@add@val{#5}{\long#2#6####1#3{####1{#4}}}{}%
           }%
           {%
-            \protected\ekvd@long\ekvdef\ekvd@set{#7}%
-              {\long#4#8####1#5{####1{#6}}}%
+            \protected\ekvd@long\ekvdef\ekvd@set{#5}%
+              {\long#2#6####1#3{####1{#4}}}%
           }%
       }%
   }
 \protected\def\ekvd@t@data
-  {\ekvd@type@data{}{}\@secondoftwo\edef{####2}{\unexpanded{##1}}}
-\protected\def\ekvd@t@edata{\ekvd@type@data e{}\@secondoftwo\edef{####2}{##1}}
+  {\ekvd@type@data\@secondoftwo\edef{####2}{\unexpanded{##1}}}
+\protected\def\ekvd@t@edata{\ekvd@type@data\@secondoftwo\edef{####2}{##1}}
 \protected\def\ekvd@t@gdata
-  {\ekvd@type@data g{}\@secondoftwo\xdef{####2}{\unexpanded{##1}}}
-\protected\def\ekvd@t@xdata{\ekvd@type@data x{}\@secondoftwo\xdef{####2}{##1}}
-\protected\def\ekvd@t@dataT{\ekvd@type@data{}T\@gobble\edef{}{\unexpanded{##1}}}
-\protected\def\ekvd@t@edataT{\ekvd@type@data eT\@gobble\edef{}{##1}}
-\protected\def\ekvd@t@gdataT
-  {\ekvd@type@data gT\@gobble\xdef{}{\unexpanded{##1}}}
-\protected\def\ekvd@t@xdataT{\ekvd@type@data xT\@gobble\xdef{}{##1}}
+  {\ekvd@type@data\@secondoftwo\xdef{####2}{\unexpanded{##1}}}
+\protected\def\ekvd@t@xdata{\ekvd@type@data\@secondoftwo\xdef{####2}{##1}}
+\protected\def\ekvd@t@dataT{\ekvd@type@data\@gobble\edef{}{\unexpanded{##1}}}
+\protected\def\ekvd@t@edataT{\ekvd@type@data\@gobble\edef{}{##1}}
+\protected\def\ekvd@t@gdataT{\ekvd@type@data\@gobble\xdef{}{\unexpanded{##1}}}
+\protected\def\ekvd@t@xdataT{\ekvd@type@data\@gobble\xdef{}{##1}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1170,45 +1164,45 @@ and the derived files           expkv-def.pdf
 % whether the first argument is defined and if not does
 % |\csname new#2\endcsname#1|.
 %    \begin{macrocode}
-\protected\def\ekvd@type@box#1#2#3#4%
+\protected\def\ekvd@type@box#1#2#3%
   {%
-    \ekvd@assert@filledarg{#4}%
+    \ekvd@assert@filledarg{#3}%
       {%
-        \ekvd@newreg#4{box}%
+        \ekvd@newreg#3{box}%
         \ekvd@ifalso
           {%
             \let\ekvd@prot\protected
-            \ekvd@add@val{#3}{#2\setbox#4\hbox{\begingroup##1\endgroup}}{}%
+            \ekvd@add@val{#2}{#1\setbox#3\hbox{\begingroup##1\endgroup}}{}%
           }%
           {%
-            \protected\ekvd@long\ekvdef\ekvd@set{#3}%
-              {#2\setbox#4\hbox{\begingroup##1\endgroup}}%
+            \protected\ekvd@long\ekvdef\ekvd@set{#2}%
+              {#1\setbox#3\hbox{\begingroup##1\endgroup}}%
           }%
       }%
   }
-\protected\def\ekvd@t@box{\ekvd@type@box{}{}}
-\protected\def\ekvd@t@gbox{\ekvd@type@box g\global}
+\protected\def\ekvd@t@box{\ekvd@type@box{}}
+\protected\def\ekvd@t@gbox{\ekvd@type@box\global}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}[internal]{\ekvd@type@toks,\ekvd@t@toks,\ekvd@t@gtoks}
 % Similar to |box|, but set the |toks|.
 %    \begin{macrocode}
-\protected\def\ekvd@type@toks#1#2#3#4%
+\protected\def\ekvd@type@toks#1#2#3%
   {%
-    \ekvd@assert@filledarg{#4}%
+    \ekvd@assert@filledarg{#3}%
       {%
-        \ekvd@newreg#4{toks}%
+        \ekvd@newreg#3{toks}%
         \ekvd@ifalso
           {%
             \let\ekvd@prot\protected
-            \ekvd@add@val{#3}{#2#4{##1}}{}%
+            \ekvd@add@val{#2}{#1#3{##1}}{}%
           }%
-          {\protected\ekvd@long\ekvdef\ekvd@set{#3}{#2#4{##1}}}%
+          {\protected\ekvd@long\ekvdef\ekvd@set{#2}{#1#3{##1}}}%
       }%
   }
-\protected\def\ekvd@t@toks{\ekvd@type@toks{}{}}
-\protected\def\ekvd@t@gtoks{\ekvd@type@toks{g}\global}
+\protected\def\ekvd@t@toks{\ekvd@type@toks{}}
+\protected\def\ekvd@t@gtoks{\ekvd@type@toks\global}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1216,24 +1210,24 @@ and the derived files           expkv-def.pdf
 % Just like |toks|, but expand the current contents of the |toks| register to
 % append the new contents.
 %    \begin{macrocode}
-\protected\def\ekvd@type@apptoks#1#2#3#4%
+\protected\def\ekvd@type@apptoks#1#2#3%
   {%
-    \ekvd@assert@filledarg{#4}%
+    \ekvd@assert@filledarg{#3}%
       {%
-        \ekvd@newreg#4{toks}%
+        \ekvd@newreg#3{toks}%
         \ekvd@ifalso
           {%
             \let\ekvd@prot\protected
-            \ekvd@add@val{#3}{#2#4\expandafter{\the#4##1}}{}%
+            \ekvd@add@val{#2}{#1#3\expandafter{\the#3##1}}{}%
           }%
           {%
-            \protected\ekvd@long\ekvdef\ekvd@set{#3}%
-              {#2#4\expandafter{\the#4##1}}%
+            \protected\ekvd@long\ekvdef\ekvd@set{#2}%
+              {#1#3\expandafter{\the#3##1}}%
           }%
       }%
   }
-\protected\def\ekvd@t@apptoks{\ekvd@type@apptoks{}{}}
-\protected\def\ekvd@t@gapptoks{\ekvd@type@apptoks{g}\global}
+\protected\def\ekvd@t@apptoks{\ekvd@type@apptoks{}}
+\protected\def\ekvd@t@gapptoks{\ekvd@type@apptoks\global}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1246,31 +1240,31 @@ and the derived files           expkv-def.pdf
 % The |\ekvd@type@reg| can handle all the types for which the assignment will
 % just be \texttt{\meta{register}=\meta{value}}.
 %    \begin{macrocode}
-\protected\def\ekvd@type@reg#1#2#3#4#5#6#7%
+\protected\def\ekvd@type@reg#1#2#3#4#5#6%
   {%
-    \ekvd@assert@filledarg{#7}%
+    \ekvd@assert@filledarg{#6}%
       {%
-        \ekvd@newreg#7{#2}%
+        \ekvd@newreg#6{#1}%
         \ekvd@ifalso
           {%
             \let\evkd@prot\protected
-            \ekvd@add@val{#6}{#3#7=#4##1#5\relax}{}%
+            \ekvd@add@val{#5}{#2#6=#3##1#4\relax}{}%
           }%
-          {\protected\ekvd@long\ekvdef\ekvd@set{#6}{#3#7=#4##1#5\relax}}%
+          {\protected\ekvd@long\ekvdef\ekvd@set{#5}{#2#6=#3##1#4\relax}}%
       }%
   }
-\protected\def\ekvd@t@int{\ekvd@type@reg{int}{count}{}{}{}}
-\protected\def\ekvd@t@eint{\ekvd@type@reg{eint}{count}{}\numexpr\relax}
-\protected\def\ekvd@t@gint{\ekvd@type@reg{gint}{count}\global{}{}}
-\protected\def\ekvd@t@xint{\ekvd@type@reg{xint}{count}\global\numexpr\relax}
-\protected\def\ekvd@t@dimen{\ekvd@type@reg{dimen}{dimen}{}{}{}}
-\protected\def\ekvd@t@edimen{\ekvd@type@reg{edimen}{dimen}{}\dimexpr\relax}
-\protected\def\ekvd@t@gdimen{\ekvd@type@reg{gdimen}{dimen}\global{}{}}
-\protected\def\ekvd@t@xdimen{\ekvd@type@reg{xdimen}{dimen}\global\dimexpr\relax}
-\protected\def\ekvd@t@skip{\ekvd@type@reg{skip}{skip}{}{}{}}
-\protected\def\ekvd@t@eskip{\ekvd@type@reg{eskip}{skip}{}\glueexpr\relax}
-\protected\def\ekvd@t@gskip{\ekvd@type@reg{gskip}{skip}\global{}{}}
-\protected\def\ekvd@t@xskip{\ekvd@type@reg{xskip}{skip}\global\glueexpr\relax}
+\protected\def\ekvd@t@int{\ekvd@type@reg{count}{}{}{}}
+\protected\def\ekvd@t@eint{\ekvd@type@reg{count}{}\numexpr\relax}
+\protected\def\ekvd@t@gint{\ekvd@type@reg{count}\global{}{}}
+\protected\def\ekvd@t@xint{\ekvd@type@reg{count}\global\numexpr\relax}
+\protected\def\ekvd@t@dimen{\ekvd@type@reg{dimen}{}{}{}}
+\protected\def\ekvd@t@edimen{\ekvd@type@reg{dimen}{}\dimexpr\relax}
+\protected\def\ekvd@t@gdimen{\ekvd@type@reg{dimen}\global{}{}}
+\protected\def\ekvd@t@xdimen{\ekvd@type@reg{dimen}\global\dimexpr\relax}
+\protected\def\ekvd@t@skip{\ekvd@type@reg{skip}{}{}{}}
+\protected\def\ekvd@t@eskip{\ekvd@type@reg{skip}{}\glueexpr\relax}
+\protected\def\ekvd@t@gskip{\ekvd@type@reg{skip}\global{}{}}
+\protected\def\ekvd@t@xskip{\ekvd@type@reg{skip}\global\glueexpr\relax}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1278,42 +1272,42 @@ and the derived files           expkv-def.pdf
 % The none-expanding |store| types use an |\edef| or |\xdef| and |\unexpanded|
 % to be able to also store |#| easily.
 %    \begin{macrocode}
-\protected\def\ekvd@type@store#1#2#3#4%
+\protected\def\ekvd@type@store#1#2#3%
   {%
-    \ekvd@assert@filledarg{#4}%
+    \ekvd@assert@filledarg{#3}%
       {%
-        \ekvd@newlet#4\ekvd@empty
+        \ekvd@newlet#3\ekvd@empty
         \ekvd@ifalso
           {%
             \let\ekvd@prot\protected
-            \ekvd@add@val{#3}{#2#4{\unexpanded{##1}}}{}%
+            \ekvd@add@val{#2}{#1#3{\unexpanded{##1}}}{}%
           }%
-          {\protected\ekvd@long\ekvdef\ekvd@set{#3}{#2#4{\unexpanded{##1}}}}%
+          {\protected\ekvd@long\ekvdef\ekvd@set{#2}{#1#3{\unexpanded{##1}}}}%
       }%
   }
-\protected\def\ekvd@t@store{\ekvd@type@store{}\edef}
-\protected\def\ekvd@t@gstore{\ekvd@type@store{g}\xdef}
+\protected\def\ekvd@t@store{\ekvd@type@store\edef}
+\protected\def\ekvd@t@gstore{\ekvd@type@store\xdef}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}[internal]{\ekvd@type@estore,\ekvd@t@estore,\ekvd@t@xstore}
 % And the straight forward |estore| types.
 %    \begin{macrocode}
-\protected\def\ekvd@type@estore#1#2#3#4%
+\protected\def\ekvd@type@estore#1#2#3%
   {%
-    \ekvd@assert@filledarg{#4}%
+    \ekvd@assert@filledarg{#3}%
       {%
-        \ekvd@newlet#4\ekvd@empty
+        \ekvd@newlet#3\ekvd@empty
         \ekvd@ifalso
           {%
             \let\ekvd@prot\protected
-            \ekvd@add@val{#3}{#2#4{##1}}{}%
+            \ekvd@add@val{#2}{#1#3{##1}}{}%
           }%
-          {\protected\ekvd@long\ekvdef\ekvd@set{#3}{#2#4{##1}}}%
+          {\protected\ekvd@long\ekvdef\ekvd@set{#2}{#1#3{##1}}}%
       }%
   }
-\protected\def\ekvd@t@estore{\ekvd@type@estore{e}\edef}
-\protected\def\ekvd@t@xstore{\ekvd@type@estore{x}\xdef}
+\protected\def\ekvd@t@estore{\ekvd@type@estore\edef}
+\protected\def\ekvd@t@xstore{\ekvd@type@estore\xdef}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1325,15 +1319,15 @@ and the derived files           expkv-def.pdf
 % |meta| sets up things such that another instance of |\ekvset| will be run on
 % the argument, with the same \set.
 %    \begin{macrocode}
-\protected\long\def\ekvd@type@meta#1#2#3#4#5#6#7#8%
+\protected\long\def\ekvd@type@meta#1#2#3#4#5#6#7%
   {%
-    \ekvd@assert@filledarg{#8}%
+    \ekvd@assert@filledarg{#7}%
       {%
         \edef\ekvd@tmp{\ekvd@set}%
-        \expandafter\ekvd@type@meta@a\expandafter{\ekvd@tmp}{#8}{#3}%
+        \expandafter\ekvd@type@meta@a\expandafter{\ekvd@tmp}{#7}{#2}%
         \ekvd@ifalso
-          {\ekv@expB@unbraceA{#4{#7}}{\ekvd@tmp#5}{#6}}%
-          {#2\ekvd@set{#7}\ekvd@tmp}%
+          {\ekv@expB@unbraceA{#3{#6}}{\ekvd@tmp#4}{#5}}%
+          {#1\ekvd@set{#6}\ekvd@tmp}%
       }%
   }
 \protected\long\def\ekvd@type@meta@a#1#2%
@@ -1348,12 +1342,11 @@ and the derived files           expkv-def.pdf
   {%
     \ekvd@prot\ekvd@long\def\ekvd@tmp#2{#1}%
   }
-\protected\def\ekvd@t@meta{\ekvd@type@meta{}\ekvlet{##1}\ekvd@add@val{{##1}}{}}
+\protected\def\ekvd@t@meta{\ekvd@type@meta\ekvlet{##1}\ekvd@add@val{{##1}}{}}
 \protected\def\ekvd@t@nmeta
   {%
     \ekvd@assert@not@long
-    \ekvd@type@meta
-      n\ekvletNoVal{}\ekvd@add@noval{}\ekvd@assert@not@long@also
+    \ekvd@type@meta\ekvletNoVal{}\ekvd@add@noval{}\ekvd@assert@not@long@also
   }
 %    \end{macrocode}
 % \end{macro}
@@ -1364,23 +1357,21 @@ and the derived files           expkv-def.pdf
 % such that the first is the \set\ for which the sub-|\ekvset| and the second is
 % the \kv\ list.
 %    \begin{macrocode}
-\protected\long\def\ekvd@type@smeta#1#2#3#4#5#6#7#8%
+\protected\long\def\ekvd@type@smeta#1#2#3#4#5#6#7%
   {%
-    \ekvd@assert@twoargs{#8}%
+    \ekvd@assert@twoargs{#7}%
       {%
-        \ekvd@type@meta@a#8{#3}%
+        \ekvd@type@meta@a#7{#2}%
         \ekvd@ifalso
-          {\ekv@expB@unbraceA{#4{#7}}{\ekvd@tmp#5}{#6}}%
-          {#2\ekvd@set{#7}\ekvd@tmp}%
+          {\ekv@expB@unbraceA{#3{#6}}{\ekvd@tmp#4}{#5}}%
+          {#1\ekvd@set{#6}\ekvd@tmp}%
       }%
   }
-\protected\def\ekvd@t@smeta
-  {\ekvd@type@smeta{}\ekvlet{##1}\ekvd@add@val{{##1}}{}}
+\protected\def\ekvd@t@smeta{\ekvd@type@smeta\ekvlet{##1}\ekvd@add@val{{##1}}{}}
 \protected\def\ekvd@t@snmeta
   {%
     \ekvd@assert@not@long
-    \ekvd@type@smeta
-      n\ekvletNoVal{}\ekvd@add@noval{}\ekvd@assert@not@long@also
+    \ekvd@type@smeta\ekvletNoVal{}\ekvd@add@noval{}\ekvd@assert@not@long@also
   }
 %    \end{macrocode}
 % \end{macro}
@@ -1398,19 +1389,19 @@ and the derived files           expkv-def.pdf
 % allowed to be long). |\ekvd@type@choice| will just define the choice-key, the
 % handling of the choices definition will be done by |\ekvd@populate@choice|.
 %    \begin{macrocode}
-\protected\def\ekvd@type@choice#1#2%
+\protected\def\ekvd@type@choice#1%
   {%
     \ekvd@assert@not@long
     \ekvd@prot\edef\ekvd@tmp##1%
       {%
-        \unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#2}{##1}}%
+        \unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#1}{##1}}%
       }%
     \ekvd@ifalso
       {%
-        \ekv@expB@unbraceA{\ekvd@add@val{#2}}{\ekvd@tmp{##1}}%
+        \ekv@expB@unbraceA{\ekvd@add@val{#1}}{\ekvd@tmp{##1}}%
           \ekvd@assert@not@long@also
       }%
-      {\ekvlet\ekvd@set{#2}\ekvd@tmp}%
+      {\ekvlet\ekvd@set{#1}\ekvd@tmp}%
   }
 %    \end{macrocode}
 % |\ekvd@populate@choice| just uses |\ekvparse| and then gives control to
@@ -1487,7 +1478,7 @@ and the derived files           expkv-def.pdf
   {%
     \ekvd@assert@arg
       {%
-        \ekvd@type@choice{choice}{#1}%
+        \ekvd@type@choice{#1}%
         \def\ekvd@set@choice{#1}%
         \ekvd@populate@choice{#2}%
       }%
