@@ -309,6 +309,11 @@ and the derived files           expkv-def.pdf
 %     ,also code key = \domystuff
 %   }
 % \end{lstlisting}
+%
+%   Don't ever use |also| on a key that already is a |choice|, |bool|,
+%   |invbool|, or |boolpair| key to add a second of those types. Instead you can
+%   just add valid choices and the corresponding callbacks by using |choice|
+%   again.
 % \end{function}
 %
 % \begin{function}{protected,protect}
@@ -392,6 +397,25 @@ and the derived files           expkv-def.pdf
 %   behaviour to execute the |false| choice). Internally a |bool| \key\ is the
 %   same as a |choice| key which is set up to handle |true| and |false| as
 %   choices.
+% \end{function}
+%
+% \begin{function}{invbool,ginvbool,invboolTF,ginvboolTF}
+%   \begin{syntax}
+%     bool \key\ = \meta{cs} \prefixes223
+%   \end{syntax}
+%   These are inverse boolean keys, they behave like |bool| and friends but set
+%   the opposite meaning to the macro \meta{cs} in each case. So if
+%   \texttt{key=true} is used |invbool| will set \meta{cs} to |\iffalse| and
+%   vice versa.
+% \end{function}
+%
+% \begin{function}{boolpair,gboolpair,boolpairTF,gboolpairTF}
+%   \begin{syntax}
+%     boolpair \key\ = \meta{cs_1}\meta{cs_2} \prefixes223
+%   \end{syntax}
+%   The |boolpair| key type behaves like both |bool| and |invbool|, the
+%   \meta{cs_1} will be set to the meaning according to the rules of |bool|, and
+%   \meta{cs_2} will be set to the opposite.
 % \end{function}
 %
 % \begin{function}{store,estore,gstore,xstore}
