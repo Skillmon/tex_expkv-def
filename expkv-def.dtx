@@ -272,11 +272,11 @@ and the derived files           expkv-def.pdf
 % is allowed for all |t|-prefixes.
 %
 % \subsubsection{\texttt{p}-Prefixes}\label{sec:prefix:p}
-% The three |p|-type prefixes |new|, |long|, and |protected| are pretty simple
-% by nature, so their description is pretty simple. They affect the \key\ at
-% use-time, so omitting |long| doesn't mean that a \meta{definition} can't
-% contain a |\par| token, only that the \key\ will not accept a |\par| in \val.
-% On the other hand |also| might be simple on first sight as well, but its rules
+% The two |p|-type prefixes |long| and |protected| are pretty simple by nature,
+% so their description is pretty simple. They affect the \key\ at use-time, so
+% omitting |long| doesn't mean that a \meta{definition} can't contain a |\par|
+% token, only that the \key\ will not accept a |\par| in \val.  On the other
+% hand |new| and |also| might be simple on first sight as well, but their rules
 % are a bit more complicated.
 %
 % \begin{function}{also}
@@ -299,7 +299,7 @@ and the derived files           expkv-def.pdf
 % \ekvdefinekeys{also-example}
 %   {
 %      bool key      = \ifmybool
-%     ,also code key = \domystuff
+%     ,also code key = \domystuff{#1}
 %   }
 % \end{lstlisting}
 %
@@ -329,7 +329,7 @@ and the derived files           expkv-def.pdf
 % \begin{lstlisting}
 % \ekvdefinekeys{new-example}
 %   {
-%      code key       = \domystuffwitharg
+%      code key       = \domystuffwitharg{#1}
 %     ,new  noval key = \domystuffwithoutarg
 %   }
 % \end{lstlisting}
@@ -614,8 +614,8 @@ and the derived files           expkv-def.pdf
 %     ,skip      keyI = \keyI
 %     ,toks      keyJ = \keyJ
 %     ,default   keyJ = \empty test
-%     ,box       keyK = \keyK
-%     ,qdefault  keyK = text
+%     ,new box   keyK = \keyK
+%     ,qdefault  keyK = K
 %     ,choice    keyL =
 %       {
 %          protected 1 = \texttt{a}
@@ -626,6 +626,8 @@ and the derived files           expkv-def.pdf
 %       }
 %     ,edefault  keyL = 2
 %     ,meta      keyM = {keyA={#1},keyB=false}
+%     ,invbool   keyN = \keyN
+%     ,boolpair  keyO = \keyOa\keyOb
 %   }
 % \end{lstlisting}
 %
@@ -753,8 +755,8 @@ and the derived files           expkv-def.pdf
 % \begin{macro}{\ekvdVersion,\ekvdDate}
 % We're on our first input, so lets store the version and date in a macro.
 %    \begin{macrocode}
-\def\ekvdVersion{0.5}
-\def\ekvdDate{2020-07-12}
+\def\ekvdVersion{0.6}
+\def\ekvdDate{2020-10-12}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -902,10 +904,15 @@ and the derived files           expkv-def.pdf
           {%
             \ekvd@ifalso
               {%
-                \ekvd@add@noval{#1}{\ekvchangeset{#2}}%
+                \ekv@expB@unbraceA{\ekv@expB@unbraceA{\ekvd@add@noval{#1}}}%
+                  {\ekvchangeset{#2}}%
                   \ekvd@assert@not@protected@also
               }%
-              {\ekvdefNoVal\ekvd@set{#1}{\ekvchangeset{#2}}}%
+              {%
+                \ekv@expB@unbraceA
+                  {\ekv@expB@unbraceA{\ekvdefNoVal\ekvd@set{#1}}}%
+                  {\ekvchangeset{#2}}%
+              }%
           }%
       }%
   }
