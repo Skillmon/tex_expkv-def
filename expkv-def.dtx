@@ -146,30 +146,23 @@ and the derived files           expkv-def.pdf
 \newcommand\key{\meta{key}}
 \newcommand\val{\meta{value}}
 \newcommand\set{\meta{set}}
-\newcommand\enfprot{\textcolor{black}{protected}}
-\newcommand\allprot{\textcolor{gray}{protected}}
-\newcommand\notprot{\textcolor{red!80!black}{protected}}
-\newcommand\enflong{\textcolor{black}{long}}
-\newcommand\alllong{\textcolor{gray}{long}}
-\newcommand\notlong{\textcolor{red!80!black}{long}}
-\newcommand\enfalso{\textcolor{black}{also}}
-\newcommand\allalso{\textcolor{gray}{also}}
-\newcommand\notalso{\textcolor{red!80!black}{also}}
-\newcommand\prefixes[3]
+\newcommand\enfprefix{\textcolor{black}}
+\newcommand\allprefix{\textcolor{gray}}
+\newcommand\notprefix{\textcolor{red!80!black}}
+\newcommand\printprefix[2]
+  {^^A
+    \ifcase\numexpr#1\relax\or
+      \enfprefix{#2}\or
+      \allprefix{#2}\or
+      \notprefix{#2}\fi
+  }
+\newcommand\prefixes[4]
   {^^A
     \hfill
-    \ifcase\numexpr#1\relax\or
-      \enfalso\or
-      \allalso\or
-      \notalso\fi\space
-    \ifcase\numexpr#2\relax\or
-      \enfprot\or
-      \allprot\or
-      \notprot\fi\space
-    \ifcase\numexpr#3\relax\or
-      \enflong\or
-      \alllong\or
-      \notlong\fi
+    \printprefix{#1}{new}
+    \printprefix{#2}{also}
+    \printprefix{#3}{protected}
+    \printprefix{#4}{long}^^A
   }
 \hypersetup{linkcolor=red!80!black,urlcolor=purple!80!black}
 \DoNotIndex{\def,\edef,\,,\=,\begingroup,\catcode,\chardef,\csname,\endcsname}
@@ -279,12 +272,12 @@ and the derived files           expkv-def.pdf
 % is allowed for all |t|-prefixes.
 %
 % \subsubsection{\texttt{p}-Prefixes}\label{sec:prefix:p}
-% The two |p|-type prefixes |long| and |protected| are pretty simple by nature,
-% so their description is pretty simple. They affect the \key\ at use-time, so
-% omitting |long| doesn't mean that a \meta{definition} can't contain a |\par|
-% token, only that the \key\ will not accept a |\par| in \val. On the other hand
-% |also| might be simple on first sight as well, but its rules are a bit more
-% complicated.
+% The three |p|-type prefixes |new|, |long|, and |protected| are pretty simple
+% by nature, so their description is pretty simple. They affect the \key\ at
+% use-time, so omitting |long| doesn't mean that a \meta{definition} can't
+% contain a |\par| token, only that the \key\ will not accept a |\par| in \val.
+% On the other hand |also| might be simple on first sight as well, but its rules
+% are a bit more complicated.
 %
 % \begin{function}{also}
 %   The following key type will be \emph{added} to an existing \key's
@@ -325,17 +318,33 @@ and the derived files           expkv-def.pdf
 %   The following key will be defined |\long|.
 % \end{function}
 %
+% \begin{function}{new}
+%   The following key must be new (so previously undefined). An error is thrown
+%   if it is already defined and the new definition is ignored. |new| only
+%   asserts that there are no conflicts between |NoVal| keys and other |NoVal|
+%   keys or value taking keys and other value taking keys. For example you can
+%   use the following without an error:
+% \begin{lstlisting}
+% \ekvdefinekeys{new-example}
+%   {
+%      code key       = \domystuffwitharg
+%     ,new  noval key = \domystuffwithoutarg
+%   }
+% \end{lstlisting}
+% \end{function}
+%
 % \subsubsection{\texttt{t}-Prefixes}\label{sec:prefix:t}
 % Since the |p|-type prefixes apply to some of the |t|-prefixes automatically
 % but sometimes one might be disallowed we need some way to highlight this
 % behaviour. In the following an enforced prefix will be printed black
-% (\texttt{\enfprot}), allowed prefixes will be grey (\texttt{\allprot}), and
-% disallowed prefixes will be red (\texttt{\notprot}). This will be put
-% flush-right in the syntax showing line.
+% (\texttt{\enfprefix{protected}}), allowed prefixes will be grey
+% (\texttt{\allprefix{protected}}), and disallowed prefixes will be red
+% (\texttt{\notprefix{protected}}). This will be put flush-right in the syntax
+% showing line.
 %
 % \begin{function}{code,ecode}
 %   \begin{syntax}
-%     code \key\ = \marg{definition} \prefixes222
+%     code \key\ = \marg{definition} \prefixes2222
 %   \end{syntax}
 %   Define \key\ to expand to \meta{definition}. The \key\ will require a \val\
 %   for which you can use |#1| inside \meta{definition}. The |ecode| variant
@@ -344,7 +353,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{noval,enoval}
 %   \begin{syntax}
-%     noval \key\ = \marg{definition} \prefixes223
+%     noval \key\ = \marg{definition} \prefixes2223
 %   \end{syntax}
 %   The |noval| type defines \key\ to expand to \meta{definition}. The \key\
 %   will not take a \val. |enoval| fully expands \meta{definition} inside an
@@ -353,7 +362,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{default,qdefault,edefault}
 %   \begin{syntax}
-%     default \key\ = \marg{definition} \prefixes223
+%     default \key\ = \marg{definition} \prefixes3223
 %   \end{syntax}
 %   This serves to place a default \val\ for a \key\ that takes an argument, the
 %   \key\ can be of any argument-grabbing kind, and when used without a \val\
@@ -365,7 +374,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{initial,oinitial,einitial}
 %   \begin{syntax}
-%     initial \key\ = \{\val\} \prefixes333
+%     initial \key\ = \{\val\} \prefixes3333
 %   \end{syntax}
 %   With |initial| you can set an initial \val\ for an already defined argument
 %   taking \key. It'll just call the key-macro of \key\ and pass it \val. The
@@ -376,7 +385,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{bool,gbool,boolTF,gboolTF}
 %   \begin{syntax}
-%     bool \key\ = \meta{cs} \prefixes223
+%     bool \key\ = \meta{cs} \prefixes2223
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\iffoo|.
 %   This will define \key\ to be a boolean key, which only takes the values
@@ -401,7 +410,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{invbool,ginvbool,invboolTF,ginvboolTF}
 %   \begin{syntax}
-%     bool \key\ = \meta{cs} \prefixes223
+%     bool \key\ = \meta{cs} \prefixes2223
 %   \end{syntax}
 %   These are inverse boolean keys, they behave like |bool| and friends but set
 %   the opposite meaning to the macro \meta{cs} in each case. So if
@@ -411,7 +420,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{boolpair,gboolpair,boolpairTF,gboolpairTF}
 %   \begin{syntax}
-%     boolpair \key\ = \meta{cs_1}\meta{cs_2} \prefixes223
+%     boolpair \key\ = \meta{cs_1}\meta{cs_2} \prefixes2223
 %   \end{syntax}
 %   The |boolpair| key type behaves like both |bool| and |invbool|, the
 %   \meta{cs_1} will be set to the meaning according to the rules of |bool|, and
@@ -420,7 +429,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{store,estore,gstore,xstore}
 %   \begin{syntax}
-%     store \key\ = \meta{cs} \prefixes212
+%     store \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|.
 %   This will define \key\ to store \val\ inside of the control sequence. If
@@ -432,7 +441,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{data,edata,gdata,xdata}
 %   \begin{syntax}
-%     data \key\ = \meta{cs} \prefixes212
+%     data \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|. This will
 %   define \key\ to store \val\ inside of the control sequence. But unlike the
@@ -448,7 +457,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{dataT,edataT,gdataT,xdataT}
 %   \begin{syntax}
-%     dataT \key\ = \meta{cs} \prefixes212
+%     dataT \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   Just like |data|, but instead of \meta{cs} grabbing two arguments it'll only
 %   grab one, so by default it'll behave like |\@gobble|, and if a \val\ was
@@ -458,7 +467,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{int,eint,gint,xint}
 %   \begin{syntax}
-%     int \key\ = \meta{cs} \prefixes212
+%     int \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|.
 %   An |int| key will be a \TeX-count register. If \meta{cs} isn't defined yet,
@@ -469,7 +478,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{dimen,edimen,gdimen,xdimen}
 %   \begin{syntax}
-%     dimen \key\ = \meta{cs} \prefixes212
+%     dimen \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|.
 %   This is just like |int| but uses a dimen register, |\newdimen| and
@@ -478,7 +487,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{skip,eskip,gskip,xskip}
 %   \begin{syntax}
-%     skip \key\ = \meta{cs} \prefixes212
+%     skip \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|.
 %   This is just like |int| but uses a skip register, |\newskip| and |\glueexpr|
@@ -487,7 +496,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{toks,gtoks,apptoks,gapptoks}
 %   \begin{syntax}
-%     toks \key\ = \meta{cs} \prefixes212
+%     toks \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|. 
 %   Store \val\ inside of a toks-register. The |g| variants use |\global|, the
@@ -497,7 +506,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{box,gbox}
 %   \begin{syntax}
-%     box \key\ = \meta{cs} \prefixes212
+%     box \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|.
 %   Typesets \val\ into a |\hbox| and stores the result in a box register. The
@@ -506,7 +515,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{meta}
 %   \begin{syntax}
-%     meta \key\ = \{\kv, \ldots\} \prefixes222
+%     meta \key\ = \{\kv, \ldots\} \prefixes2222
 %   \end{syntax}
 %   This key type can set other keys, you can access the \val\ which was passed
 %   to \key\ inside the \kv\ list with |#1|. It works by calling a sub-|\ekvset|
@@ -517,7 +526,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{nmeta}
 %   \begin{syntax}
-%     nmeta \key\ = \{\kv, \ldots\} \prefixes223
+%     nmeta \key\ = \{\kv, \ldots\} \prefixes2223
 %   \end{syntax}
 %   This key type can set other keys, the difference to |meta| is, that this key
 %   doesn't take a value, so the \kv\ list is static.
@@ -525,7 +534,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{smeta}
 %   \begin{syntax}
-%     smeta \key\ = \marg{set}\{\kv, \ldots\} \prefixes222
+%     smeta \key\ = \marg{set}\{\kv, \ldots\} \prefixes2222
 %   \end{syntax}
 %   Yet another |meta| variant. An |smeta| key will take a \val\ which you can
 %   access using |#1|, but it sets the \kv\ list inside of \set, so is equal to
@@ -534,7 +543,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{snmeta}
 %   \begin{syntax}
-%     snmeta \key\ = \marg{set}\{\kv, \ldots\} \prefixes223
+%     snmeta \key\ = \marg{set}\{\kv, \ldots\} \prefixes2223
 %   \end{syntax}
 %   And the last |meta| variant. |snmeta| is a combination of |smeta| and
 %   |nmeta|. It doesn't take an argument and sets the \kv\ list inside of \set.
@@ -542,7 +551,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{set}
 %   \begin{syntax}
-%     set \key\ = \marg{set} \prefixes233
+%     set \key\ = \marg{set} \prefixes2233
 %   \end{syntax}
 %   This will define \key\ to change the set of the current |\ekvset|
 %   invocation to \set. You can omit \set\ (including the equals sign),
@@ -554,7 +563,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{choice}
 %   \begin{syntax}
-%     choice \key\ = \{\val=\meta{definition}, \ldots\} \prefixes223
+%     choice \key\ = \{\val=\meta{definition}, \ldots\} \prefixes2223
 %   \end{syntax}
 %   Defines \key\ to be a |choice| key, meaning it will only accept a limited
 %   set of values. You should define each possible \val\ inside of the
@@ -570,7 +579,7 @@ and the derived files           expkv-def.pdf
 %
 % \begin{function}{unknown-choice}
 %   \begin{syntax}
-%     unknown-choice \key\ = \marg{definition} \prefixes323
+%     unknown-choice \key\ = \marg{definition} \prefixes2323
 %   \end{syntax}
 %   By default an unknown \val\ passed to a |choice| or |bool| key will throw an
 %   error.  However, with this prefix you can define an alternative action which
