@@ -1,0 +1,47 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\OMIT
+\newcommand\defkeys[1]{\ekvdefinekeys{test}{code vkey=,noval nkey=,#1}}
+\TIMO
+
+\START
+
+\TEST{already defined}
+  {
+    \defkeys
+      {
+         new code     vkey={}
+        ,new noval    nkey={}
+        ,new bool     vkey=\mybool
+        ,new bool     nkey=\mybool
+        ,new boolpair vkey=\myboolA\myboolB
+        ,new boolpair nkey=\myboolA\myboolB
+        ,new store    vkey=\key
+        ,new data     vkey=\key
+        ,new dataT    vkey=\key
+        ,new int      vkey=\key
+        ,new toks     vkey=\key
+        ,new box      vkey=\key
+        ,new meta     vkey={}
+        ,new nmeta    nkey={}
+        ,new smeta    vkey={test}{}
+        ,new snmeta   nkey={test}{}
+        ,new set      nkey=key
+        ,new choice   vkey={}
+        ,unknown-choice key={}, new unknown-choice key={}
+      }
+  }
+
+\TEST{new not accepted}
+  {
+    \defkeys
+      {
+         new initial  vkey = abc
+        ,new default  vkey = def
+        ,new edefault vkey = ghi
+      }
+  }
+
+\END

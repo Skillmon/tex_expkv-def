@@ -6,13 +6,20 @@
 \newcommand\defkeys{\ekvdefinekeys{test}}
 \newcommand\usekeys{\ekvset{test}}
 \newcommand\hihi{hihi}
+\newcommand\emptytwo{\empty}
 \TIMO
 
 \START
 
 \TEST{code}
   {
-    \defkeys{code keyA = \csname tl_analysis_show:n\endcsname{#1}}
+    \defkeys
+      {
+         code     keyA = \csname tl_analysis_show:n\endcsname{#1}
+        ,initial  keyA = \emptytwo
+        ,oinitial keyA = \emptytwo
+        ,einitial keyA = \emptytwo
+      }
     \usekeys{keyA=test}
   }
 \TEST{noval}
@@ -117,7 +124,7 @@
         ,2 = b
         ,3 = c
         ,4 = d
-        ,5 = e
+        ,protected 5 = e
       }
     ,default keyJ = 1
   }

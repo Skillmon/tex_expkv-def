@@ -71,4 +71,9 @@
       }
   }
 
+\TEST{invalid choice prefixes}
+  {
+    \defkeys{choice key = {long a=a, new b=b, also c=c}}
+  }
+
 \END

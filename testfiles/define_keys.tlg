@@ -4,6 +4,18 @@ Don't change this file in any respect.
 TEST 1: code
 ============================================================
 The token list contains the tokens:
+>  \emptytwo (control sequence=\long macro:->\empty ).
+<recently read> }
+l. ...  }
+The token list contains the tokens:
+>  \empty (control sequence=macro:->).
+<recently read> }
+l. ...  }
+The token list is empty
+> .
+<recently read> }
+l. ...  }
+The token list contains the tokens:
 >  t (the letter t)
 >  e (the letter e)
 >  s (the letter s)
@@ -163,7 +175,7 @@ l. ...  }
 ============================================================
 TEST 12: choice
 ============================================================
- aabcde 
+ aabcd\ekvdtest(keyJ)5  
 ============================================================
 ============================================================
 TEST 13: meta

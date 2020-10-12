@@ -229,3 +229,19 @@ l. ...  }
 l. ...  }
 (That was another \errmessage.)
 ============================================================
+============================================================
+TEST 4: invalid choice prefixes
+============================================================
+! expkv-def Error: prefix `long' not accepted in `choice key: long a'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+! expkv-def Error: prefix `new' not accepted in `choice key: new b'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+! expkv-def Error: prefix `also' not accepted in `choice key: also c'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+============================================================

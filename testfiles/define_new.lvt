@@ -1,0 +1,72 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\OMIT
+\newcommand\defkeys{\ekvdefinekeys{test}}
+\TIMO
+
+\START
+
+\TEST{define new keys}
+  {
+    \defkeys
+      {
+         new code           code        =
+        ,new ecode          ecode       =
+        ,new noval          noval       =
+        ,new enoval         enoval      =
+        ,new bool           bool        = \key
+        ,new gbool          gbool       = \key
+        ,new boolTF         boolTF      = \key
+        ,new gboolTF        gboolTF     = \key
+        ,new invbool        invbool     = \key
+        ,new ginvbool       ginvbool    = \key
+        ,new invboolTF      invboolTF   = \key
+        ,new ginvboolTF     ginvboolTF  = \key
+        ,new boolpair       boolpair    = \keyA\keyB
+        ,new gboolpair      gboolpair   = \keyA\keyB
+        ,new boolpairTF     boolpairTF  = \keyA\keyB
+        ,new gboolpairTF    gboolpairTF = \keyA\keyB
+        ,new store          store       = \key
+        ,new estore         estore      = \key
+        ,new gstore         gstore      = \key
+        ,new xstore         xstore      = \key
+        ,new data           data        = \key
+        ,new edata          edata       = \key
+        ,new gdata          gdata       = \key
+        ,new xdata          xdata       = \key
+        ,new dataT          dataT       = \key
+        ,new edataT         edataT      = \key
+        ,new gdataT         gdataT      = \key
+        ,new xdataT         xdataT      = \key
+        ,new int            int         = \key
+        ,new eint           eint        = \key
+        ,new gint           gint        = \key
+        ,new xint           xint        = \key
+        ,new dimen          dimen       = \key
+        ,new edimen         edimen      = \key
+        ,new gdimen         gdimen      = \key
+        ,new xdimen         xdimen      = \key
+        ,new skip           skip        = \key
+        ,new eskip          eskip       = \key
+        ,new gskip          gskip       = \key
+        ,new xskip          xskip       = \key
+        ,new toks           toks        = \key
+        ,new gtoks          gtoks       = \key
+        ,new apptoks        apptoks     = \key
+        ,new gapptoks       gapptoks    = \key
+        ,new box            box         = \key
+        ,new gbox           gbox        = \key
+        ,new meta           meta        = {.}
+        ,new nmeta          nmeta       = {.}
+        ,new smeta          smeta       = {}{}
+        ,new snmeta         snmeta      = {}{}
+        ,new set            set
+        ,new set            setB        = setB
+        ,new choice         choice      =
+        ,new unknown-choice choice      =
+      }
+  }
+
+\END
