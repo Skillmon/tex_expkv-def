@@ -53,4 +53,14 @@
     \defalso{snmeta key={set}{key={B}}}
   }
 
+\TEST{choice also choice}
+  {
+    \defkeys
+      {
+         choice key = { A = \TYPE{A given}, B = \TYPE{B given} }
+        ,also choice key = { a = \TYPE{a given}, b = \TYPE{b given} }
+      }
+    \ekvset{test}{key=A, key=B, key=a, key=b}
+  }
+
 \END

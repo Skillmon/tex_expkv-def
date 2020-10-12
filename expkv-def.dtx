@@ -303,10 +303,12 @@ and the derived files           expkv-def.pdf
 %   }
 % \end{lstlisting}
 %
-%   Don't ever use |also| on a key that already is a |choice|, |bool|,
-%   |invbool|, or |boolpair| key to add a second of those types. Instead you can
-%   just add valid choices and the corresponding callbacks by using |choice|
-%   again.
+%   If you use |also| on a |choice|, |bool|, |invbool|, or |boolpair| key it is
+%   tried to determine if the key already is of one of those types. If this test
+%   is true the declared choices will be added to the possible choices but the
+%   key's definition will not be changed other than that. If that wouldn't have
+%   been done, the callbacks of the different choices could get called multiple
+%   times.
 % \end{function}
 %
 % \begin{function}{protected,protect}
@@ -1413,7 +1415,7 @@ and the derived files           expkv-def.pdf
       {%
         \ekvd@assert@val{#1}%
           {%
-            \ekvd@assert@not@already@choice{#1}%
+            \ekvd@if@not@already@choice{#1}%
               {%
                 \ekv@expB@unbraceA
                   {%
@@ -1799,26 +1801,26 @@ and the derived files           expkv-def.pdf
 %
 % \begin{macro}[internal]
 %   {
-%     \ekvd@assert@not@already@choice, \ekvd@assert@not@already@choice@a,
-%     \ekvd@assert@not@already@choice@b
+%     \ekvd@if@not@already@choice, \ekvd@if@not@already@choice@a,
+%     \ekvd@if@not@already@choice@b
 %   }
 % It is bad to use |also| on a key that already contains a |choice|, as both
 % choices would share the same valid values and thus lead to each callback being
 % used twice. The following is a rudimentary test against this.
 %    \begin{macrocode}
-\protected\def\ekvd@assert@not@already@choice#1%
+\protected\def\ekvd@if@not@already@choice#1%
   {%
-    \expandafter\ekvd@assert@not@already@choice@a
+    \expandafter\ekvd@if@not@already@choice@a
       \csname\ekv@name\ekvd@set{#1}\endcsname
       {}\ekvd@h@choice\ekvd@stop
   }
-\protected\def\ekvd@assert@not@already@choice@a
+\protected\def\ekvd@if@not@already@choice@a
   {%
-    \expandafter\ekvd@assert@not@already@choice@b
+    \expandafter\ekvd@if@not@already@choice@b
   }
-\long\protected\def\ekvd@assert@not@already@choice@b#1\ekvd@h@choice#2\ekvd@stop
+\long\protected\def\ekvd@if@not@already@choice@b#1\ekvd@h@choice#2\ekvd@stop
   {%
-    \ekv@ifempty{#2}\@firstofone{\ekvd@err@already@choice\@gobble}%
+    \ekv@ifempty{#2}\@firstofone\@gobble
   }
 %    \end{macrocode}
 % \end{macro}
@@ -1850,7 +1852,7 @@ and the derived files           expkv-def.pdf
 %     \ekvd@err@missing@type,\ekvd@err@undefined@prefix,\ekvd@err@undefined@key,
 %     \ekvd@err@no@prefix,\ekvd@err@no@prefix@msg,\ekvd@err@no@prefix@also,
 %     \ekvd@err@add@val@on@noval,\ekvd@err@add@noval@on@val,
-%     \ekvd@err@unsupported@arg,\ekvd@err@already@choice,\ekvd@err@not@new
+%     \ekvd@err@unsupported@arg,\ekvd@err@not@new
 %   }
 % The non-expandable error messages are boring, so here they are:
 %    \begin{macrocode}
@@ -1890,8 +1892,6 @@ and the derived files           expkv-def.pdf
         `\ekvd@extracted@args' for key `\ekvd@cur'%
       }%
   }
-\protected\def\ekvd@err@already@choice
-  {\ekvd@errm{`\ekvd@cur' not allowed for a key that already contains a choice}}
 \protected\def\ekvd@err@not@new
   {\ekvd@errm{The key for `\ekvd@cur' is already defined}} 
 %    \end{macrocode}

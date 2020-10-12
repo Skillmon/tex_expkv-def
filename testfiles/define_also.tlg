@@ -36,3 +36,11 @@ macro:->a\ekvtest(key) {b}
 macro:->a\ekv@set \! expkv Error: Set `test' undefined. \ekv@mark keyB=B,\ekv@stop ,{}
 macro:->a\ekv@set \! expkv Error: Set `set' undefined. \ekv@mark key={B},\ekv@stop ,{}
 ============================================================
+============================================================
+TEST 3: choice also choice
+============================================================
+A given
+B given
+a given
+b given
+============================================================

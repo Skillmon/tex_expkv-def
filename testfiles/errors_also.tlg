@@ -176,12 +176,4 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
-! expkv-def Error: `also bool key' not allowed for a key that already contains a choice.
-\ekvd@errm #1->\errmessage {expkv-def Error: #1}
-l. ...  }
-(That was another \errmessage.)
-! expkv-def Error: `also invbool key' not allowed for a key that already contains a choice.
-\ekvd@errm #1->\errmessage {expkv-def Error: #1}
-l. ...  }
-(That was another \errmessage.)
 ============================================================
