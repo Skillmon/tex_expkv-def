@@ -15,6 +15,14 @@ The token list is empty
 > .
 <recently read> }
 l. ...  }
+The token list is empty
+> .
+<recently read> }
+l. ...  }
+The token list contains the tokens:
+>  \empty (control sequence=macro:->).
+<recently read> }
+l. ...  }
 The token list contains the tokens:
 >  t (the letter t)
 >  e (the letter e)
@@ -158,10 +166,15 @@ l. ...  }
 l. ...  }
 ============================================================
 ============================================================
-TEST 10: qdefault
+TEST 10: qdefault and fdefault
 ============================================================
 > \empty test.
-<argument> ...est} \usekeys {keyH} \showthe \keyH 
+<argument> ...ed } \usekeys {keyH} \showthe \keyH 
+                                                  \defkeys {choice keyH = { ...
+l. ...  }
+The token list \showkeytmp contains the tokens:
+>  \empty (control sequence=macro:->).
+<recently read> }
 l. ...  }
 ============================================================
 ============================================================

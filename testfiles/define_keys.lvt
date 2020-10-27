@@ -3,10 +3,23 @@
 \RequirePackage{expkv-def}
 
 \OMIT
+\makeatletter
 \newcommand\defkeys{\ekvdefinekeys{test}}
 \newcommand\usekeys{\ekvset{test}}
+\newcommand\showkey[1]
+  {%
+    \expandafter\let\expandafter\showkeytmp\csname\ekv@name{test}{#1}\endcsname
+    \csname tl_analysis_show:N\endcsname\showkeytmp
+  }
+\newcommand\showkeyN[1]
+  {%
+    \expandafter\let\expandafter\showkeytmp\csname\ekv@name{test}{#1}N\endcsname
+    \csname tl_analysis_show:N\endcsname\showkeytmp
+  }
 \newcommand\hihi{hihi}
 \newcommand\emptytwo{\empty}
+\newcommand\emptyspacetwo{ \empty}
+\makeatother
 \TIMO
 
 \START
@@ -19,6 +32,8 @@
         ,initial  keyA = \emptytwo
         ,oinitial keyA = \emptytwo
         ,einitial keyA = \emptytwo
+        ,finitial keyA = \emptytwo
+        ,finitial keyA = \emptyspacetwo
       }
     \usekeys{keyA=test}
   }
@@ -105,11 +120,14 @@
     \usekeys{keyH=abc}
     \showthe\keyH
   }
-\TEST{qdefault}
+\TEST{qdefault and fdefault}
   {
     \defkeys{toks keyH = \keyH, qdefault keyH = \empty test}
+    \defkeys{store keyH = \gobbled}
     \usekeys{keyH}
     \showthe\keyH
+    \defkeys{choice keyH = { abc = { \empty}, def = ERR }, fdefault keyH = abc}
+    \showkeyN{keyH}
   }
 \TEST{box}
   {
