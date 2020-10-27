@@ -171,6 +171,7 @@ and the derived files           expkv-def.pdf
 \DoNotIndex{\@,\unexpanded,\string,\expanded,\dimexpr,\global,\glueexpr,\hbox}
 \DoNotIndex{\numexpr,\RequirePackage,\setbox,\the,\unless,\xdef,\@firstofone}
 \DoNotIndex{\@firstoftwo,\@gobble,\@secondoftwo,\meaning,\detokenize}
+\DoNotIndex{\romannumeral,\^}
 \DoNotIndex{\ifcsname}
 \DoNotIndex{\ifx}
 \DoNotIndex{\ifdefined}
@@ -389,10 +390,11 @@ and the derived files           expkv-def.pdf
 %   taking \key. It'll just call the key-macro of \key\ and pass it \val. The
 %   |einitial| variant will expand \val\ using an |\edef| expansion prior to
 %   passing it to the key-macro and the |oinitial| variant will expand the first
-%   token in \val\ once. The |finitial| will expand \val\ until a non-expandable
+%   token in \val\ once. |finitial| will expand \val\ until a non-expandable
 %   token or a space is found, a space would be
-%   gobbled.\footnotemark[\numexpr\value{footnote}]
+%   gobbled.\footnotemark
 % \end{function}
+% \footnotetext{Again using \cs[no-index]{romannumeral}.}
 %
 % \begin{function}{bool,gbool,boolTF,gboolTF}
 %   \begin{syntax}
@@ -764,8 +766,8 @@ and the derived files           expkv-def.pdf
 % \begin{macro}{\ekvdVersion,\ekvdDate}
 % We're on our first input, so lets store the version and date in a macro.
 %    \begin{macrocode}
-\def\ekvdVersion{0.6}
-\def\ekvdDate{2020-10-12}
+\def\ekvdVersion{0.7}
+\def\ekvdDate{2020-10-27}
 %    \end{macrocode}
 % \end{macro}
 %
