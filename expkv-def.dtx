@@ -915,15 +915,11 @@ and the derived files           expkv-def.pdf
           {%
             \ekvd@ifalso
               {%
-                \ekv@expB@unbraceA{\ekv@expB@unbraceA{\ekvd@add@noval{#1}}}%
+                \ekv@expargtwice{\ekvd@add@noval{#1}}%
                   {\ekvchangeset{#2}}%
                   \ekvd@assert@not@protected@also
               }%
-              {%
-                \ekv@expB@unbraceA
-                  {\ekv@expB@unbraceA{\ekvdefNoVal\ekvd@set{#1}}}%
-                  {\ekvchangeset{#2}}%
-              }%
+              {\ekv@expargtwice{\ekvdefNoVal\ekvd@set{#1}}{\ekvchangeset{#2}}}%
           }%
       }%
   }
@@ -953,7 +949,7 @@ and the derived files           expkv-def.pdf
             \ekvd@assert@not@long
             \ekvd@prot#1\ekvd@tmp{#3}%
             \ekvd@ifalso
-              {\ekv@expB@unbraceA{\ekvd@add@noval{#2}}\ekvd@tmp{}}%
+              {\ekv@exparg{\ekvd@add@noval{#2}}\ekvd@tmp{}}%
               {\ekvletNoVal\ekvd@set{#2}\ekvd@tmp}%
           }%
       }%
@@ -975,7 +971,7 @@ and the derived files           expkv-def.pdf
           {%
             \ekvd@prot\ekvd@long#1\ekvd@tmp##1{#3}%
             \ekvd@ifalso
-              {\ekv@expB@unbraceA{\ekvd@add@val{#2}}{\ekvd@tmp{##1}}{}}%
+              {\ekv@exparg{\ekvd@add@val{#2}}{\ekvd@tmp{##1}}{}}%
               {\ekvlet\ekvd@set{#2}\ekvd@tmp}%
           }%
       }%
@@ -1010,7 +1006,7 @@ and the derived files           expkv-def.pdf
                   {#2\csname\ekv@name\ekvd@set{#3}\endcsname{#4}}%
               }%
             \ekvd@ifalso
-              {\ekv@expB@unbraceA{\ekvd@add@noval{#3}}\ekvd@tmp{}}%
+              {\ekv@exparg{\ekvd@add@noval{#3}}\ekvd@tmp{}}%
               {\ekvletNoVal\ekvd@set{#3}\ekvd@tmp}%
           }%
           {\ekvd@err@undefined@key{#3}}%
@@ -1038,7 +1034,7 @@ and the derived files           expkv-def.pdf
             \ekvd@prot\edef\ekvd@tmp
               {\csname\ekv@name\ekvd@set{#1}\endcsname{#2}}%
             \ekvd@ifalso
-              {\ekv@expB@unbraceA{\ekvd@add@noval{#1}}\ekvd@tmp{}}%
+              {\ekv@exparg{\ekvd@add@noval{#1}}\ekvd@tmp{}}%
               {\ekvletNoVal\ekvd@set{#1}\ekvd@tmp}%
           }%
           {\ekvd@err@undefined@key{#1}}%
@@ -1068,10 +1064,10 @@ and the derived files           expkv-def.pdf
       }%
   }
 \def\ekvd@t@initial{\ekvd@type@initial{\def\ekvd@tmp}{}}
-\def\ekvd@t@oinitial{\ekvd@type@initial{\ekv@expB@unbraceA{\def\ekvd@tmp}}{}}
+\def\ekvd@t@oinitial{\ekvd@type@initial{\ekv@exparg{\def\ekvd@tmp}}{}}
 \def\ekvd@t@einitial{\ekvd@type@initial{\edef\ekvd@tmp}{}}
 \def\ekvd@t@finitial
-  {\ekvd@type@initial{\ekv@expB@unbraceA{\def\ekvd@tmp}}{\romannumeral`\^^@}}
+  {\ekvd@type@initial{\ekv@exparg{\def\ekvd@tmp}}{\romannumeral`\^^@}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1366,7 +1362,7 @@ and the derived files           expkv-def.pdf
             \edef\ekvd@tmp{\ekvd@set}%
             \expandafter\ekvd@type@meta@a\expandafter{\ekvd@tmp}{#7}{#2}%
             \ekvd@ifalso
-              {\ekv@expB@unbraceA{#3{#6}}{\ekvd@tmp#4}{#5}}%
+              {\ekv@exparg{#3{#6}}{\ekvd@tmp#4}{#5}}%
               {\csname ekvlet#1\endcsname\ekvd@set{#6}\ekvd@tmp}%
           }%
       }%
@@ -1406,7 +1402,7 @@ and the derived files           expkv-def.pdf
           {%
             \ekvd@type@meta@a#7{#2}%
             \ekvd@ifalso
-              {\ekv@expB@unbraceA{#3{#6}}{\ekvd@tmp#4}{#5}}%
+              {\ekv@exparg{#3{#6}}{\ekvd@tmp#4}{#5}}%
               {\csname ekvlet#1\endcsname\ekvd@set{#6}\ekvd@tmp}%
           }%
       }%
@@ -1444,7 +1440,7 @@ and the derived files           expkv-def.pdf
           {%
             \ekvd@if@not@already@choice{#1}%
               {%
-                \ekv@expB@unbraceA
+                \ekv@exparg
                   {%
                     \expandafter\ekvd@add@aux
                       \csname\ekv@name\ekvd@set{#1}\endcsname{{##1}}{#1}%
