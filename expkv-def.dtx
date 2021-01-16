@@ -1956,18 +1956,12 @@ and the derived files           expkv-def.pdf
       {\ekvd@err{invalid choice `#3' (`#2', set `#1')}}%
   }
 }
-\begingroup
-\edef\ekvd@err
+\def\ekvd@err#1%
   {%
-    \endgroup
-    \unexpanded{\long\def\ekvd@err}##1%
-      {%
-        \unexpanded{\expandafter\ekv@err@\@firstofone}%
-        {\unexpanded\expandafter{\csname ! expkv-def Error:\endcsname}##1.}%
-        \unexpanded{\ekv@stop}%
-      }%
+    \long\def\ekvd@err##1{\expandafter\ekv@err@\@firstofone{#1##1.}\ekv@stop}%
   }
-\ekvd@err
+\begingroup\expandafter\endgroup
+\expandafter\ekvd@err\csname ! expkv-def Error:\endcsname
 %    \end{macrocode}
 % \end{macro}
 %
