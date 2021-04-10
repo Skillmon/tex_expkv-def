@@ -1,0 +1,146 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\START
+\OMIT
+\newcommand\defkeys{\ekvdefinekeys{test}}
+\ekvsetdef\usekeys{test}
+\newcommand\defkeysettypeboth[1]{\defkeysettype{#1}\defkeyssettypeNoVal{#1}}
+\newcommand\defkeysettype[1]
+  {%
+    \ekvdefinekeys{#1}%
+      {
+         long code #1 = \TYPE{key `#1' in set `#1' got value `##1'}
+        ,long code all = \TYPE{key `all' in set `#1' got value `##1'}
+      }%
+  }
+\newcommand\defkeyssettypeNoVal[1]
+  {%
+    \ekvdefinekeys{#1}%
+      {
+         noval #1 = \TYPE{key `#1' in set `#1' got no value}
+        ,noval all = \TYPE{key `all' in set `#1' got no value}
+      }%
+  }
+\defkeysettypeboth{foo}
+\defkeysettypeboth{bar}
+\defkeysettypeboth{baz}
+\TIMO
+
+\begingroup
+\TEST{unknown code|noval}
+  {
+    \defkeys
+      {
+         new long unknown code  = \TYPE{unknown key `#1', value `#2'}
+        ,new      unknown noval = \TYPE{unknown key `#1', no value}
+      }
+    \usekeys{key=\par, noval}
+  }
+\endgroup
+
+\begingroup
+\TEST{unknown redirect-code|noval}
+  {
+    \defkeys
+      {
+         unknown redirect-code  = {foo,bar}
+        ,unknown redirect-noval = {bar, baz }
+      }
+    \usekeys{bar, baz, foo=val, bar=\par, all, all=val}
+  }
+\endgroup
+
+\begingroup
+\TEST{unknown redirect}
+  {
+    \defkeys{unknown redirect={foo,bar,baz}}
+    \usekeys{foo,bar,baz,foo=\par,bar=val,baz=value, all, all=val}
+  }
+\endgroup
+
+\begingroup
+\TEST{not new}
+  {
+    \defkeys
+      {
+         unknown code = {}
+        ,new unknown code = {}
+        ,new unknown redirect-code = {}
+        ,unknown noval = {}
+        ,new unknown noval = {}
+        ,new unknown redirect-noval = {}
+        ,new unknown redirect = {}
+      }
+  }
+\endgroup
+
+\begingroup
+\TEST{disallowed prefixes - also}
+  {
+    \defkeys
+      {
+         also unknown code = {}
+        ,also unknown noval = {}
+        ,also unknown redirect-code = {}
+        ,also unknown redirect-noval = {}
+        ,also unknown redirect = {}
+      }
+  }
+\endgroup
+
+\begingroup
+\TEST{disallowed prefixes - long}
+  {
+    \defkeys
+      {
+         long unknown noval = {}
+        ,long unknown redirect-noval = {}
+        ,long unknown redirect = {}
+      }
+  }
+\endgroup
+
+\begingroup
+\TEST{disallowed prefixes - protected}
+  {
+    \defkeys
+      {
+         protected unknown redirect-code = {}
+        ,protected unknown redirect-noval = {}
+        ,protected unknown redirect = {}
+      }
+  }
+\endgroup
+
+\begingroup
+\TEST{unknown keys in every set}
+  {
+    \defkeys{unknown redirect={foo,bar,baz}}
+    \usekeys{unknown, unknown=val}
+  }
+\endgroup
+
+\begingroup
+\TEST{misused unknown}
+  {
+    \defkeys{unknown unknown = unknown}
+  }
+\endgroup
+
+\begingroup
+\TEST{missing argument}
+  {
+    \defkeys
+      {
+         unknown code
+        ,unknown noval
+        ,unknown redirect-code
+        ,unknown redirect-noval
+        ,unknown redirect
+      }
+  }
+\endgroup
+
+\END
