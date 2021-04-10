@@ -600,6 +600,63 @@ and the derived files           expkv-def.pdf
 %   you can refer to the choice which was passed in with |#1|.
 % \end{function}
 %
+% \begin{function}{unknown code}
+%   \begin{syntax}
+%     unknown code = \marg{definition} \prefixes2322
+%   \end{syntax}
+%   By default \expkv\ throws errors when it encounters unknown keys in a set.
+%   With the |unknown| prefix you can define handlers that deal with undefined
+%   keys, instead of a \key\ name you have to specify a subtype for this prefix,
+%   here the subtype is |code|.\par
+%   With |unknown code| the \meta{definition} is used for unknown keys which
+%   were provided a value (so corresponds to |\ekvdefunknown|), you can access
+%   the key name with |#1| and the value with |#2|.\footnotemark
+% \end{function}
+% \footnotetext
+%   {^^A
+%     There is some trickery involved to get this more intuitive argument order
+%     without any performance hit if you compare this to
+%     \cs[no-index]{ekvdefunknown} directly.^^A
+%   }
+%
+% \begin{function}{unknown noval}
+%   \begin{syntax}
+%     unknown noval = \marg{definition} \prefixes2323
+%   \end{syntax}
+%   This is like |unknown code| but uses \meta{definition} for unknown keys to
+%   which no value was passed (so corresponds to |\ekvdefunknownNoVal|). You can
+%   access the key name with |#1|.
+% \end{function}
+%
+% \begin{function}{unknown redirect-code}
+%   \begin{syntax}
+%     unknown redirect-code = \marg{set-list} \prefixes2331
+%   \end{syntax}
+%   This uses a predefined action for |unknown code|. Instead of throwing an
+%   error, it is tried to find the \key\ in each \set\ in the comma separated
+%   \meta{set-list}. The first found match will be used and the remaining
+%   options from the list discarded. If the \key\ isn't found in any \set\ an
+%   expandable error will be thrown eventually. Internally \expkv's
+%   |\ekvredirectunknown| will be used.
+% \end{function}
+%
+% \begin{function}{unknown redirect-noval}
+%   \begin{syntax}
+%     unknown redirect-noval = \marg{set-list} \prefixes2333
+%   \end{syntax}
+%   This behaves just like |unknown redirect-code| but will set up means to
+%   forward keys for |unknown noval|. Internally \expkv's
+%   |\ekvredirectunknownNoVal| will be used.
+% \end{function}
+%
+% \begin{function}{unknown redirect}
+%   \begin{syntax}
+%     unknown redirect = \marg{set-list} \prefixes2333
+%   \end{syntax}
+%   This is a short cut to apply both, |unknown redirect-code| and
+%   |unknown redirect-noval|.
+% \end{function}
+%
 % \subsection{Bugs}
 % I don't think there are any (but every developer says that), if you find some
 % please let me know, either via the email address on the first page or on
@@ -1543,12 +1600,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \protected\long\expandafter\def\csname ekvd@t@unknown-choice\endcsname#1#2%
   {%
-    \ifx\ekvd@ifnew\ekvd@assert@new
-      \ekv@fi@firstoftwo
-    \fi
-    \@secondoftwo
-      {\ekv@ifdefined{\ekvd@unknown@choice@name\ekvd@set{#1}}\ekvd@err@not@new}%
-      \@firstofone
+    \ekvd@assert@new@for@name{\ekvd@unknown@choice@name\ekvd@set{#1}}%
       {%
         \ekvd@assert@arg
           {%
@@ -1557,6 +1609,97 @@ and the derived files           expkv-def.pdf
             \ekvd@prot\expandafter
             \def\csname\ekvd@unknown@choice@name\ekvd@set{#1}\endcsname##1{#2}%
           }%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {\ekvd@t@unknown,\ekvd@type@unknown@code,\ekvd@type@unknown@noval}
+%   The |unknown| type has different subtypes which would be the key names for
+%   other types. It is first checked whether that subtype is defined, if it
+%   isn't throw an error, else use that subtype.
+%    \begin{macrocode}
+\protected\long\def\ekvd@t@unknown#1#2%
+  {%
+    \ekv@ifdefined{ekvd@type@unknown@\detokenize{#1}}%
+      {\csname ekvd@type@unknown@\detokenize{#1}\endcsname{#2}}%
+      \ekvd@err@misused@unknown
+  }
+%    \end{macrocode}
+%   The |unknown noval| type can use |\ekvdefunknownNoVal| directly (after
+%   asserting some prefixes).
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@unknown@noval#1%
+  {%
+    \ekvd@assert@new@for@name{\ekv@name\ekvd@set{}uN}%
+      {%
+        \ekvd@assert@arg
+          {%
+            \ekvd@assert@not@also
+            \ekvd@assert@not@long
+            \ekvd@prot\ekvdefunknownNoVal\ekvd@set{#1}%
+          }%
+      }%
+  }
+%    \end{macrocode}
+%   The |unknown code| type uses some trickery during the definition in order to
+%   swap out |#1| and |#2| in the user supplied definition. This is done via a
+%   temporary macro that stores the definition but gets the parameter numbers
+%   reversed while the real definition is done.
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@unknown@code#1%
+  {%
+    \ekvd@assert@new@for@name{\ekv@name\ekvd@set{}u}%
+      {%
+        \ekvd@assert@arg
+          {%
+            \ekvd@assert@not@also
+            \begingroup
+              \def\ekvd@tmp##1##2{#1}%
+              \ekv@exparg
+              {%
+                \endgroup
+                \ekvd@prot\ekvd@long\ekvdefunknown\ekvd@set
+              }%
+              {\ekvd@tmp{##2}{##1}}%
+          }%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]
+%   {
+%     \ekvd@type@unknown@redirect,
+%     \ekvd@type@unknown@redirect-code,
+%     \ekvd@type@unknown@redirect-noval
+%   }
+%   The |unknown redirect| types also just forward to |\ekvredirectunknown|
+%   after asserting some prefixes.
+%    \begin{macrocode}
+\protected\edef\ekvd@type@unknown@redirect#1%
+  {%
+    \expandafter\noexpand\csname ekvd@type@unknown@redirect-code\endcsname{#1}%
+    \expandafter\noexpand\csname ekvd@type@unknown@redirect-noval\endcsname{#1}%
+  }
+\protected\expandafter\def\csname ekvd@type@unknown@redirect-code\endcsname#1%
+  {%
+    \ekvd@assert@new@for@name{\ekv@name\ekvd@set{}u}%
+      {%
+        \ekvd@assert@not@also
+        \ekvd@assert@not@protected
+        \expandafter\ekvredirectunknown\expandafter{\ekvd@set}{#1}%
+      }%
+  }
+\protected\expandafter\def\csname ekvd@type@unknown@redirect-noval\endcsname#1%
+  {%
+    \ekvd@assert@new@for@name{\ekv@name\ekvd@set{}uN}%
+      {%
+        \ekvd@assert@not@also
+        \ekvd@assert@not@protected
+        \ekvd@assert@not@long
+        \expandafter\ekvredirectunknownNoVal\expandafter{\ekvd@set}{#1}%
       }%
   }
 %    \end{macrocode}
@@ -1819,6 +1962,15 @@ and the derived files           expkv-def.pdf
   {\csname ekvifdefined#1\endcsname\ekvd@set{#2}{\ekvd@err@not@new}}
 \def\ekvd@assert@not@new
   {\ifx\ekvd@ifnew\ekvd@assert@new\ekvd@err@no@prefix{new}\fi}
+\def\ekvd@assert@new@for@name#1%
+  {%
+    \ifx\ekvd@ifnew\ekvd@assert@new
+      \ekv@fi@firstoftwo
+    \fi
+    \@secondoftwo
+      {\ekv@ifdefined{#1}\ekvd@err@not@new}%
+      \@firstofone
+  }
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1917,17 +2069,16 @@ and the derived files           expkv-def.pdf
   }
 \protected\def\ekvd@err@not@new
   {\ekvd@errm{The key for `\ekvd@cur' is already defined}} 
+\protected\long\def\ekvd@err@misused@unknown
+  {\ekvd@errm{Misuse of the unknown type found while processing `\ekvd@cur'}}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}[internal]
 %   {
 %     \ekvd@err@choice@invalid,\ekvd@err@choice@invalid@,\ekvd@choice@name,
-%     \ekvd@unknown@choice@name,\ekvd@err
+%     \ekvd@unknown@choice@name
 %   }
-% The expandable error messages use |\ekvd@err|, which is just like |\ekv@err|
-% from \expkv\ or the way \pkg{expl3} throws expandable error messages. It uses
-% an undefined control sequence to start the error message.
 % |\ekvd@err@choice@invalid| will have to use this mechanism to throw its
 % message. Also we have to retrieve the name parts of the choice in an easy way,
 % so we use parentheses of catcode 8 here, which should suffice in most cases to
@@ -1956,6 +2107,14 @@ and the derived files           expkv-def.pdf
       {\ekvd@err{invalid choice `#3' (`#2', set `#1')}}%
   }
 }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@err}
+% The expandable error messages use |\ekvd@err|, which is just like |\ekv@err|
+% from \expkv\ or the way \pkg{expl3} throws expandable error messages. It uses
+% an undefined control sequence to start the error message.
+%    \begin{macrocode}
 \def\ekvd@err#1%
   {%
     \long\def\ekvd@err##1{\expandafter\ekv@err@\@firstofone{#1##1.}\ekv@stop}%
