@@ -654,7 +654,8 @@ and the derived files           expkv-def.pdf
 %     unknown redirect = \marg{set-list} \prefixes2333
 %   \end{syntax}
 %   This is a short cut to apply both, |unknown redirect-code| and
-%   |unknown redirect-noval|.
+%   |unknown redirect-noval|, as a result you might get doubled error messages,
+%   one from each.
 % \end{function}
 %
 % \subsection{Bugs}
@@ -1687,19 +1688,25 @@ and the derived files           expkv-def.pdf
   {%
     \ekvd@assert@new@for@name{\ekv@name\ekvd@set{}u}%
       {%
-        \ekvd@assert@not@also
-        \ekvd@assert@not@protected
-        \expandafter\ekvredirectunknown\expandafter{\ekvd@set}{#1}%
+        \ekvd@assert@arg
+          {%
+            \ekvd@assert@not@also
+            \ekvd@assert@not@protected
+            \expandafter\ekvredirectunknown\expandafter{\ekvd@set}{#1}%
+          }%
       }%
   }
 \protected\expandafter\def\csname ekvd@type@unknown@redirect-noval\endcsname#1%
   {%
     \ekvd@assert@new@for@name{\ekv@name\ekvd@set{}uN}%
       {%
-        \ekvd@assert@not@also
-        \ekvd@assert@not@protected
-        \ekvd@assert@not@long
-        \expandafter\ekvredirectunknownNoVal\expandafter{\ekvd@set}{#1}%
+        \ekvd@assert@arg
+          {%
+            \ekvd@assert@not@also
+            \ekvd@assert@not@protected
+            \ekvd@assert@not@long
+            \expandafter\ekvredirectunknownNoVal\expandafter{\ekvd@set}{#1}%
+          }%
       }%
   }
 %    \end{macrocode}
