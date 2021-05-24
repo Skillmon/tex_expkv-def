@@ -64,6 +64,19 @@ and the derived files           expkv-def.pdf
 \RequirePackage[oldstylenums,nott]{kpfonts}
 \input{glyphtounicode}
 \pdfgentounicode=1
+\RequirePackage{tcolorbox}
+\newtcolorbox{exresult}[2][]
+  {colback=expkvgrey!10!white,colframe=expkvgrey,fontupper=\small,width={#2},#1}
+\newtcbox\exres[1][]
+  {
+     colback=expkvgrey!10!white
+    ,colframe=expkvgrey
+    ,size=small
+    ,nobeforeafter
+    ,tcbox raise base
+    ,fontupper=\small
+    ,#1
+  }
 \RequirePackage{listings}
 \RequirePackage{booktabs}
 \RequirePackage{array}
@@ -73,23 +86,117 @@ and the derived files           expkv-def.pdf
 \RequirePackage{caption}
 \RequirePackage{microtype}
 \RequirePackage{accsupp}
+\lstdefinelanguage{expkvd}[primitive]{TeX}
+  {
+    ,moretexcs=[4]^^A e-TeX
+      {
+        expanded,
+        numexpr,
+        protected,
+      }
+    ,moretexcs=[5]^^A plain/LaTeX
+      {
+        approx,
+        begin,
+        empty,
+        item,
+        LaTeX,
+        makeatletter,makeatother,
+        newcommand,newdimen,
+        RequirePackage,
+        rule,
+        TeX,
+        textit,texttt,
+        usepackage,
+      }
+    ,moretexcs=[6]^^A used packages
+      {
+        ^^A xfp
+        fpeval,
+        ^^A keyval
+        setkeys,
+        ^^A yax
+        defactiveparameter,storevalue,setparameterlist
+      }
+    ,moretexcs=[2]^^A expkv-def macros
+      {
+        ekvdefinekeys
+      }
+    ,moretexcs=[3]^^A expkv-pkg macros
+      {
+        ^^A expkv
+        ekvdef,ekvdefNoVal,^^A
+        ekvlet,ekvletNoVal,ekvletkv,ekvletkvNoVal,^^A
+        ekvdefunknown,ekvdefunknownNoVal,^^A
+        ekvredirectunknown,ekvredirectunknownNoVal,^^A
+        ekvset,ekvsetSneaked,^^A
+        ekvsetdef,ekvsetSneakeddef,ekvsetdefSneaked,^^A
+        ekvparse,^^A
+        ekvVersion,ekvDate,^^A
+        ekvifdefined,ekvifdefinedNoVal,ekvifdefinedset,^^A
+        ekvbreak,ekvbreakPreSneak,ekvbreakPostSneak,^^A
+        ekvsneak,ekvsneakPre,^^A
+        ekvchangeset,^^A
+        ekvoptarg,ekvoptargTF,^^A
+        ekverr,
+        ^^A expkv-cs
+        ekvcSecondaryKeys,ekvcSplitAndForward,
+      }
+  }
+\colorlet{codeparam}{cyan!65!black}
+\def\mylstwd{.55em}
 \lstset
   {
+    ,language=expkvd
     ,flexiblecolumns=false
-    ,basewidth=.53em
+    ,basewidth=\mylstwd
     ,gobble=2
     ,basicstyle=\fontfamily{jkp}\itshape
-    ,morekeywords=^^A
-      {^^A
-        \ekvdefinekeys
-      }
-    ,morecomment=[l]\%
+    ,texcsstyle=*[1]{\bfseries\color{expkvgrey}} ^^A primitives
+    ,texcsstyle=*[2]{\bfseries\color{expkvred}}  ^^A expkv
+    ,texcsstyle=*[3]{\color{expkvred}}           ^^A expkv-pkg
+    ,texcsstyle=*[4]{\bfseries\color{expkvgrey}} ^^A e-TeX
+    ,texcsstyle=*[5]{\bfseries\color{expkvgrey}} ^^A plain/LaTeX macros
+    ,texcsstyle=*[6]{}                           ^^A macros of other packages
     ,commentstyle=\color[gray]{0.4}
-    ,literate={\{}{{\CodeSymbol\{}}{1}
-              {\}}{{\CodeSymbol\}}}{1}
+    ,literate=
+              {\{} {{\CodeUpBf\{}}{1}
+              {\}} {{\CodeUpBf\}}}{1}
+              {$}  {{\CodeUpBf\$}}{1}
+              {[}  {{\CodeUp[}}{1}
+              {]}  {{\CodeUp]}}{1}
+              {(}  {{\CodeUp(}}{1}
+              {)}  {{\CodeUp)}}{1}
+              {*}  {{$*$}}{1}
+              {1}  {{\CodeUp{1}}}{1}
+              {2}  {{\CodeUp{2}}}{1}
+              {3}  {{\CodeUp{3}}}{1}
+              {4}  {{\CodeUp{4}}}{1}
+              {5}  {{\CodeUp{5}}}{1}
+              {6}  {{\CodeUp{6}}}{1}
+              {7}  {{\CodeUp{7}}}{1}
+              {8}  {{\CodeUp{8}}}{1}
+              {9}  {{\CodeUp{9}}}{1}
+              {0}  {{\CodeUp{0}}}{1}
+              {##} {{\CodeColored{codeparam}{1}{\#}}}{1}
+              {##1}{{\CodeColored{codeparam}{2}{\#1}}}{2}
+              {##2}{{\CodeColored{codeparam}{2}{\#2}}}{2}
+              {##3}{{\CodeColored{codeparam}{2}{\#3}}}{2}
+              {##4}{{\CodeColored{codeparam}{2}{\#4}}}{2}
+              {##5}{{\CodeColored{codeparam}{2}{\#5}}}{2}
+              {##6}{{\CodeColored{codeparam}{2}{\#6}}}{2}
+              {##7}{{\CodeColored{codeparam}{2}{\#7}}}{2}
+              {##8}{{\CodeColored{codeparam}{2}{\#8}}}{2}
+              {##9}{{\CodeColored{codeparam}{2}{\#9}}}{2}
+              {<key>}{{$\langle$}key{$\rangle$}}{5}
+              {<set>}{{$\langle$}set{$\rangle$}}{5}
+              {<set1>}{{$\langle$}set1{$\rangle$}}{6}
+              {<set2>}{{$\langle$}set2{$\rangle$}}{6}
     ^^A,literate=*{<key>}{\key}{4}{<set>}{\set}{4}
   }
-\newcommand*\CodeSymbol[1]{\textbf{#1}}
+\newcommand*\CodeColored[3]{\textcolor{#1}{\makebox[\dimexpr\mylstwd*#2]{#3}}}
+\newcommand*\CodeUpBf[1]{\makebox[\mylstwd]{\textup{\textbf{#1}}}}
+\newcommand*\CodeUp[1]{\makebox[\mylstwd]{\textup{#1}}}
 \RequirePackage{randtext}
 \let\metaORIG\meta
 \protected\def\meta #1{\texttt{\metaORIG{#1}}}
@@ -730,7 +837,7 @@ and the derived files           expkv-def.pdf
 % in Italics. If a person has no hobbies the description item will be silently
 % left out.  The result of the above code looks like this:
 %
-% \begingroup
+% \begin{exresult}{\linewidth}
 % \ekvdefinekeys{ex}
 %   {
 %      data  name  = \Pname
@@ -751,7 +858,7 @@ and the derived files           expkv-def.pdf
 % \Person{name=Jonathan P. Spratte, age=young, hobby=\TeX\ coding}
 % \Person{name=Some User, age=unknown, hobby=Reading Documentation}
 % \Person{name=Anybody, age=any}
-% \endgroup
+% \end{exresult}
 %
 % \subsection{License}
 %
