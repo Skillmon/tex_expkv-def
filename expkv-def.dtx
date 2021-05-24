@@ -511,7 +511,7 @@ and the derived files           expkv-def.pdf
 %   \begin{syntax}
 %     toks \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
-%   The \meta{cs} should be a single control sequence, such as |\foo|. 
+%   The \meta{cs} should be a single control sequence, such as |\foo|.
 %   Store \val\ inside of a toks-register. The |g| variants use |\global|, the
 %   |app| variants append \val\ to the contents of that register. If \meta{cs}
 %   is not yet defined it will be initialised with |\newtoks|.
@@ -2075,7 +2075,7 @@ and the derived files           expkv-def.pdf
       }%
   }
 \protected\def\ekvd@err@not@new
-  {\ekvd@errm{The key for `\ekvd@cur' is already defined}} 
+  {\ekvd@errm{The key for `\ekvd@cur' is already defined}}
 \protected\long\def\ekvd@err@misused@unknown
   {\ekvd@errm{Misuse of the unknown type found while processing `\ekvd@cur'}}
 %    \end{macrocode}
@@ -2111,7 +2111,7 @@ and the derived files           expkv-def.pdf
   {%
     \ekv@ifdefined{\ekvd@unknown@choice@name{#1}{#2}}%
       {\csname\ekvd@unknown@choice@name{#1}{#2}\endcsname{#3}}%
-      {\ekvd@err{invalid choice `#3' (`#2', set `#1')}}%
+      {\ekvd@err{invalid choice `#3' for `#2' in set `#1'}}%
   }
 }
 %    \end{macrocode}
@@ -2119,15 +2119,9 @@ and the derived files           expkv-def.pdf
 %
 % \begin{macro}[internal]{\ekvd@err}
 % The expandable error messages use |\ekvd@err|, which is just like |\ekv@err|
-% from \expkv\ or the way \pkg{expl3} throws expandable error messages. It uses
-% an undefined control sequence to start the error message.
+% from \expkv. It uses a runaway argument to start the error message.
 %    \begin{macrocode}
-\def\ekvd@err#1%
-  {%
-    \long\def\ekvd@err##1{\expandafter\ekv@err@\@firstofone{#1##1.}\ekv@stop}%
-  }
-\begingroup\expandafter\endgroup
-\expandafter\ekvd@err\csname ! expkv-def Error:\endcsname
+\ekv@exparg{\long\def\ekvd@err#1}{\ekverr{expkv-def}{#1}}
 %    \end{macrocode}
 % \end{macro}
 %

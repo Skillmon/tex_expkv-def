@@ -3,15 +3,21 @@ Don't change this file in any respect.
 ============================================================
 TEST 1: invalid choice
 ============================================================
-! Undefined control sequence.
-<argument> \! expkv-def Error: 
-                               invalid choice `5' (`foo', set `test').
+Runaway argument?
+! expkv-def Error: invalid choice `5' for `foo' in set `test'
+! Paragraph ended before \<an-expandable-macro>
+completed due to above exception.  If the error
+summary is  not comprehensible  see the package
+documentation.
+I will try to recover now.  If you're in inter-
+active mode hit <return>  at the ? prompt and I
+continue hoping recovery was complete.
+<to be read again> 
+                   \par 
 l. ...\TESTEXP{invalid choice}{\usekeys{foo=5}}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
 ============================================================
 ============================================================
 TEST 2: invalid definitions
@@ -153,28 +159,40 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
-! Undefined control sequence.
-<argument> \! expkv-def Error: 
-                               invalid choice `' (`foo', set `test').
+Runaway argument?
+! expkv-def Error: invalid choice `' for `foo' in set `test'
+! Paragraph ended before \<an-expandable-macro>
+completed due to above exception.  If the error
+summary is  not comprehensible  see the package
+documentation.
+I will try to recover now.  If you're in inter-
+active mode hit <return>  at the ? prompt and I
+continue hoping recovery was complete.
+<to be read again> 
+                   \par 
 l. ...  }
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
 ! expkv-def Error: prefix `protected' not accepted in `protected initial foo'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
-! Undefined control sequence.
-<argument> \! expkv-def Error: 
-                               invalid choice `' (`foo', set `test').
+Runaway argument?
+! expkv-def Error: invalid choice `' for `foo' in set `test'
+! Paragraph ended before \<an-expandable-macro>
+completed due to above exception.  If the error
+summary is  not comprehensible  see the package
+documentation.
+I will try to recover now.  If you're in inter-
+active mode hit <return>  at the ? prompt and I
+continue hoping recovery was complete.
+<to be read again> 
+                   \par 
 l. ...  }
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
 ! expkv-def Error: prefix `long' not accepted in `long protected initial foo'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
@@ -183,15 +201,21 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
-! Undefined control sequence.
-<argument> \! expkv-def Error: 
-                               invalid choice `' (`foo', set `test').
+Runaway argument?
+! expkv-def Error: invalid choice `' for `foo' in set `test'
+! Paragraph ended before \<an-expandable-macro>
+completed due to above exception.  If the error
+summary is  not comprehensible  see the package
+documentation.
+I will try to recover now.  If you're in inter-
+active mode hit <return>  at the ? prompt and I
+continue hoping recovery was complete.
+<to be read again> 
+                   \par 
 l. ...  }
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
 ! expkv-def Error: prefix `long' not accepted in `long bool key'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
