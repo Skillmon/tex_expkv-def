@@ -43,6 +43,7 @@ This work consists of the file  expkv-def.dtx
 and the derived files           expkv-def.pdf
                                 expkv-def.sty
                                 expkv-def.tex
+                                t-expkv-def.tex
 
 \endpreamble
 % stop docstrip adding \endinput
@@ -50,6 +51,7 @@ and the derived files           expkv-def.pdf
 \endpostamble
 \generate{\file{expkv-def.sty}{\from{expkv-def.dtx}{pkg}}}
 \generate{\file{expkv-def.tex}{\from{expkv-def.dtx}{tex}}}
+\generate{\file{t-expkv-def.tex}{\from{expkv-def.dtx}{ctx}}}
 \ifx\fmtname\nameofplainTeX
   \expandafter\endbatchfile
 \else
@@ -317,8 +319,8 @@ and the derived files           expkv-def.pdf
 % \expkvd\ provides a small \kv\ interface to define keys for \expkv. Key-types
 % are declared using prefixes, similar to static typed languages. The stylised
 % name is \expkvd\ but the files use \file{expkv-def}, this is due to CTAN-rules
-% which don't allow \string| in package names since that is the pipe symbol in *nix
-% shells.
+% which don't allow \string| in package names since that is the pipe symbol in
+% *nix shells.
 % \end{abstract}
 %
 % \tableofcontents
@@ -345,12 +347,13 @@ and the derived files           expkv-def.pdf
 % \autoref{sec:prefix:p}, the |t|-prefixes are described in
 % \autoref{sec:prefix:t}.
 %
-% \expkvd\ is usable as generic code and as a \LaTeX\ package. It'll
-% automatically load \expkv\ in the same mode as well. To use it, just use one
-% of
+% \expkvd\ is usable as generic code, as a \LaTeX\ package, and as a \ConTeXt\
+% module. It'll automatically load \expkv\ in the same mode as well. To use it,
+% just use one of
 % \begin{lstlisting}
-% \usepackage{expkv-def} % LaTeX
 % \input expkv-def       % plainTeX
+% \usepackage{expkv-def} % LaTeX
+% \usemodule[expkv-def]  % ConTeXt
 % \end{lstlisting}
 %
 % \subsection{Macros}
@@ -480,8 +483,9 @@ and the derived files           expkv-def.pdf
 %   expand the \key's code once, so will be slightly quicker, but not change if
 %   you redefine \key. |odefault| is just another name for |qdefault|. The
 %   |fdefault| version will expand the key code until a non-expandable token or
-%   a space is found, a space would be gobbled.\footnotemark{} The |edefault| on the other hand fully expands
-%   the \key-code with \meta{definition} as its argument inside of an |\edef|.
+%   a space is found, a space would be gobbled.\footnotemark{} The |edefault| on
+%   the other hand fully expands the \key-code with \meta{definition} as its
+%   argument inside of an |\edef|.
 % \end{function}
 % \footnotetext
 %   {^^A
@@ -906,6 +910,29 @@ and the derived files           expkv-def.pdf
 % \gobbledocstriptag
 %</pkg>
 %^^A=<<
+%^^A the ConTeXt module >>=
+% \subsection{The \ConTeXt\ module}
+% \gobbledocstriptag
+%<*ctx>
+%    \begin{macrocode}
+%D \module
+%D   [file=t-expkv-def,
+%D    version=1.8a,
+%D    title=expkv-def,
+%D    subtitle=a key-defining frontend for expkv,
+%D    author=Jonathan P. Spratte,
+%D    date=2021-06-03,
+%D    copyright=Jonathan P. Spratte,
+%D    license=LPPL1.3c+]
+\writestatus{loading}{expkv-cs -- a key-defining frontend for expkv}
+\usemodule[expkv]
+\unprotect
+\input expkv-def.tex
+\protect\endinput
+%    \end{macrocode}
+% \gobbledocstriptag
+%</ctx>
+%^^A=<<
 %^^A main file >>=
 % \subsection{The Generic Code}
 % The rest of this implementation will be the generic code.
@@ -1167,7 +1194,7 @@ and the derived files           expkv-def.pdf
             \ekvd@assert@not@long
             \ekvd@prot\edef\ekvd@tmp
               {%
-                \unexpanded\expandafter#1%
+                \ekv@unexpanded\expandafter#1%
                   {#2\csname\ekv@name\ekvd@set{#3}\endcsname{#4}}%
               }%
             \ekvd@ifalso
@@ -1348,14 +1375,16 @@ and the derived files           expkv-def.pdf
       }%
   }
 \protected\def\ekvd@t@data
-  {\ekvd@type@data\@secondoftwo\edef{####2}{\unexpanded{##1}}}
+  {\ekvd@type@data\@secondoftwo\edef{####2}{\ekv@unexpanded{##1}}}
 \protected\def\ekvd@t@edata{\ekvd@type@data\@secondoftwo\edef{####2}{##1}}
 \protected\def\ekvd@t@gdata
-  {\ekvd@type@data\@secondoftwo\xdef{####2}{\unexpanded{##1}}}
+  {\ekvd@type@data\@secondoftwo\xdef{####2}{\ekv@unexpanded{##1}}}
 \protected\def\ekvd@t@xdata{\ekvd@type@data\@secondoftwo\xdef{####2}{##1}}
-\protected\def\ekvd@t@dataT{\ekvd@type@data\@gobble\edef{}{\unexpanded{##1}}}
+\protected\def\ekvd@t@dataT
+  {\ekvd@type@data\@gobble\edef{}{\ekv@unexpanded{##1}}}
 \protected\def\ekvd@t@edataT{\ekvd@type@data\@gobble\edef{}{##1}}
-\protected\def\ekvd@t@gdataT{\ekvd@type@data\@gobble\xdef{}{\unexpanded{##1}}}
+\protected\def\ekvd@t@gdataT
+  {\ekvd@type@data\@gobble\xdef{}{\ekv@unexpanded{##1}}}
 \protected\def\ekvd@t@xdataT{\ekvd@type@data\@gobble\xdef{}{##1}}
 %    \end{macrocode}
 % \end{macro}
@@ -1503,8 +1532,8 @@ and the derived files           expkv-def.pdf
           }%
       }%
   }
-\protected\def\ekvd@t@store{\ekvd@type@store\edef{\unexpanded{##1}}}
-\protected\def\ekvd@t@gstore{\ekvd@type@store\xdef{\unexpanded{##1}}}
+\protected\def\ekvd@t@store{\ekvd@type@store\edef{\ekv@unexpanded{##1}}}
+\protected\def\ekvd@t@gstore{\ekvd@type@store\xdef{\ekv@unexpanded{##1}}}
 \protected\def\ekvd@t@estore{\ekvd@type@store\edef{##1}}
 \protected\def\ekvd@t@xstore{\ekvd@type@store\xdef{##1}}
 %    \end{macrocode}
@@ -1598,7 +1627,7 @@ and the derived files           expkv-def.pdf
   {%
     \ekvd@assert@not@long
     \ekvd@prot\edef\ekvd@tmp##1%
-      {\unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#1}{##1}}}%
+      {\ekv@unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#1}{##1}}}%
     \ekvd@ifalso
       {%
         \ekvd@assert@val{#1}%
@@ -2149,23 +2178,26 @@ and the derived files           expkv-def.pdf
 \protected\def\ekvd@err@missing@definition
   {\ekvd@errm{Missing definition for key `\ekvd@cur'}}
 \protected\def\ekvd@err@missing@definition@msg#1%
-  {\ekvd@errm{Missing definition for key `\unexpanded{#1}'}}
+  {\ekvd@errm{Missing definition for key `\ekv@unexpanded{#1}'}}
 \protected\def\ekvd@err@missing@type
   {\ekvd@errm{Missing type prefix for key `\ekvd@cur'}}
 \protected\def\ekvd@err@undefined@prefix#1%
   {%
     \ekvd@errm
-      {Undefined prefix `\unexpanded{#1}' found while processing `\ekvd@cur'}%
+      {%
+        Undefined prefix `\ekv@unexpanded{#1}' found while processing
+        `\ekvd@cur'%
+      }%
   }
 \protected\def\ekvd@err@undefined@key#1%
   {%
     \ekvd@errm
-      {Undefined key `\unexpanded{#1}' found while processing `\ekvd@cur'}%
+      {Undefined key `\ekv@unexpanded{#1}' found while processing `\ekvd@cur'}%
   }
 \protected\def\ekvd@err@no@prefix#1%
   {\ekvd@errm{prefix `#1' not accepted in `\ekvd@cur'}}
 \protected\def\ekvd@err@no@prefix@msg#1#2%
-  {\ekvd@errm{prefix `#2' not accepted in `\unexpanded{#1}'}}
+  {\ekvd@errm{prefix `#2' not accepted in `\ekv@unexpanded{#1}'}}
 \protected\def\ekvd@err@no@prefix@also#1%
   {\ekvd@errm{`\ekvd@cur' not allowed with a `#1' key}}
 \protected\def\ekvd@err@add@val@on@noval
