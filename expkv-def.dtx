@@ -492,6 +492,7 @@ and the derived files           expkv-def.pdf
 % \begin{function}{initial,oinitial,finitial,einitial}
 %   \begin{syntax}
 %     initial \key\ = \{\val\} \prefixes3333
+%     initial \key
 %   \end{syntax}
 %   With |initial| you can set an initial \val\ for an already defined argument
 %   taking \key. It'll just call the key-macro of \key\ and pass it \val. The
@@ -500,6 +501,10 @@ and the derived files           expkv-def.pdf
 %   token in \val\ once. |finitial| will expand \val\ until a non-expandable
 %   token or a space is found, a space would be
 %   gobbled.\footnotemark
+%
+%   If you don't provide a value (and no equals sign) a |noval| \key\ of the
+%   same name is called once (or, if you specified a |default| for a value
+%   taking key that would be used).
 % \end{function}
 % \footnotetext{Again using \cs[no-index]{romannumeral}.}
 %
@@ -1213,14 +1218,19 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \long\def\ekvd@type@initial#1#2#3#4%
   {%
-    \ekvd@assert@arg
+    \ekvd@assert@not@new
+    \ekvd@assert@not@also
+    \ekvd@assert@not@long
+    \ekvd@assert@not@protected
+    \ekvd@ifnoarg
+      {%
+        \ekvifdefinedNoVal\ekvd@set{#3}%
+          {\csname\ekv@name\ekvd@set{#3}N\endcsname}%
+          {\ekvd@err@undefined@noval{#3}}%
+      }%
       {%
         \ekvifdefined\ekvd@set{#3}%
           {%
-            \ekvd@assert@not@new
-            \ekvd@assert@not@also
-            \ekvd@assert@not@long
-            \ekvd@assert@not@protected
             #1{#2#4}%
             \csname\ekv@name\ekvd@set{#3}\expandafter\endcsname\expandafter
               {\ekvd@tmp}%
@@ -2161,6 +2171,14 @@ and the derived files           expkv-def.pdf
   {%
     \ekvd@errm
       {Undefined key `\unexpanded{#1}' found while processing `\ekvd@cur'}%
+  }
+\protected\def\ekvd@err@undefined@noval#1%
+  {%
+    \ekvd@errm
+      {%
+        Undefined noval key `\unexpanded{#1}' found while processing
+        `\ekvd@cur'%
+      }%
   }
 \protected\def\ekvd@err@no@prefix#1%
   {\ekvd@errm{prefix `#1' not accepted in `\ekvd@cur'}}

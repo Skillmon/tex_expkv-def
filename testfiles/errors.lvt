@@ -57,9 +57,11 @@
       {
         ,long noval foo = {}
         ,long default foo = {}
+        ,new default foo = {}
         ,long initial foo = {}
         ,protected initial foo = {}
         ,long protected initial foo = {}
+        ,new initial foo = {}
         ,long bool key = \key
         ,long nmeta key = {abc}
         ,long snmeta key = {abc}{abc}

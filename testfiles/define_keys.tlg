@@ -46,6 +46,18 @@ The token list contains the tokens:
 >  e (the letter e).
 <recently read> }
 l. ...  }
+The token list contains the tokens:
+>  d (the letter d)
+>  ' (the character ')
+>  i (the letter i)
+>  s (the letter s)
+>    (blank space  )
+>  c (the letter c)
+>  o (the letter o)
+>  d (the letter d)
+>  e (the letter e).
+<recently read> }
+l. ...  }
 ============================================================
 ============================================================
 TEST 3: bool

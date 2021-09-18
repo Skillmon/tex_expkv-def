@@ -45,7 +45,7 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
-! expkv-def Error: Missing definition for key `initial foo'.
+! expkv-def Error: Undefined noval key `foo' found while processing `initial foo'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
@@ -155,6 +155,10 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
+! expkv-def Error: prefix `new' not accepted in `new default foo'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
 ! expkv-def Error: prefix `long' not accepted in `long initial foo'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
@@ -198,6 +202,25 @@ My plan is to forget the whole thing and hope for the best.
 l. ...  }
 (That was another \errmessage.)
 ! expkv-def Error: prefix `protected' not accepted in `long protected initial foo'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+Runaway argument?
+! expkv-def Error: invalid choice `' for `foo' in set `test'
+! Paragraph ended before \<an-expandable-macro>
+completed due to above exception.  If the error
+summary is  not comprehensible  see the package
+documentation.
+I will try to recover now.  If you're in inter-
+active mode hit <return>  at the ? prompt and I
+continue hoping recovery was complete.
+<to be read again> 
+                   \par 
+l. ...  }
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
+! expkv-def Error: prefix `new' not accepted in `new initial foo'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)

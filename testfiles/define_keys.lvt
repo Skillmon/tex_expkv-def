@@ -39,7 +39,11 @@
   }
 \TEST{noval}
   {
-    \defkeys{noval keyA = \csname tl_analysis_show:n\endcsname{d'is code}}
+    \defkeys
+      {
+         noval   keyA = \csname tl_analysis_show:n\endcsname{d'is code}
+        ,initial keyA
+      }
     \usekeys{keyA}
   }
 \TEST{bool}
