@@ -1018,17 +1018,17 @@ and the derived files           expkv-def.pdf
 % if so calls the prefix grabbing routine, else we throw an error and ignore the
 % key.
 %    \begin{macrocode}
-\protected\def\ekvd@noarg#1%
+\protected\long\def\ekvd@noarg#1%
   {%
     \let\ekvd@ifnoarg\@firstoftwo
-    \ekvd@handle{#1}{}%
+    \expandafter\ekvd@handle\detokenize{#1}\ekvd@stop{}%
   }
-\protected\def\ekvd@arg
+\protected\long\def\ekvd@arg#1%
   {%
     \let\ekvd@ifnoarg\@secondoftwo
-    \ekvd@handle
+    \expandafter\ekvd@handle\detokenize{#1}\ekvd@stop
   }
-\protected\long\def\ekvd@handle#1#2%
+\protected\long\def\ekvd@handle#1\ekvd@stop#2%
   {%
     \ekvd@clear@prefixes
     \edef\ekvd@cur{\detokenize{#1}}%
