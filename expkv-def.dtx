@@ -1409,11 +1409,11 @@ and the derived files           expkv-def.pdf
             \ekvd@ifalso
               {%
                 \let\ekvd@prot\protected
-                \ekvd@add@val{#2}{#1\setbox#3\hbox{\begingroup##1\endgroup}}{}%
+                \ekvd@add@val{#2}{#1\setbox#3=\hbox{\begingroup##1\endgroup}}{}%
               }%
               {%
                 \protected\ekvd@long\ekvdef\ekvd@set{#2}%
-                  {#1\setbox#3\hbox{\begingroup##1\endgroup}}%
+                  {#1\setbox#3=\hbox{\begingroup##1\endgroup}}%
               }%
           }%
       }%
