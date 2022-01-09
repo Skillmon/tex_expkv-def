@@ -123,6 +123,10 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
+! expkv-def Error: `also pretoks key' not allowed with a NoVal key.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
 \mybox=\box...
 ! expkv-def Error: `also box key' not allowed with a NoVal key.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}

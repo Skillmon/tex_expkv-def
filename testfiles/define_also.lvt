@@ -29,6 +29,7 @@
     \defalso{skip key = \myskip}
     \defalso{toks key = \mytoks}
     \defalso{apptoks key = \mytoks}
+    \defalso{pretoks key = \mytoks}
     \defalso{box key = \mybox}
     \defalso{meta key = {keyB={#1}}}
     \defalso{smeta key = {set}{key={#1}}}

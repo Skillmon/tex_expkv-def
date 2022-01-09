@@ -50,6 +50,14 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
+! expkv-def Error: The key for `new apptoks vkey' is already defined.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+! expkv-def Error: The key for `new pretoks vkey' is already defined.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
 ! expkv-def Error: The key for `new box vkey' is already defined.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }

@@ -167,14 +167,18 @@ TEST 9: toks
 \keyH=\toks...
 > .
 <argument> ...{toks keyH = \keyH } \showthe \keyH 
-                                                  \usekeys {keyH=abc} \showt...
+                                                  \usekeys {keyH=##1##2##3} ...
 l. ...  }
-> abc.
-<argument> ... \usekeys {keyH=abc} \showthe \keyH 
+> ##1##2##3.
+<argument> ...eys {keyH=##1##2##3} \showthe \keyH 
                                                   \defkeys {apptoks keyH = \...
 l. ...  }
-> abcabc.
-<argument> ... \usekeys {keyH=abc} \showthe \keyH 
+> ##1##2##3a##1##2##3.
+<argument> ...ys {keyH=a##1##2##3} \showthe \keyH 
+                                                  \defkeys {pretoks keyH = \...
+l. ...  }
+> p##1##2##3##1##2##3a##1##2##3.
+<argument> ...ys {keyH=p##1##2##3} \showthe \keyH 
 l. ...  }
 ============================================================
 ============================================================

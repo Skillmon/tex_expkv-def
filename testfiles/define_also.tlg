@@ -21,6 +21,7 @@ macro:#1->a\myskip =#1\relax
 \mytoks=\toks...
 \protected macro:#1->a\mytoks ={#1}
 \protected macro:#1->a\mytoks =\expandafter {\the \mytoks #1}
+\protected macro:#1->a\ekvd@toks ={#1}\mytoks =\expandafter {\the \expandafter \ekvd@toks \the \mytoks }
 \mybox=\box...
 \protected macro:#1->a\setbox \mybox =\hbox {\begingroup #1\endgroup }
 macro:#1->a\ekv@set \! expkv Error: Set `test' undefined. \ekv@mark keyB={#1},\ekv@stop ,{}

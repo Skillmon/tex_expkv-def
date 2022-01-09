@@ -77,6 +77,14 @@ l. ...  }
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }
 (That was another \errmessage.)
+! expkv-def Error: Missing definition for key `apptoks key'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
+! expkv-def Error: Missing definition for key `pretoks key'.
+\ekvd@errm #1->\errmessage {expkv-def Error: #1}
+l. ...  }
+(That was another \errmessage.)
 ! expkv-def Error: Missing definition for key `box key'.
 \ekvd@errm #1->\errmessage {expkv-def Error: #1}
 l. ...  }

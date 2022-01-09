@@ -118,10 +118,13 @@
   {
     \defkeys{toks keyH = \keyH}
     \showthe\keyH
-    \usekeys{keyH=abc}
+    \usekeys{keyH=#1#2#3}
     \showthe\keyH
     \defkeys{apptoks keyH = \keyH}
-    \usekeys{keyH=abc}
+    \usekeys{keyH=a#1#2#3}
+    \showthe\keyH
+    \defkeys{pretoks keyH = \keyH}
+    \usekeys{keyH=p#1#2#3}
     \showthe\keyH
   }
 \TEST{qdefault and fdefault}

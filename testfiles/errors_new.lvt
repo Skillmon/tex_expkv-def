@@ -23,6 +23,8 @@
         ,new dataT    vkey=\key
         ,new int      vkey=\key
         ,new toks     vkey=\key
+        ,new apptoks  vkey=\key
+        ,new pretoks  vkey=\key
         ,new box      vkey=\key
         ,new meta     vkey={}
         ,new nmeta    nkey={}

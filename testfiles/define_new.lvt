@@ -56,6 +56,8 @@
         ,new gtoks          gtoks       = \key
         ,new apptoks        apptoks     = \key
         ,new gapptoks       gapptoks    = \key
+        ,new pretoks        pretoks     = \key
+        ,new gpretoks       gpretoks    = \key
         ,new box            box         = \key
         ,new gbox           gbox        = \key
         ,new meta           meta        = {.}

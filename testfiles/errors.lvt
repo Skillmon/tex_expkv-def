@@ -33,6 +33,8 @@
         ,dimen key
         ,skip key
         ,toks key
+        ,apptoks key
+        ,pretoks key
         ,box key
         ,meta key
         ,nmeta key = {#1}
