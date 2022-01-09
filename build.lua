@@ -32,7 +32,7 @@ function update_tag(file, content, tagname, tagdate)
 end
 
 -- test with pdfTeX and the LaTeX format
-checkengines = {"pdftex"}
+checkengines = {"pdftex","luatex"}
 checkformat  = "latex"
 
 -- from which files to build

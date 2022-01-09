@@ -82,12 +82,12 @@ YES
 NO
 > \keyD=macro:
 ->.
-<argument> ... \usekeys {keyD=\empty }\show \keyD 
+<argument> ...D = \keyD } \usekeys {keyD=\empty }\show \keyD 
                                                   \usekeys {keyD=\hihi }\sho...
 l. ...  }
 > \keyD=macro:
 ->hihi.
-<argument> ...D \usekeys {keyD=\hihi }\show \keyD 
+<argument> ...}\show \keyD \usekeys {keyD=\hihi }\show \keyD 
 l. ...  }
 ============================================================
 ============================================================
@@ -98,17 +98,17 @@ YES
 YES
 > \keyData=\long macro:
 #1#2->#2.
-<argument> ...ata keyD = \keyData }\show \keyData 
+<argument> ...defkeys {edata keyD = \keyData }\show \keyData 
                                                   \usekeys {keyD=\empty }\sh...
 l. ...  }
 > \keyData=\long macro:
 #1#2->#1{}.
-<argument> ...sekeys {keyD=\empty }\show \keyData 
+<argument> ...\keyData \usekeys {keyD=\empty }\show \keyData 
                                                   \usekeys {keyD=\hihi }\sho...
 l. ...  }
 > \keyData=\long macro:
 #1#2->#1{hihi}.
-<argument> ...usekeys {keyD=\hihi }\show \keyData 
+<argument> ... \keyData \usekeys {keyD=\hihi }\show \keyData 
 l. ...  }
 ============================================================
 ============================================================
@@ -118,17 +118,17 @@ YES
 YES
 > \keyDataT=\long macro:
 #1->.
-<argument> ...T keyD = \keyDataT }\show \keyDataT 
+<argument> ...keys {edataT keyD = \keyDataT }\show \keyDataT 
                                                   \usekeys {keyD=\empty }\sh...
 l. ...  }
 > \keyDataT=\long macro:
 #1->#1{}.
-<argument> ...ekeys {keyD=\empty }\show \keyDataT 
+<argument> ...eyDataT \usekeys {keyD=\empty }\show \keyDataT 
                                                   \usekeys {keyD=\hihi }\sho...
 l. ...  }
 > \keyDataT=\long macro:
 #1->#1{hihi}.
-<argument> ...sekeys {keyD=\hihi }\show \keyDataT 
+<argument> ...keyDataT \usekeys {keyD=\hihi }\show \keyDataT 
 l. ...  }
 ============================================================
 ============================================================
@@ -138,27 +138,27 @@ TEST 8: registers
 \keyF=\dimen...
 \keyG=\skip...
 > 0.
-<argument> ...,skip keyG = \keyG } \showthe \keyE 
+<argument> ...yF = \keyF ,skip keyG = \keyG } \showthe \keyE 
                                                   \showthe \keyF \showthe \k...
 l. ...  }
 > 0.0pt.
-<argument> ...eyG } \showthe \keyE \showthe \keyF 
+<argument> ...p keyG = \keyG } \showthe \keyE \showthe \keyF 
                                                   \showthe \keyG \usekeys {k...
 l. ...  }
 > 0.0pt.
-<argument> ...\keyE \showthe \keyF \showthe \keyG 
+<argument> ...} \showthe \keyE \showthe \keyF \showthe \keyG 
                                                   \usekeys {keyE=5, keyF=5pt...
 l. ...  }
 > 5.
-<argument> ...plus 1pt minus .1pt} \showthe \keyE 
+<argument> ..., keyG=5pt plus 1pt minus .1pt} \showthe \keyE 
                                                   \showthe \keyF \showthe \k...
 l. ...  }
 > 5.0pt.
-<argument> ....1pt} \showthe \keyE \showthe \keyF 
+<argument> ... 1pt minus .1pt} \showthe \keyE \showthe \keyF 
                                                   \showthe \keyG 
 l. ...  }
 > 5.0pt plus 1.0pt minus 0.1pt.
-<argument> ...\keyE \showthe \keyF \showthe \keyG 
+<argument> ...} \showthe \keyE \showthe \keyF \showthe \keyG 
 l. ...  }
 ============================================================
 ============================================================
@@ -166,26 +166,25 @@ TEST 9: toks
 ============================================================
 \keyH=\toks...
 > .
-<argument> ...{toks keyH = \keyH } \showthe \keyH 
-                                                  \usekeys {keyH=##1##2##3} ...
-l. ...  }
+<argument> \defkeys {toks keyH = \keyH } \showthe \keyH 
+                                             \usekeys {keyH=##1##2##3} \showthel. ...  }
 > ##1##2##3.
-<argument> ...eys {keyH=##1##2##3} \showthe \keyH 
+<argument> ...\keyH \usekeys {keyH=##1##2##3} \showthe \keyH 
                                                   \defkeys {apptoks keyH = \...
 l. ...  }
 > ##1##2##3a##1##2##3.
-<argument> ...ys {keyH=a##1##2##3} \showthe \keyH 
+<argument> ...yH } \usekeys {keyH=a##1##2##3} \showthe \keyH 
                                                   \defkeys {pretoks keyH = \...
 l. ...  }
 > p##1##2##3##1##2##3a##1##2##3.
-<argument> ...ys {keyH=p##1##2##3} \showthe \keyH 
+<argument> ...yH } \usekeys {keyH=p##1##2##3} \showthe \keyH 
 l. ...  }
 ============================================================
 ============================================================
 TEST 10: qdefault and fdefault
 ============================================================
 > \empty test.
-<argument> ...ed } \usekeys {keyH} \showthe \keyH 
+<argument> ...yH = \gobbled } \usekeys {keyH} \showthe \keyH 
                                                   \defkeys {choice keyH = { ...
 l. ...  }
 The token list \showkeytmp contains the tokens:
@@ -198,7 +197,7 @@ TEST 11: box
 ============================================================
 \keyI=\box...
 > 1.0pt.
-<argument> ... {keyI=\kern 1pt}\showthe \wd \keyI 
+<argument> ... } \usekeys {keyI=\kern 1pt}\showthe \wd \keyI 
 l. ...  }
 ============================================================
 ============================================================

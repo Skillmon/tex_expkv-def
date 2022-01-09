@@ -25,7 +25,7 @@
 \START
 
 \TEST{code}
-  {
+  {%
     \defkeys
       {
          code     keyA = \csname tl_analysis_show:n\endcsname{#1}
@@ -38,7 +38,7 @@
     \usekeys{keyA=test}
   }
 \TEST{noval}
-  {
+  {%
     \defkeys
       {
          noval   keyA = \csname tl_analysis_show:n\endcsname{d'is code}
@@ -47,7 +47,7 @@
     \usekeys{keyA}
   }
 \TEST{bool}
-  {
+  {%
     \defkeys
       {
          bool     keyB = \keyB
@@ -63,7 +63,7 @@
     \keyB\TRUE\else\FALSE\fi
   }
 \TEST{boolTF}
-  {
+  {%
     \defkeys{boolTF keyC = \keyC}
     \keyC\TRUE\FALSE
     \usekeys{keyC=true}
@@ -74,7 +74,7 @@
     \keyC\TRUE\FALSE
   }
 \TEST{store}
-  {
+  {%
     \defkeys{store keyD = \keyD}\keyD\NEWLINE
     \usekeys{keyD=\YES}\keyD
     \usekeys{keyD=\NO}\keyD
@@ -83,7 +83,7 @@
     \usekeys{keyD=\hihi}\show\keyD
   }
 \TEST{data}
-  {
+  {%
     \defkeys{data keyD = \keyData}\keyData{\NO}{\YES}
     {\usekeys{keyD=\YES}\keyData{\YES}{\NO}}
     \defkeys{edata keyD = \keyData}\show\keyData
@@ -91,7 +91,7 @@
     \usekeys{keyD=\hihi}\show\keyData
   }
 \TEST{dataT}
-  {
+  {%
     \defkeys{dataT keyD = \keyDataT}\keyDataT{\NO}
     {\usekeys{keyD=\YES}\keyDataT{\YES}}
     \defkeys{edataT keyD = \keyDataT}\show\keyDataT
@@ -99,7 +99,7 @@
     \usekeys{keyD=\hihi}\show\keyDataT
   }
 \TEST{registers}
-  {
+  {%
     \defkeys
       {
         ,int   keyE = \keyE
@@ -115,7 +115,7 @@
     \showthe\keyG
   }
 \TEST{toks}
-  {
+  {%
     \defkeys{toks keyH = \keyH}
     \showthe\keyH
     \usekeys{keyH=#1#2#3}
@@ -128,7 +128,7 @@
     \showthe\keyH
   }
 \TEST{qdefault and fdefault}
-  {
+  {%
     \defkeys{toks keyH = \keyH, qdefault keyH = \empty test}
     \defkeys{store keyH = \gobbled}
     \usekeys{keyH}
@@ -137,7 +137,7 @@
     \showkeyN{keyH}
   }
 \TEST{box}
-  {
+  {%
     \defkeys{box keyI = \keyI}
     \usekeys{keyI=\kern1pt}\showthe\wd\keyI
   }
@@ -154,7 +154,7 @@
     ,default keyJ = 1
   }
 \TESTEXP{choice}
-  {
+  {%
     \usekeys{keyJ,keyJ=1,keyJ=2,keyJ=3,keyJ=4,keyJ=5}
   }
 \ekvdefinekeys{other}
@@ -166,16 +166,16 @@
 \defkeys{meta keyK = {keyJ={#1}}}
 \defkeys{smeta keyKK = {other}{nl,a,b={#1}}}
 \TESTEXP{meta}
-  {
+  {%
     \usekeys{keyK=1,keyKK=5}
   }
 \defkeys{set setB = other}
 \TESTEXP{set}
-  {
+  {%
     \usekeys{setB,a,nl,b=arg,nl}
   }
 \TEST{unbalanced if arg}
-  {
+  {%
     \defkeys
       {
          code key=test\ifx
@@ -190,12 +190,12 @@
     ,unknown-choice keyUC={unknown choice `#1'\NEWLINE}
   }
 \TESTEXP{unknown choice}
-  {
+  {%
     \usekeys{keyUC=a,keyUC=b,keyUC=c}
   }
 
 \TEST{invbool}
-  {
+  {%
     \defkeys{invbool keyL = \keyL}
     \keyL\TRUE\else\FALSE\fi
     \usekeys{keyL = false}
@@ -206,7 +206,7 @@
     \keyL\TRUE\else\FALSE\fi
   }
 \TEST{invboolTF}
-  {
+  {%
     \defkeys{invboolTF keyM = \keyM}
     \keyM\TRUE\FALSE
     \usekeys{keyM = false}
@@ -217,7 +217,7 @@
     \keyM\TRUE\FALSE
   }
 \TEST{boolpair}
-  {
+  {%
     \defkeys{boolpair keyN = \keyNa\keyNb}
     \keyNa\TRUE\else\FALSE\fi\keyNb\FALSE\else\TRUE\fi
     \usekeys{keyN = false}
@@ -228,7 +228,7 @@
     \keyNa\TRUE\else\FALSE\fi\keyNb\FALSE\else\TRUE\fi
   }
 \TEST{boolpairTF}
-  {
+  {%
     \defkeys{boolpairTF keyO = \keyOa\keyOb}
     \keyOa\TRUE\FALSE\keyOb\FALSE\TRUE
     \usekeys{keyO = false}
