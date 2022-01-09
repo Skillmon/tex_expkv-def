@@ -623,14 +623,15 @@ and the derived files           expkv-def.pdf
 %   instead.
 % \end{function}
 %
-% \begin{function}{toks,gtoks,apptoks,gapptoks}
+% \begin{function}{toks,gtoks,apptoks,gapptoks,pretoks,gpretoks}
 %   \begin{syntax}
 %     toks \key\ = \meta{cs} \prefixes2212
 %   \end{syntax}
 %   The \meta{cs} should be a single control sequence, such as |\foo|.
 %   Store \val\ inside of a toks-register. The |g| variants use |\global|, the
-%   |app| variants append \val\ to the contents of that register. If \meta{cs}
-%   is not yet defined it will be initialised with |\newtoks|.
+%   |app| variants append \val\ to the contents of that register, the |pre|
+%   variants will prepend \val. If \meta{cs} is not yet defined it will be
+%   initialised with |\newtoks|.
 % \end{function}
 %
 % \begin{function}{box,gbox}
@@ -978,19 +979,35 @@ and the derived files           expkv-def.pdf
 % defining. But we don't need it to ever store information long-term after
 % \expkvd\ was initialized.
 %
+% \begin{macro}[internal]{\ekvd@ifprimitive}
+%    \begin{macrocode}
+\protected\long\def\ekvd@ifprimitive#1%
+  {%
+    \begingroup
+      \edef\ekvd@tmpa{\string #1}%
+      \edef\ekvd@tmpb{\meaning#1}%
+      \expandafter
+    \endgroup
+    \ifx\ekvd@tmpa\ekvd@tmpb
+      \ekv@fi@firstoftwo
+    \fi
+    \@secondoftwo
+  }
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}[internal]
-%   {\ekvd@long,\ekvd@prot,\ekvd@clear@prefixes,\ekvd@empty,\ekvd@ifalso}
+%   {\ekvd@long,\ekvd@prot,\ekvd@clear@prefixes,\ekvd@ifalso}
 % \expkvd\ will use |\ekvd@long|, |\ekvd@prot|, and |\ekvd@ifalso| to store
 % whether a key should be defined as |\long| or |\protected| or adds an action
 % to an existing key, and we have to clear them for every new key. By default
 % |long| and |protected| will just be empty, |ifalso| will be
 % |\@secondoftwo|, and |ifnew| will just use its third argument.
 %    \begin{macrocode}
-\def\ekvd@empty{}
 \protected\def\ekvd@clear@prefixes
   {%
-    \let\ekvd@long\ekvd@empty
-    \let\ekvd@prot\ekvd@empty
+    \let\ekvd@long\ekv@empty
+    \let\ekvd@prot\ekv@empty
     \let\ekvd@ifalso\@secondoftwo
     \long\def\ekvd@ifnew##1##2##3{##3}%
   }
@@ -1436,9 +1453,9 @@ and the derived files           expkv-def.pdf
             \ekvd@ifalso
               {%
                 \let\ekvd@prot\protected
-                \ekvd@add@val{#2}{#1#3{##1}}{}%
+                \ekvd@add@val{#2}{#1#3={##1}}{}%
               }%
-              {\protected\ekvd@long\ekvdef\ekvd@set{#2}{#1#3{##1}}}%
+              {\protected\ekvd@long\ekvdef\ekvd@set{#2}{#1#3={##1}}}%
           }%
       }%
   }
@@ -1447,31 +1464,86 @@ and the derived files           expkv-def.pdf
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}[internal]{\ekvd@type@apptoks,\ekvd@t@apptoks,\ekvd@t@gapptoks}
+% \begin{macro}[internal]{\ekvd@type@preapptoks,\ekvd@t@apptoks,\ekvd@t@gapptoks}
 % Just like |toks|, but expand the current contents of the |toks| register to
 % append the new contents.
 %    \begin{macrocode}
-\protected\def\ekvd@type@apptoks#1#2#3%
+\ekvd@ifprimitive\toksapp
   {%
-    \ekvd@ifnew{}{#2}%
+    \protected\def\ekvd@type@preapptoks#1#2#3%
       {%
-        \ekvd@assert@filledarg{#3}%
+        \ekvd@ifnew{}{#2}%
           {%
-            \ekvd@newreg#3{toks}%
-            \ekvd@ifalso
+            \ekvd@assert@filledarg{#3}%
               {%
-                \let\ekvd@prot\protected
-                \ekvd@add@val{#2}{#1#3\expandafter{\the#3##1}}{}%
-              }%
-              {%
-                \protected\ekvd@long\ekvdef\ekvd@set{#2}%
-                  {#1#3\expandafter{\the#3##1}}%
+                \ekvd@newreg#3{toks}%
+                \ekvd@ifalso
+                  {%
+                    \let\ekvd@prot\protected
+                    \ekvd@add@val{#2}{#1#3{##1}}{}%
+                  }%
+                  {\protected\ekvd@long\ekvdef\ekvd@set{#2}{#1#3{##1}}}%
               }%
           }%
-      }%
+      }
+    \protected\def\ekvd@t@apptoks{\ekvd@type@preapptoks\toksapp}
+    \protected\def\ekvd@t@gapptoks{\ekvd@type@preapptoks\gtoksapp}
+    \protected\def\ekvd@t@pretoks{\ekvd@type@preapptoks\tokspre}
+    \protected\def\ekvd@t@gpretoks{\ekvd@type@preapptoks\gtokspre}
   }
-\protected\def\ekvd@t@apptoks{\ekvd@type@apptoks{}}
-\protected\def\ekvd@t@gapptoks{\ekvd@type@apptoks\global}
+  {%
+    \protected\def\ekvd@type@apptoks#1#2#3%
+      {%
+        \ekvd@ifnew{}{#2}%
+          {%
+            \ekvd@assert@filledarg{#3}%
+              {%
+                \ekvd@newreg#3{toks}%
+                \ekvd@ifalso
+                  {%
+                    \let\ekvd@prot\protected
+                    \ekvd@add@val{#2}{#1#3=\expandafter{\the#3##1}}{}%
+                  }%
+                  {%
+                    \protected\ekvd@long\ekvdef\ekvd@set{#2}%
+                      {#1#3=\expandafter{\the#3##1}}%
+                  }%
+              }%
+          }%
+      }
+    \protected\def\ekvd@t@apptoks{\ekvd@type@apptoks{}}
+    \protected\def\ekvd@t@gapptoks{\ekvd@type@apptoks\global}
+    \newtoks\ekvd@toks
+    \protected\def\ekvd@type@pretoks#1#2#3%
+      {%
+        \ekvd@ifnew{}{#2}%
+          {%
+            \ekvd@assert@filledarg{#3}%
+              {%
+                \ekvd@newreg#3{toks}%
+                \ekvd@ifalso
+                  {%
+                    \let\ekvd@prot\protected
+                    \ekvd@add@val{#2}%
+                      {%
+                        \ekvd@toks={##1}%
+                        #1#3=\expandafter{\the\expandafter\ekvd@toks\the#3}%
+                      }%
+                      {}%
+                  }%
+                  {%
+                    \protected\ekvd@long\ekvdef\ekvd@set{#2}%
+                      {%
+                        \ekvd@toks={##1}%
+                        #1#3=\expandafter{\the\expandafter\ekvd@toks\the#3}%
+                      }%
+                  }%
+              }%
+          }%
+      }
+    \protected\def\ekvd@t@pretoks{\ekvd@type@pretoks{}}
+    \protected\def\ekvd@t@gpretoks{\ekvd@type@pretoks\global}
+  }
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1525,7 +1597,7 @@ and the derived files           expkv-def.pdf
       {%
         \ekvd@assert@filledarg{#4}%
           {%
-            \ekvd@newlet#4\ekvd@empty
+            \ekvd@newlet#4\ekv@empty
             \ekvd@ifalso
               {%
                 \let\ekvd@prot\protected
@@ -2043,7 +2115,7 @@ and the derived files           expkv-def.pdf
 \protected\def\ekvd@assert@noval@#1%
   {%
     \expandafter\ekvd@extract@args\meaning#1\ekvd@stop
-    \unless\ifx\ekvd@extracted@args\ekvd@empty
+    \unless\ifx\ekvd@extracted@args\ekv@empty
       \ekvd@err@unsupported@arg
     \fi
     \@firstofone

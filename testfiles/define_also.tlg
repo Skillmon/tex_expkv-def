@@ -19,10 +19,10 @@ macro:#1->a\mydimen =#1\relax
 \myskip=\skip...
 macro:#1->a\myskip =#1\relax 
 \mytoks=\toks...
-\protected macro:#1->a\mytoks {#1}
-\protected macro:#1->a\mytoks \expandafter {\the \mytoks #1}
+\protected macro:#1->a\mytoks ={#1}
+\protected macro:#1->a\mytoks =\expandafter {\the \mytoks #1}
 \mybox=\box...
-\protected macro:#1->a\setbox \mybox \hbox {\begingroup #1\endgroup }
+\protected macro:#1->a\setbox \mybox =\hbox {\begingroup #1\endgroup }
 macro:#1->a\ekv@set \! expkv Error: Set `test' undefined. \ekv@mark keyB={#1},\ekv@stop ,{}
 macro:#1->a\ekv@set \! expkv Error: Set `set' undefined. \ekv@mark key={#1},\ekv@stop ,{}
 macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
