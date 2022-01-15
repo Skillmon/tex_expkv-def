@@ -1048,7 +1048,7 @@ and the derived files           expkv-def.pdf
 \protected\long\def\ekvd@handle#1\ekvd@stop#2%
   {%
     \ekvd@clear@prefixes
-    \edef\ekvd@cur{\detokenize{#1}}%
+    \def\ekvd@cur{#1}%
     \ekvd@ifspace{#1}%
       {\ekvd@prefix\ekv@mark#1\ekv@stop{#2}}%
       \ekvd@err@missing@type
