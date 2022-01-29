@@ -1744,36 +1744,40 @@ and the derived files           expkv-def.pdf
 \protected\long\def\ekvd@populate@choice@#1#2%
   {%
     \ekvd@clear@prefixes
-    \expandafter\ekvd@assert@arg@msg\expandafter{\ekvd@cur : #1}%
+    \ekvd@ifspace{#1}%
+      {\ekvd@choice@prefix{\ekv@mark#1}\ekv@mark#1\ekv@stop}%
       {%
-        \ekvd@ifspace{#1}%
-          {\ekvd@choice@prefix\ekv@mark#1\ekv@stop}%
-          {%
-            \expandafter\def
-              \csname\ekvd@choice@name\ekvd@set\ekvd@set@choice{#1}\endcsname
-          }%
-          {#2}%
+        \expandafter\def
+          \csname\ekvd@choice@name\ekvd@set\ekvd@set@choice{#1}\endcsname
       }%
+      {#2}%
   }
-\protected\def\ekvd@choice@prefix#1
+\protected\def\ekvd@choice@prefix#1#2
   {%
-    \ekv@strip{#1}\ekvd@choice@prefix@\ekv@mark
+    \ekv@strip{#2}{\ekvd@choice@prefix@{#1}}\ekv@mark
   }
-\protected\def\ekvd@choice@prefix@#1#2\ekv@stop
+\protected\def\ekvd@choice@prefix@#1#2#3\ekv@stop
   {%
-    \ekv@ifdefined{ekvd@choice@p@#1}%
+    \ekv@ifdefined{ekvd@choice@p@#2}%
       {%
-        \csname ekvd@choice@p@#1\endcsname
-        \ekvd@ifspace{#2}%
-          {\ekvd@choice@prefix#2\ekv@stop}%
+        \csname ekvd@choice@p@#2\endcsname
+        \ekvd@ifspace{#3}%
+          {\ekvd@choice@prefix{#3}#3\ekv@stop}%
           {%
             \ekvd@prot\expandafter\def
               \csname
-                \ekv@strip{#2}{\ekvd@choice@name\ekvd@set\ekvd@set@choice}%
+                \ekv@strip{#3}{\ekvd@choice@name\ekvd@set\ekvd@set@choice}%
               \endcsname
           }%
       }%
-      {\ekvd@err@undefined@prefix{#1}\@gobble}%
+      {%
+        \ekvd@prot\expandafter\def
+          \csname
+            \ekv@strip{#1}{\ekvd@choice@name\ekvd@set\ekvd@set@choice}%
+          \endcsname
+      }%
+  }
+  {%
   }
 \protected\def\ekvd@choice@p@protected{\let\ekvd@prot\protected}
 \let\ekvd@choice@p@protect\ekvd@choice@p@protected
