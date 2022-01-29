@@ -707,6 +707,49 @@ and the derived files           expkv-def.pdf
 %   interface to remove certain choices.
 % \end{function}
 %
+% \begin{function}{choice-store}
+%   \begin{syntax}
+%     choice-store \key\ = \meta{cs}\{\val, \ldots\} \prefixes2223
+%   \end{syntax}
+%   This is defines a special type of |choice| key that'll store the given
+%   choice inside the macro \meta{cs} (so \meta{cs} should be a single control
+%   sequence name such as |\foo|). Since storing inside a macro can't be done
+%   expandably every choice-code is |\protected|, you might define the
+%   |choice-store| key itself as |protected| as well if you want. Since the
+%   definition of each choice is predefined with this key type the choice list
+%   should just be a comma separated list of valid choices.
+% \end{function}
+% This means that the following |choice| and |choice-store| keys are equivalent
+% at use time:
+% \begin{lstlisting}
+% \newcommand*\mya{}
+% \ekvdefinekeys{example}
+%   {
+%      choice key1 = {a=\def\mya{a}, b=\def\mya{b}, c=\def\mya{c}}
+%     ,choice-store key2 = \mya{a,b,c}
+%   }
+% \end{lstlisting}
+%
+% \begin{function}{choice-enum}
+%   \begin{syntax}
+%     choice-enum \key\ = \meta{cs}\{\val, \ldots\} \prefixes2223
+%   \end{syntax}
+%   This is similar to |choice-store|, the differences are: \meta{cs} should be
+%   a count-register or is initialised as such if the \meta{cs} is undefined
+%   (via |\newcount|); instead of the value the position of the value in the
+%   given list is stored in this register (zero-based).
+% \end{function}
+% This means that the following |choice| and |choice-enum| keys are equivalent
+% at use time:
+% \begin{lstlisting}
+% \newcount\myb
+% \ekvdefinekeys{example}
+%   {
+%      choice key1 = {a={\myb=0 }, b={\myb=1 }, c={\myb=2 }}
+%     ,choice-enum key2 = \myb{a,b,c}
+%   }
+% \end{lstlisting}
+%
 % \begin{function}{unknown-choice}
 %   \begin{syntax}
 %     unknown-choice \key\ = \marg{definition} \prefixes2323
@@ -1703,8 +1746,11 @@ and the derived files           expkv-def.pdf
 \protected\def\ekvd@type@choice#1%
   {%
     \ekvd@assert@not@long
-    \ekvd@prot\edef\ekvd@tmp##1%
-      {\ekv@unexpanded{\ekvd@h@choice}{\ekvd@choice@name\ekvd@set{#1}{##1}}}%
+    \ekv@exparg{\ekvd@prot\def\ekvd@tmp##1}%
+      {%
+        \expandafter\ekvd@h@choice\expandafter
+          {\ekvd@choice@name\ekvd@set{#1}{##1}}%
+      }%
     \ekvd@ifalso
       {%
         \ekvd@assert@val{#1}%
@@ -1807,6 +1853,82 @@ and the derived files           expkv-def.pdf
       }%
   }
 %    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[internal]{\ekvd@t@choice-store,\ekvd@t@choice-enum}
+%   These two types define a special kind of |choice| key and are quite similar,
+%   the only difference is what the different choices do (hence they use a
+%   shared initialisation which differs in the chosen |populate| step).
+%    \begin{macrocode}
+\protected\long\expandafter\def\csname ekvd@t@choice-store\endcsname
+  {\ekvd@type@choicespecial\ekvd@populate@choicestore}
+\protected\long\expandafter\def\csname ekvd@t@choice-enum\endcsname
+  {\ekvd@type@choicespecial\ekvd@populate@choiceenum}
+%    \end{macrocode}
+% \begin{macro}[internal]{\ekvd@type@choicespecial}
+%   Initialise similar to a |choice| key. The difference is that we require two
+%   arguments (which we assert), a macro to store things in, and a |csv|-list
+%   containing the allowed values. |#1| is the |populate| macro according to the
+%   type used.
+%    \begin{macrocode}
+\protected\long\def\ekvd@type@choicespecial#1#2#3%
+  {%
+    \ekvd@ifnew{}{#2}%
+      {%
+        \ekvd@assert@twoargs{#3}%
+          {%
+            \ekvd@type@choice{#2}%
+            \def\ekvd@set@choice{#2}%
+            #1#3%
+          }%
+      }%
+  }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}[internal]
+%   {\ekvd@populate@choicestore,\ekvd@populate@choicestore@}
+%   We initialise the storing macro if it doesn't yet exist, and then we loop
+%   over the value list. The |\edef|s with |\unexpanded| are both necessary to
+%   be able to store macro parameter tokens (the outer protects at define time,
+%   the inner at use time).
+%    \begin{macrocode}
+\protected\long\def\ekvd@populate@choicestore#1%
+  {%
+    \ekvd@newlet#1\ekv@empty
+    \ekvcsvloop{\ekvd@populate@choicestore@#1}%
+  }
+\protected\long\def\ekvd@populate@choicestore@#1#2%
+  {%
+    \protected\expandafter\edef
+      \csname\ekvd@choice@name\ekvd@set\ekvd@set@choice{#2}\endcsname
+      {\unexpanded{\edef#1{\unexpanded{#2}}}}%
+  }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}[internal]
+%   {\ekvd@populate@choiceenum,\ekvd@populate@choiceenum@}
+%   This is similar to the population of a |choice-store| type, but instead of
+%   storing the values in a macro this initialises a count and stores the
+%   position of the value in the list inside that count (zero-indexed). The
+%   space is necessary to terminate the number scanning, which is the reason we
+%   use |\@firstofone| (so that the space after the macro name isn't gobbled by
+%   \TeX).
+%    \begin{macrocode}
+\protected\long\def\ekvd@populate@choiceenum#1%
+  {%
+    \ekvd@newreg#1{count}%
+    \def\ekvd@tmp{0}%
+    \ekvcsvloop{\ekvd@populate@choiceenum@#1}%
+  }
+\protected\long\def\ekvd@populate@choiceenum@#1#2%
+  {%
+    \protected\expandafter\edef
+      \csname\ekvd@choice@name\ekvd@set\ekvd@set@choice{#2}\endcsname
+      {#1=\@firstofone{\ekvd@tmp} }%
+    \edef\ekvd@tmp{\the\numexpr\ekvd@tmp+1\relax}%
+  }
+%    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}[internal]{\ekvd@t@unknown-choice}
@@ -2316,7 +2438,7 @@ and the derived files           expkv-def.pdf
 %    \begin{macrocode}
 \def\ekvd@err@choice@invalid#1%
   {%
-    \ekvd@err@choice@invalid@#1\ekv@stop
+    \ekvd@err@choice@invalid@#1%
   }
 \begingroup
 \catcode40=8
@@ -2324,13 +2446,13 @@ and the derived files           expkv-def.pdf
 \@firstofone{\endgroup
 \def\ekvd@choice@name#1#2#3%
   {%
-    ekvd#1(#2)#3%
+    ekvd#1(#2)\detokenize{#3}%
   }
 \def\ekvd@unknown@choice@name#1#2%
   {%
     ekvd:u:#1(#2)%
   }
-\def\ekvd@err@choice@invalid@ ekvd#1(#2)#3\ekv@stop%
+\def\ekvd@err@choice@invalid@ ekvd#1(#2)\detokenize#3%
   {%
     \ekv@ifdefined{\ekvd@unknown@choice@name{#1}{#2}}%
       {\csname\ekvd@unknown@choice@name{#1}{#2}\endcsname{#3}}%
