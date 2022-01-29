@@ -252,4 +252,24 @@
     \keyQ\ERROR\TRUE
   }
 
+\TEST{choice-store}
+  {%
+    \defkeys{choice-store keyR = \testtmp{r, o, w, #1, k, s}}
+    \usekeys{keyR=w}\TYPE{\testtmp}%
+    \usekeys{keyR=o}\TYPE{\testtmp}%
+    \usekeys{keyR=r}\TYPE{\testtmp}%
+    \usekeys{keyR=k}\TYPE{\testtmp}%
+    \usekeys{keyR=s}\TYPE{\testtmp}%
+    \usekeys{keyR=#1}\TYPE{\meaning\testtmp}%
+  }
+
+\TEST{choice-enum}
+  {%
+    \defkeys{choice-enum keyS = \testcount{a, b, c, #1}}
+    \usekeys{keyS=#1}\TYPE{\the\testcount}
+    \usekeys{keyS=c}\TYPE{\the\testcount}
+    \usekeys{keyS=b}\TYPE{\the\testcount}
+    \usekeys{keyS=a}\TYPE{\the\testcount}
+  }
+
 \END

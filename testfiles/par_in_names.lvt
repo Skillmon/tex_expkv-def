@@ -1,0 +1,17 @@
+\input regression-test
+
+\RequirePackage{expkv-def}
+
+\START
+
+\TEST{par in key names}
+  {
+    \ekvdefinekeys{foo}
+      {
+         store \par=\foopar
+        ,default \par=foo
+        ,initial \par
+      }
+  }
+
+\END
