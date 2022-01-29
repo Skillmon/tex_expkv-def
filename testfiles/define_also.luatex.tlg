@@ -4,8 +4,8 @@ Don't change this file in any respect.
 TEST 1: val
 ============================================================
 macro:#1->ab
-macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
-macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
+macro:#1->a\ekvd@h@choice {ekvdtest(key)\detokenize {#1}}
+macro:#1->a\ekvd@h@choice {ekvdtest(key)\detokenize {#1}}
 \protected macro:#1->a\edef \mystore {\ekv@unexpanded {#1}}
 \protected macro:#1->a\edef \mystore {#1}
 \protected macro:#1->a\long \edef \mydata ##1##2{##1{\ekv@unexpanded {#1}}}
@@ -26,8 +26,8 @@ macro:#1->a\myskip =#1\relax
 \protected macro:#1->a\setbox \mybox =\hbox {\begingroup #1\endgroup }
 macro:#1->a\ekv@set \! expkv Error: Set `test' undefined. \ekv@mark keyB={#1},\ekv@stop ,{}
 macro:#1->a\ekv@set \! expkv Error: Set `set' undefined. \ekv@mark key={#1},\ekv@stop ,{}
-macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
-macro:#1->a\ekvd@h@choice {ekvdtest(key)#1}
+macro:#1->a\ekvd@h@choice {ekvdtest(key)\detokenize {#1}}
+macro:#1->a\ekvd@h@choice {ekvdtest(key)\detokenize {#1}}
 ============================================================
 ============================================================
 TEST 2: noval

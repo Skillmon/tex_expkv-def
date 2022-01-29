@@ -1000,8 +1000,8 @@ and the derived files           expkv-def.pdf
 % \begin{macro}{\ekvdVersion,\ekvdDate}
 % We're on our first input, so lets store the version and date in a macro.
 %    \begin{macrocode}
-\def\ekvdVersion{0.8c}
-\def\ekvdDate{2021-09-20}
+\def\ekvdVersion{0.9}
+\def\ekvdDate{2022-01-29}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1746,10 +1746,12 @@ and the derived files           expkv-def.pdf
 \protected\def\ekvd@type@choice#1%
   {%
     \ekvd@assert@not@long
-    \ekv@exparg{\ekvd@prot\def\ekvd@tmp##1}%
+    \ekv@expargtwice{\ekvd@prot\def\ekvd@tmp##1}%
       {%
-        \expandafter\ekvd@h@choice\expandafter
-          {\ekvd@choice@name\ekvd@set{#1}{##1}}%
+        \expandafter\expandafter\expandafter
+        \ekvd@h@choice
+        \expandafter\expandafter\expandafter
+          {\expandafter\ekvd@choice@name\expandafter{\ekvd@set}{#1}{##1}}%
       }%
     \ekvd@ifalso
       {%
