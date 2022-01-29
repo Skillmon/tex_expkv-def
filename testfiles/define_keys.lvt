@@ -238,5 +238,18 @@
     \usekeys{keyO}
     \keyOa\TRUE\FALSE\keyOb\FALSE\TRUE
   }
+\TEST{space in choice names}
+  {%
+    \defkeys{choice keyP = { choice a = a, choice b = b }}
+    \TYPE{\usekeys{keyP=choice a, keyP=choice b}}
+  }
+\TEST{parameters in choice codes}
+  {%
+    \defkeys{choice keyQ = {a=\def\keyQ#1#2{#1}, b=\def\keyQ#1#2{#2}}}
+    \usekeys{keyQ=a}
+    \keyQ\TRUE\ERROR
+    \usekeys{keyQ=b}
+    \keyQ\ERROR\TRUE
+  }
 
 \END
