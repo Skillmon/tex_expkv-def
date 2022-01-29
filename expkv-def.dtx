@@ -1687,10 +1687,12 @@ and the derived files           expkv-def.pdf
 %
 % \begin{macro}[internal]
 %   {
-%     \ekvd@type@choice,\ekvd@populate@choice,\ekvd@populate@choice@,
-%     \ekvd@populate@choice@noarg,\ekvd@choice@prefix,\ekvd@choice@prefix@,
+%     \ekvd@type@choice,
+%     \ekvd@populate@choice,\ekvd@populate@choice@,\ekvd@populate@choice@noarg,
+%     \ekvd@choice@prefix,\ekvd@choice@prefix@,\ekvd@choice@prefix@done,
 %     \ekvd@choice@p@protected,\ekvd@choice@p@protect,
-%     \ekvd@choice@p@long,\ekvd@choice@p@long@,\ekvd@t@choice
+%     \ekvd@choice@p@long,\ekvd@choice@p@long@,
+%     \ekvd@t@choice
 %   }
 % The |choice| type is by far the most complex type, as we have to run a
 % sub-parser on the choice-definition list, which should support the |@p@| type
@@ -1747,10 +1749,10 @@ and the derived files           expkv-def.pdf
     \ekvd@ifspace{#1}%
       {\ekvd@choice@prefix{\ekv@mark#1}\ekv@mark#1\ekv@stop}%
       {%
-        \expandafter\def
+        \expandafter\edef
           \csname\ekvd@choice@name\ekvd@set\ekvd@set@choice{#1}\endcsname
       }%
-      {#2}%
+      {\unexpanded{#2}}%
   }
 \protected\def\ekvd@choice@prefix#1#2
   {%
@@ -1763,21 +1765,16 @@ and the derived files           expkv-def.pdf
         \csname ekvd@choice@p@#2\endcsname
         \ekvd@ifspace{#3}%
           {\ekvd@choice@prefix{#3}#3\ekv@stop}%
-          {%
-            \ekvd@prot\expandafter\def
-              \csname
-                \ekv@strip{#3}{\ekvd@choice@name\ekvd@set\ekvd@set@choice}%
-              \endcsname
-          }%
+          {\ekvd@choice@prefix@done{#3}}%
       }%
-      {%
-        \ekvd@prot\expandafter\def
-          \csname
-            \ekv@strip{#1}{\ekvd@choice@name\ekvd@set\ekvd@set@choice}%
-          \endcsname
-      }%
+      {\ekvd@choice@prefix@done{#1}}%
   }
+\protected\def\ekvd@choice@prefix@done#1%
   {%
+    \ekvd@prot\expandafter\edef
+      \csname
+        \ekv@strip{#1}{\ekvd@choice@name\ekvd@set\ekvd@set@choice}%
+      \endcsname
   }
 \protected\def\ekvd@choice@p@protected{\let\ekvd@prot\protected}
 \let\ekvd@choice@p@protect\ekvd@choice@p@protected
